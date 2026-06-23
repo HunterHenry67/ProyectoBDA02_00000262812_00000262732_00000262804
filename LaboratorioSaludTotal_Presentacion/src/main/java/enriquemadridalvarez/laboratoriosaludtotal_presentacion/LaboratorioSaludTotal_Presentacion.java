@@ -11,6 +11,7 @@ package enriquemadridalvarez.laboratoriosaludtotal_presentacion;
 public class LaboratorioSaludTotal_Presentacion {
 
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+        System.out.println("Prueba funcionamiento.");
+        System.out.println("Funcionamiento correcto de gitHub");
     }
 }
