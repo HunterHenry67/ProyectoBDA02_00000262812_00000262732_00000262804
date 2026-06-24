@@ -5,54 +5,48 @@
 package Entidades;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 /**
  *
  * @author BALAMRUSH
  */
 @Entity
+@Table(name = "doctor")
 public class Doctor implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    @Column(name = "idDoctor", nullable = false)
+    private Integer idDoctor;
+    
+    @Column(name = "nombes", nullable = false, length = 20)
+    private String nombres;
+    
+    @Column(name = "apellidoPaterno", nullable = false, length = 50)
+    private String apellidoPaterno;
+    
+    @Column(name = "apellidoMeterno")
+    private String apellidoMaterno;
+    
+    @Column(name = "sexo", nullable = false, length = 9)
+    private String sexo;
+    
+    @OneToMany(mappedBy = "dcotor", cascade = CascadeType.PERSIST)
+    private List<Prueba> listaPruebas = new ArrayList<>();
+    
+    
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Doctor)) {
-            return false;
-        }
-        Doctor other = (Doctor) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "Entidades.Doctor[ id=" + id + " ]";
-    }
     
 }
