@@ -9,7 +9,12 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>LaboratorioSaludTotal_Entidades</artifactId>
-            <version>${project.version}</version>
+            <version>${project.version}</version>         
+        </dependency>
+        <dependency>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
+            <version>9.3.0</version>
         </dependency>
     </dependencies>
     <properties>
@@ -17,4 +22,5 @@
         <maven.compiler.release>23</maven.compiler.release>
         <exec.mainClass>enriquemadridalvarez.laboratoriosaludtotal_persistencia.LaboratorioSaludTotal_Persistencia</exec.mainClass>
     </properties>
+    
 </project>
