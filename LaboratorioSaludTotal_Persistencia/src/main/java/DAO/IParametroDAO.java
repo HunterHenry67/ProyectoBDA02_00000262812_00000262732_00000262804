@@ -19,7 +19,7 @@ public interface IParametroDAO {
 
     void eliminarParametro(Integer idParametro) throws PersistenciaException;
 
-    List<Parametro> consultarParametroPorID(Integer idParametro) throws PersistenciaException;
+    Parametro consultarParametroPorID(Integer idParametro) throws PersistenciaException;
     
     List<Parametro> consultarParametroPorNombre(String nombre) throws PersistenciaException;
     
@@ -29,5 +29,5 @@ public interface IParametroDAO {
     
     List<Parametro> consultarParametroPorCantidadRango(Integer rangos) throws PersistenciaException;
     
-    List<Parametro> contarRangos(Integer idAnalisis) throws PersistenciaException;
+    Integer contarRangos(Integer idParametro) throws PersistenciaException;
 }

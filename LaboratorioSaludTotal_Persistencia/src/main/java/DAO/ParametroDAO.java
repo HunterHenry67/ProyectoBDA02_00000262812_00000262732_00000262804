@@ -5,72 +5,176 @@
 package DAO;
 
 import Entidades.Parametro;
+import Entidades.Rango;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceException;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 /**
  *
  * @author BALAMRUSH
  */
-public class ParametroDAO implements IParametroDAO{
-    
+public class ParametroDAO implements IParametroDAO {
+
     private final IConexionBD conexionBD;
-    
-    public ParametroDAO(IConexionBD conexionBD){
-        this.conexionBD =  conexionBD;
+
+    public ParametroDAO(IConexionBD conexionBD) {
+        this.conexionBD = conexionBD;
     }
 
     @Override
     public Parametro registarParametro(Parametro nuevoParametro) throws PersistenciaException {
         EntityManager entityManager = conexionBD.conexionBD();
-        try{
+        try {
             entityManager.getTransaction().begin();
             entityManager.persist(nuevoParametro);
             entityManager.getTransaction().commit();
             return nuevoParametro;
-        }catch(Exception ex){
+        } catch (Exception ex) {
             entityManager.getTransaction().rollback();
-            throw new PersistenceException("Error al agregar el parámtero, hubo un rollback: ");
-        }finally{
+            throw new PersistenceException("Error al agregar el parámtero, hubo un rollback: " + ex.getMessage());
+        } finally {
             entityManager.close();
         }
     }
 
     @Override
-    public List<Parametro> listar(String filtro) throws PersistenciaException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public List<Parametro> listarTodos() throws PersistenciaException {
+        EntityManager entityManager = conexionBD.conexionBD();
+        try {
+            CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+            CriteriaQuery<Parametro> criteriaQuery = criteriaBuilder.createQuery(Parametro.class);
+            Root<Parametro> parametro = criteriaQuery.from(Parametro.class);
+            criteriaQuery.select(parametro).orderBy(criteriaBuilder.asc(parametro.get("ordenReporte")));
+            return entityManager.createQuery(criteriaQuery).getResultList();
+        } catch (Exception ex) {
+            throw new PersistenciaException("Error al consultar todos los parametros: " + ex.getMessage());
+        } finally {
+            entityManager.close();
+        }
     }
 
     @Override
-    public void eliminarParametro(Integer idParametro) throws PersistenciaException{
+    public void eliminarParametro(Integer idParametro) throws PersistenciaException {
         EntityManager entityManager = conexionBD.conexionBD();
-        try{
+        try {
             entityManager.getTransaction().begin();
             Parametro parametroEliminado = this.consultarParametroPorID(idParametro);
             entityManager.remove(parametroEliminado);
-        }catch(Exception ex){
+        } catch (Exception ex) {
             entityManager.getTransaction().rollback();
-            throw new PersistenciaException("Error al eliminar el parámetro, hubo un rollback: ");
-        }finally{
-            
+            throw new PersistenciaException("Error al eliminar el parámetro, hubo un rollback: " + ex.getMessage());
+        } finally {
+            entityManager.close();
         }
     }
 
     @Override
-    public Parametro consultarParametroPorID(Integer idParametro) throws PersistenciaException{
+    public Parametro consultarParametroPorID(Integer idParametro) throws PersistenciaException {
         EntityManager entityManager = conexionBD.conexionBD();
-        try{
+        try {
             Parametro parametroEncontrado = entityManager.find(Parametro.class, idParametro);
-            if(parametroEncontrado == null){
+            if (parametroEncontrado == null) {
                 throw new Exception("El parametro no existe");
             }
             return parametroEncontrado;
+        } catch (Exception ex) {
+            throw new PersistenciaException("Error al consultar el paraemtro por ID: " + ex.getMessage());
+        } finally {
+            entityManager.close();
+        }
+    }
+
+    @Override
+    public List<Parametro> consultarParametroPorNombre(String nombre) throws PersistenciaException {
+        EntityManager entityManager = conexionBD.conexionBD();
+        try {
+            CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+            CriteriaQuery<Parametro> criteriaQuery = criteriaBuilder.createQuery(Parametro.class);
+            Root<Parametro> parametro = criteriaQuery.from(Parametro.class);
+            criteriaQuery.select(parametro)
+                    .where(criteriaBuilder
+                            .like(criteriaBuilder.lower(parametro.get("nombre")), "%" + nombre.toLowerCase() + "%"));
+            return entityManager.createQuery(criteriaQuery).getResultList();
+        } catch (Exception ex) {
+            throw new PersistenciaException("Error al consultar los parámetros por Nombre: " + ex.getMessage());
+        } finally {
+            entityManager.close();
+        }
+    }
+
+    @Override
+    public List<Parametro> consultarParametroPorOrden(Integer orden) throws PersistenciaException {
+        EntityManager entityManager = conexionBD.conexionBD();
+        try {
+            CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+            CriteriaQuery<Parametro> criteriaQuery = criteriaBuilder.createQuery(Parametro.class);
+            Root<Parametro> parametro = criteriaQuery.from(Parametro.class);
+            criteriaQuery.select(parametro)
+                    .where(criteriaBuilder.equal(parametro.get("ordenReporte"), orden));
+            return entityManager.createQuery(criteriaQuery).getResultList();
+        } catch (Exception ex) {
+            throw new PersistenciaException("Error al consultar los parámetros por ID: " + ex.getMessage());
+        } finally {
+            entityManager.close();
+        }
+    }
+
+    @Override
+    public List<Parametro> consultarParametroPorUnidadMedidad(String unidadMedida) throws PersistenciaException {
+        EntityManager entityManager = conexionBD.conexionBD();
+        try {
+            CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+            CriteriaQuery<Parametro> criteriaQuery = criteriaBuilder.createQuery(Parametro.class);
+            Root<Parametro> parametro = criteriaQuery.from(Parametro.class);
+            criteriaQuery.select(parametro).
+                    where(criteriaBuilder.like(criteriaBuilder.lower(parametro.get("unidadMedida").get("nombre")), "%" + unidadMedida.toLowerCase() + "%"));
+            return entityManager.createQuery(criteriaQuery).getResultList();
+        } catch (Exception ex) {
+            throw new PersistenciaException("Error al consultar el parámetro por unidad de medidad: " + ex.getMessage());
+        } finally {
+            entityManager.close();
+        }
+    }
+
+    @Override
+    public List<Parametro> consultarParametroPorCantidadRango(Integer rangos) throws PersistenciaException {
+        EntityManager entityManager = conexionBD.conexionBD();
+        try {
+            CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+            CriteriaQuery<Parametro> criteriaQuery = criteriaBuilder.createQuery(Parametro.class);
+            Root<Parametro> parametro = criteriaQuery.from(Parametro.class);
+            criteriaQuery.select(parametro)
+                    .where(criteriaBuilder.equal(criteriaBuilder.size(parametro.get("rangos")), rangos
+                    ));
+            return entityManager.createQuery(criteriaQuery).getResultList();
+        } catch (Exception ex) {
+            throw new PersistenciaException("Error al consultar los parámetros con cantidad de rango.");
+        } finally {
+            entityManager.close();
+        }
+    }
+
+    @Override
+    public Integer contarRangos(Integer idParametro) throws PersistenciaException {
+        EntityManager entityManager = conexionBD.conexionBD();
+        try{
+            CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+            CriteriaQuery<Long> criteriaQuery = criteriaBuilder.createQuery(Long.class);
+            Root<Rango> rango = criteriaQuery.from(Rango.class);
+            criteriaQuery.select(criteriaBuilder.count(rango))
+                    .where(criteriaBuilder.equal(rango.get("parametro").get("idParametro"), idParametro));
+            Long totalRangos = entityManager.createQuery(criteriaQuery).getSingleResult();
+            return totalRangos.intValue();
         }catch(Exception ex){
-            throw new PersistenciaException("Error al consultar el paraemtro por ID:");
+            throw new PersistenciaException("Error al contarlos rangos del parámetro: "+ex.getMessage());               
+            
         }finally{
             entityManager.close();
         }
     }
-    
+
 }
