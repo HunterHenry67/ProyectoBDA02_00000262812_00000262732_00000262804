@@ -40,7 +40,7 @@ public class Cliente implements Serializable {
     private String apellidoMaterno;
     
     @Column(name = "sexo", nullable = false, length = 9)
-    private String sexo;
+    private Sexo sexo;
     
     @Column(name = "fechaNacimiento", nullable = false)
     private LocalDateTime fechaNacimiento;
@@ -86,11 +86,11 @@ public class Cliente implements Serializable {
         this.apellidoMaterno = apellidoMaterno;
     }
 
-    public String getSexo() {
+    public Sexo getSexo() {
         return sexo;
     }
 
-    public void setSexo(String sexo) {
+    public void setSexo(Sexo sexo) {
         this.sexo = sexo;
     }
 
