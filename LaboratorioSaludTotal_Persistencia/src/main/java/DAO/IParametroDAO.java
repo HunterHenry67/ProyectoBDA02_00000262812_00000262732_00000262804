@@ -6,7 +6,6 @@ package DAO;
 
 import Entidades.Parametro;
 import java.util.List;
-import javax.persistence.PersistenceException;
 
 /**
  *
@@ -14,11 +13,21 @@ import javax.persistence.PersistenceException;
  */
 public interface IParametroDAO {
 
-    Parametro registarParametro(Parametro nuevoParametro) ;
+    Parametro registarParametro(Parametro nuevoParametro) throws PersistenciaException;
 
-    List<Parametro> listar(String filtro) throws PersistenceException;
+    List<Parametro> listarTodos() throws PersistenciaException;
 
-    void eliminarParametro(Integer idParametro) throws PersistenceException;
+    void eliminarParametro(Integer idParametro) throws PersistenciaException;
 
-    Parametro consultarParametroPorID(Integer idParametro) throws PersistenceException;
+    List<Parametro> consultarParametroPorID(Integer idParametro) throws PersistenciaException;
+    
+    List<Parametro> consultarParametroPorNombre(String nombre) throws PersistenciaException;
+    
+    List<Parametro> consultarParametroPorOrden(Integer orden) throws PersistenciaException;
+    
+    List<Parametro> consultarParametroPorUnidadMedidad(String unidadMedida) throws PersistenciaException;
+    
+    List<Parametro> consultarParametroPorCantidadRango(Integer rangos) throws PersistenciaException;
+    
+    List<Parametro> contarRangos(Integer idAnalisis) throws PersistenciaException;
 }

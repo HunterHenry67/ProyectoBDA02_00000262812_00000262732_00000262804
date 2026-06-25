@@ -22,34 +22,55 @@ public class ParametroDAO implements IParametroDAO{
     }
 
     @Override
-    public Parametro registarParametro(Parametro nuevoParametro) throws PersistenceException {
-        EntityManager crearConexionBD = conexionBD.conexionBD();
+    public Parametro registarParametro(Parametro nuevoParametro) throws PersistenciaException {
+        EntityManager entityManager = conexionBD.conexionBD();
         try{
-            crearConexionBD.getTransaction().begin();
-            crearConexionBD.persist(nuevoParametro);
-            crearConexionBD.getTransaction().commit();
+            entityManager.getTransaction().begin();
+            entityManager.persist(nuevoParametro);
+            entityManager.getTransaction().commit();
             return nuevoParametro;
         }catch(Exception ex){
-            crearConexionBD.getTransaction().rollback();
-            throw new PersistenceException("Error al agregar el parámtero: ");
+            entityManager.getTransaction().rollback();
+            throw new PersistenceException("Error al agregar el parámtero, hubo un rollback: ");
         }finally{
-            crearConexionBD.close();
+            entityManager.close();
         }
     }
 
     @Override
-    public List<Parametro> listar(String filtro) throws PersistenceException {
+    public List<Parametro> listar(String filtro) throws PersistenciaException {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
-    public void eliminarParametro(Integer idParametro) throws PersistenceException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public void eliminarParametro(Integer idParametro) throws PersistenciaException{
+        EntityManager entityManager = conexionBD.conexionBD();
+        try{
+            entityManager.getTransaction().begin();
+            Parametro parametroEliminado = this.consultarParametroPorID(idParametro);
+            entityManager.remove(parametroEliminado);
+        }catch(Exception ex){
+            entityManager.getTransaction().rollback();
+            throw new PersistenciaException("Error al eliminar el parámetro, hubo un rollback: ");
+        }finally{
+            
+        }
     }
 
     @Override
-    public Parametro consultarParametroPorID(Integer idParametro) throws PersistenceException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public Parametro consultarParametroPorID(Integer idParametro) throws PersistenciaException{
+        EntityManager entityManager = conexionBD.conexionBD();
+        try{
+            Parametro parametroEncontrado = entityManager.find(Parametro.class, idParametro);
+            if(parametroEncontrado == null){
+                throw new Exception("El parametro no existe");
+            }
+            return parametroEncontrado;
+        }catch(Exception ex){
+            throw new PersistenciaException("Error al consultar el paraemtro por ID:");
+        }finally{
+            entityManager.close();
+        }
     }
     
 }
