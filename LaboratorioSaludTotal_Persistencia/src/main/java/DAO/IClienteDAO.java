@@ -5,6 +5,9 @@
 package DAO;
 
 import Entidades.Cliente;
+import Entidades.Sexo;
+import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  *
@@ -12,5 +15,9 @@ import Entidades.Cliente;
  */
 public interface IClienteDAO {
     
-    Cliente buscarClienteId (int id);
+    Cliente buscarClienteId (int id) throws Exception;
+    List<Cliente> buscarClienteNombre (String nombre) throws PersistenciaException;
+    List<Cliente> buscarClienteFechaNacimiento (LocalDateTime fecha) throws PersistenciaException;
+    List<Cliente> buscarClienteTipoSangre (String tipoSangre) throws PersistenciaException;
+    List<Cliente> buscarClienteSexo (Sexo sexo) throws PersistenciaException;
 }
