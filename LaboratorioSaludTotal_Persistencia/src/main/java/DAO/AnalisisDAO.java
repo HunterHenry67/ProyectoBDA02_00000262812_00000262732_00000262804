@@ -5,28 +5,27 @@
 package DAO;
 
 import Entidades.Analisis;
-import Entidades.Muestra;
 import java.util.List;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 /**
- *
  * @author BALAMRUSH
  */
 public class AnalisisDAO implements IAnalisisDAO {
 
-    private final EntityManagerFactory emf;
+    private IConexionBD conexion;
 
     public AnalisisDAO() {
-        this.emf = Persistence.createEntityManagerFactory("NombreDeTuUnidadPersistencia");
+        this.conexion = new ConexionBD();
     }
 
     @Override
     public Analisis guardar(Analisis analisis) throws PersistenciaException {
 
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = conexion.conexionBD();
 
         try {
             em.getTransaction().begin();
@@ -53,7 +52,7 @@ public class AnalisisDAO implements IAnalisisDAO {
     @Override
     public Analisis actualizar(Analisis analisis) throws PersistenciaException {
 
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = conexion.conexionBD();
 
         try {
 
@@ -80,19 +79,21 @@ public class AnalisisDAO implements IAnalisisDAO {
 
     @Override
     public void eliminar(Integer idAnalisis) throws PersistenciaException {
-        EntityManager em = emf.createEntityManager();
-        
-        try{
-            
-            em.getTransaction().begin();;
+        EntityManager em = conexion.conexionBD();
+
+        try {
+
+            em.getTransaction().begin();
             Analisis analisisRemover = em.find(Analisis.class, idAnalisis);
             em.remove(analisisRemover);
             em.getTransaction().commit();
-        
-        } catch (Exception e){
-            if(em.getTransaction().isActive()){
+
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) {
                 em.getTransaction().rollback();
             }
+            throw new PersistenciaException("Error al eliminar el análisis: " + e.getMessage());
+
         } finally {
             em.close();
         }
@@ -100,17 +101,75 @@ public class AnalisisDAO implements IAnalisisDAO {
 
     @Override
     public Analisis consultarPorId(Integer idAnalisis) throws PersistenciaException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+
+        EntityManager em = conexion.conexionBD();
+
+        try {
+
+            CriteriaBuilder cb = em.getCriteriaBuilder();
+            CriteriaQuery<Analisis> cq = cb.createQuery(Analisis.class);
+            Root<Analisis> root = cq.from(Analisis.class);
+
+            cq.select(root)
+                    .where(cb.equal(root.get("idAnalisis"), idAnalisis));
+
+            return em.createQuery(cq).getSingleResult();
+
+        } catch (Exception e) {
+
+            throw new PersistenciaException("Error al consultar el análisis: " + e.getMessage());
+
+        } finally {
+            em.close();
+        }
     }
 
     @Override
     public List<Analisis> consultarTodos() throws PersistenciaException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+
+        EntityManager em = conexion.conexionBD();
+
+        try {
+
+            CriteriaBuilder cb = em.getCriteriaBuilder();
+            CriteriaQuery<Analisis> cq = cb.createQuery(Analisis.class);
+            Root<Analisis> root = cq.from(Analisis.class);
+
+            cq.select(root);
+
+            return em.createQuery(cq).getResultList();
+
+        } catch (Exception e) {
+
+            throw new PersistenciaException("Error al consultar los análisis: " + e.getMessage());
+
+        } finally {
+            em.close();
+        }
     }
 
     @Override
     public List<Analisis> buscarPorNombre(String nombre) throws PersistenciaException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+
+        EntityManager em = conexion.conexionBD();
+
+        try {
+
+            CriteriaBuilder cb = em.getCriteriaBuilder();
+            CriteriaQuery<Analisis> cq = cb.createQuery(Analisis.class);
+            Root<Analisis> root = cq.from(Analisis.class);
+
+            cq.select(root).where(cb.like(root.get("nombre"), "%" + nombre + "%"));
+
+            return em.createQuery(cq).getResultList();
+
+        } catch (Exception e) {
+
+            throw new PersistenciaException("Error al buscar análisis: " + e.getMessage());
+
+        } finally {
+            em.close();
+        }
     }
 
 }
