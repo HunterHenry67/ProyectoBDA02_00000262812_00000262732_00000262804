@@ -4,10 +4,21 @@
  */
 package DAO;
 
+import Entidades.Parametro;
+import java.util.List;
+import javax.persistence.PersistenceException;
+
 /**
  *
  * @author BALAMRUSH
  */
 public interface IParametroDAO {
-    
+
+    Parametro registarParametro(Parametro nuevoParametro) ;
+
+    List<Parametro> listar(String filtro) throws PersistenceException;
+
+    void eliminarParametro(Integer idParametro) throws PersistenceException;
+
+    Parametro consultarParametroPorID(Integer idParametro) throws PersistenceException;
 }
