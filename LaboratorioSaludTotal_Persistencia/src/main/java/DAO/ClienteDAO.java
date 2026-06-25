@@ -4,10 +4,30 @@
  */
 package DAO;
 
+import Entidades.Cliente;
+
 /**
  *
  * @author BALAMRUSH
  */
-public class ClienteDAO {
+public class ClienteDAO implements IClienteDAO{
+
+    @Override
+    public Cliente buscarClienteId(int id) {
+        
+        String sql = """
+                     Select
+                        idCliente,
+                        nombre,
+                        apellidoPaterno,
+                        apellidoMaterno,
+                        fechaNacimiento,
+                        tipoSangre,
+                        sexo
+                     FROM Cliente
+                     Where idCliente = ?
+                     """;
+        return null;
+    }
     
 }
