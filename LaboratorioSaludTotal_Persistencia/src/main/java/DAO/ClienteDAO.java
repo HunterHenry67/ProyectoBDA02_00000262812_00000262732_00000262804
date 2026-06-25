@@ -11,6 +11,9 @@ import java.time.LocalTime;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 /**
  *
@@ -48,19 +51,19 @@ public class ClienteDAO implements IClienteDAO{
         EntityManager em = conexion.conexionBD();
     
         try {
-            String jpql = """
-                            SELECT c 
-                            FROM Cliente c 
-                            WHERE c.nombre LIKE :textoBuscado 
-                                OR c.apellidoPaterno LIKE :textoBuscado 
-                                OR c.apellidoMaterno LIKE :textoBuscado
-                          """;
-              
-            TypedQuery<Cliente> query = em.createQuery(jpql, Cliente.class);
+            CriteriaBuilder cb = em.getCriteriaBuilder();
+            CriteriaQuery<Cliente> cq = cb.createQuery(Cliente.class);
+            Root<Cliente> root = cq.from(Cliente.class);
 
-            query.setParameter("textoBuscado", "%" + nombre + "%");
+            String textoBuscado = "%" + nombre + "%";
 
-            return query.getResultList();
+            javax.persistence.criteria.Predicate p1 = cb.like(root.get("nombre"), textoBuscado);
+            javax.persistence.criteria.Predicate p2 = cb.like(root.get("apellidoPaterno"), textoBuscado);
+            javax.persistence.criteria.Predicate p3 = cb.like(root.get("apellidoMaterno"), textoBuscado);
+
+            cq.select(root).where(cb.or(p1, p2, p3));
+
+            return em.createQuery(cq).getResultList();
 
         } catch (Exception e) {
             throw new PersistenciaException("Error al buscar cliente por nombre en DAO");
@@ -77,19 +80,15 @@ public class ClienteDAO implements IClienteDAO{
     
         try {
             LocalDateTime inicioDia = fecha.with(LocalTime.MIN); 
-            LocalDateTime finDia = fecha.with(LocalTime.MAX);    
-            String jpql = """
-                          SELECT c 
-                          FROM Cliente c 
-                          WHERE c.fechaNacimiento BETWEEN :paramInicio AND :paramFin            
-                          """;
-                    
-                    
-            TypedQuery<Cliente> query = em.createQuery(jpql, Cliente.class);
-            query.setParameter("paramInicio", inicioDia);
-            query.setParameter("paramFin", finDia);
+            LocalDateTime finDia = fecha.with(LocalTime.MAX);
 
-            return query.getResultList();
+            CriteriaBuilder cb = em.getCriteriaBuilder();
+            CriteriaQuery<Cliente> cq = cb.createQuery(Cliente.class);
+            Root<Cliente> root = cq.from(Cliente.class);
+
+            cq.select(root).where(cb.between(root.get("fechaNacimiento"), inicioDia, finDia));
+
+            return em.createQuery(cq).getResultList();
         } catch (Exception e) {
             throw new PersistenciaException("Error al buscar clientes por fecha de nacimiento en DAO");
         } finally {
@@ -104,20 +103,14 @@ public class ClienteDAO implements IClienteDAO{
         EntityManager em = conexion.conexionBD();
     
         try {
-            String jpql = """
-                          SELECT c 
-                          FROM Cliente c 
-                          WHERE c.tipoSangre LIKE :tipoSangre
-                          """;
-                    
-                    
-
-            TypedQuery<Cliente> query = em.createQuery(jpql, Cliente.class);
-
-            query.setParameter("tipoSangre", "%" + tipoSangre + "%");
-
-            return query.getResultList();
-
+            CriteriaBuilder cb = em.getCriteriaBuilder();
+            CriteriaQuery<Cliente> cq = cb.createQuery(Cliente.class);
+            Root<Cliente> root = cq.from(Cliente.class);
+            
+            String tipoBuscado = "%" + tipoSangre + "%";
+            cq.select(root).where(cb.like(root.get("tipoSangre"),tipoBuscado));
+                   
+            return em.createQuery(cq).getResultList();
         } catch (Exception e) {
             throw new PersistenciaException("Error al buscar cliente por tipoSangre en DAO");
         } finally {
@@ -132,15 +125,13 @@ public class ClienteDAO implements IClienteDAO{
         EntityManager em = conexion.conexionBD();
         
         try{
-            String jpql = """
-                          Select c
-                          From Cliente c
-                          Where c.sexo = :sexo
-                          """;
-            TypedQuery<Cliente> query = em.createQuery(jpql, Cliente.class);
-            query.setParameter("sexo", sexo);
-            
-            return query.getResultList();
+            CriteriaBuilder cb = em.getCriteriaBuilder();
+            CriteriaQuery<Cliente> cq = cb.createQuery(Cliente.class);
+            Root<Cliente> root = cq.from(Cliente.class);
+
+            cq.select(root).where(cb.equal(root.get("sexo"), sexo));
+
+            return em.createQuery(cq).getResultList();
         }catch (Exception e){
             throw new PersistenciaException ("Eror al obtener cliente por categoria sexo en DAO");
         }finally{
@@ -155,12 +146,15 @@ public class ClienteDAO implements IClienteDAO{
         EntityManager em = conexion.conexionBD();
         
         try{
-            String jpql = """
-                          Select c
-                          From Cliente c
-                          """;
-            TypedQuery<Cliente> query = em.createQuery(jpql, Cliente.class);
-            return query.getResultList();
+            CriteriaBuilder cb = em.getCriteriaBuilder();
+        
+            CriteriaQuery<Cliente> cq = cb.createQuery(Cliente.class);
+
+            Root<Cliente> root = cq.from(Cliente.class);
+
+            cq.select(root);
+
+            return em.createQuery(cq).getResultList();
         }catch (Exception e){
             throw new PersistenciaException ("Eror al obtener cliente por categoria sexo en DAO");
         }finally{
