@@ -41,5 +41,4 @@ public class Resultado implements Serializable {
     @ManyToOne
     @JoinColumn(name = "idParametro", nullable = false)
     private Parametro parametro;
-    
 }

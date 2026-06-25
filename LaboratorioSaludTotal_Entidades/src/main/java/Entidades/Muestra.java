@@ -33,6 +33,5 @@ public class Muestra implements Serializable {
     private String nombre;
     
     @OneToMany(mappedBy = "muestra", cascade = CascadeType.PERSIST)
-    private List<Analisis> listaAnalisis = new ArrayList<>();
-    
+    private List<Analisis> listaAnalisis = new ArrayList<>(); 
 }

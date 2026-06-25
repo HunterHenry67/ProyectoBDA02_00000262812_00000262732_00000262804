@@ -49,8 +49,5 @@ public class Cliente implements Serializable {
     private String tipoSangre;
     
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.PERSIST)
-    private List<Prueba> listaPruebas = new ArrayList<>();
-    
-   
-    
+    private List<Prueba> listaPruebas = new ArrayList<>();  
 }

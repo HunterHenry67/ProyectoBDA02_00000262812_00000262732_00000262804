@@ -48,7 +48,5 @@ public class Prueba implements Serializable {
     private Doctor Doctor;
     
     @OneToMany(mappedBy = "idResultado", cascade = CascadeType.PERSIST)
-    private List<Resultado> listaResultado = new ArrayList<>();
-    
-    
+    private List<Resultado> listaResultado = new ArrayList<>();    
 }
