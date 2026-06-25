@@ -7,6 +7,8 @@ package Entidades;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -25,6 +27,7 @@ public class Rango implements Serializable {
     @Column(name = "idRango", nullable = false)
     private Integer idRango;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "sexo", nullable = false, length = 20)
     private Sexo sexo;
     
