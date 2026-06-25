@@ -52,4 +52,73 @@ public class Parametro implements Serializable {
     @ManyToOne
     @JoinColumn(name = "idAnalisis", nullable = false)
     private Analisis analisis;
+
+    public Parametro() {
+    }
+
+    public Integer getIdParametro() {
+        return idParametro;
+    }
+
+    public void setIdParametro(Integer idParametro) {
+        this.idParametro = idParametro;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public Integer getOrdenReporte() {
+        return ordenReporte;
+    }
+
+    public void setOrdenReporte(Integer ordenReporte) {
+        this.ordenReporte = ordenReporte;
+    }
+
+    public String getNotaDescriptiva() {
+        return notaDescriptiva;
+    }
+
+    public void setNotaDescriptiva(String notaDescriptiva) {
+        this.notaDescriptiva = notaDescriptiva;
+    }
+
+    public String getUnidadMedida() {
+        return unidadMedida;
+    }
+
+    public void setUnidadMedida(String unidadMedida) {
+        this.unidadMedida = unidadMedida;
+    }
+
+    public List<Resultado> getListaResultados() {
+        return listaResultados;
+    }
+
+    public void setListaResultados(List<Resultado> listaResultados) {
+        this.listaResultados = listaResultados;
+    }
+
+    public List<Rango> getListaRangos() {
+        return listaRangos;
+    }
+
+    public void setListaRangos(List<Rango> listaRangos) {
+        this.listaRangos = listaRangos;
+    }
+
+    public Analisis getAnalisis() {
+        return analisis;
+    }
+
+    public void setAnalisis(Analisis analisis) {
+        this.analisis = analisis;
+    }
+    
+    
 }

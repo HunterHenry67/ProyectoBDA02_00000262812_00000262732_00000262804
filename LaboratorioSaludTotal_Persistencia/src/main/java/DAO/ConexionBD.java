@@ -4,10 +4,21 @@
  */
 package DAO;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+
 /**
  *
  * @author BALAMRUSH
  */
-public class ConexionBD {
+public class ConexionBD implements IConexionBD{
+
+    @Override
+    public EntityManager conexionBD() {
+        EntityManagerFactory managerFactory = Persistence.createEntityManagerFactory("LaboratorioSaludPU");
+        EntityManager entityManager = managerFactory.createEntityManager();
+        return entityManager;
+    }
     
 }
