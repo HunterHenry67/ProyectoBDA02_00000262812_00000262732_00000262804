@@ -13,7 +13,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -24,8 +23,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "doctor")
 public class Doctor implements Serializable {
-
-    
+ 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "idDoctor", nullable = false)
@@ -41,7 +39,7 @@ public class Doctor implements Serializable {
     private String apellidoMaterno;
     
     @Column(name = "sexo", nullable = false, length = 9)
-    private String sexo;
+    private Sexo sexo;
     
     @OneToMany(mappedBy = "dcotor", cascade = CascadeType.PERSIST)
     private List<Prueba> listaPruebas = new ArrayList<>();

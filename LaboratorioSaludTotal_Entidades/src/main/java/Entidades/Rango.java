@@ -26,7 +26,7 @@ public class Rango implements Serializable {
     private Integer idRango;
 
     @Column(name = "sexo", nullable = false, length = 20)
-    private String sexo;
+    private Sexo sexo;
     
     @Column(name = "edadIncial", nullable = false)
     private Integer edadInicial;
