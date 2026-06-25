@@ -49,4 +49,57 @@ public class Prueba implements Serializable {
     
     @OneToMany(mappedBy = "idResultado", cascade = CascadeType.PERSIST)
     private List<Resultado> listaResultado = new ArrayList<>();    
+
+    public Prueba() {
+    }
+
+    public Integer getIdPrueba() {
+        return idPrueba;
+    }
+
+    public void setIdPrueba(Integer idPrueba) {
+        this.idPrueba = idPrueba;
+    }
+
+    public Integer getFolio() {
+        return folio;
+    }
+
+    public void setFolio(Integer folio) {
+        this.folio = folio;
+    }
+
+    public LocalDateTime getFechaHora() {
+        return fechaHora;
+    }
+
+    public void setFechaHora(LocalDateTime fechaHora) {
+        this.fechaHora = fechaHora;
+    }
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
+
+    public Doctor getDoctor() {
+        return Doctor;
+    }
+
+    public void setDoctor(Doctor Doctor) {
+        this.Doctor = Doctor;
+    }
+
+    public List<Resultado> getListaResultado() {
+        return listaResultado;
+    }
+
+    public void setListaResultado(List<Resultado> listaResultado) {
+        this.listaResultado = listaResultado;
+    }
+    
+    
 }

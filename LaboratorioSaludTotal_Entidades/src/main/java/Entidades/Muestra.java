@@ -34,4 +34,33 @@ public class Muestra implements Serializable {
     
     @OneToMany(mappedBy = "muestra", cascade = CascadeType.PERSIST)
     private List<Analisis> listaAnalisis = new ArrayList<>(); 
+
+    public Muestra() {
+    }
+
+    public Integer getIdMuestra() {
+        return idMuestra;
+    }
+
+    public void setIdMuestra(Integer idMuestra) {
+        this.idMuestra = idMuestra;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public List<Analisis> getListaAnalisis() {
+        return listaAnalisis;
+    }
+
+    public void setListaAnalisis(List<Analisis> listaAnalisis) {
+        this.listaAnalisis = listaAnalisis;
+    }
+    
+    
 }

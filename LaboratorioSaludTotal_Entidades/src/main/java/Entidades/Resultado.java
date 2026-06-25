@@ -41,4 +41,49 @@ public class Resultado implements Serializable {
     @ManyToOne
     @JoinColumn(name = "idParametro", nullable = false)
     private Parametro parametro;
+
+    public Resultado() {
+    }
+
+    public Integer getIdResultado() {
+        return idResultado;
+    }
+
+    public void setIdResultado(Integer idResultado) {
+        this.idResultado = idResultado;
+    }
+
+    public Double getResultadoObtenido() {
+        return resultadoObtenido;
+    }
+
+    public void setResultadoObtenido(Double resultadoObtenido) {
+        this.resultadoObtenido = resultadoObtenido;
+    }
+
+    public String getObservacion() {
+        return observacion;
+    }
+
+    public void setObservacion(String observacion) {
+        this.observacion = observacion;
+    }
+
+    public Prueba getPrueba() {
+        return prueba;
+    }
+
+    public void setPrueba(Prueba prueba) {
+        this.prueba = prueba;
+    }
+
+    public Parametro getParametro() {
+        return parametro;
+    }
+
+    public void setParametro(Parametro parametro) {
+        this.parametro = parametro;
+    }
+    
+    
 }

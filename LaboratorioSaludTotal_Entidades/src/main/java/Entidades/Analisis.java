@@ -36,4 +36,41 @@ public class Analisis implements Serializable {
     @ManyToOne
     @JoinColumn(name = "idMuestra", nullable = false)
     private Muestra muestra;
+
+    public Analisis() {
+    }
+    
+    public Integer getIdAnalisis() {
+        return idAnalisis;
+    }
+
+    public void setIdAnalisis(Integer idAnalisis) {
+        this.idAnalisis = idAnalisis;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getNota() {
+        return nota;
+    }
+
+    public void setNota(String nota) {
+        this.nota = nota;
+    }
+
+    public Muestra getMuestra() {
+        return muestra;
+    }
+
+    public void setMuestra(Muestra muestra) {
+        this.muestra = muestra;
+    }
+    
+    
 }
