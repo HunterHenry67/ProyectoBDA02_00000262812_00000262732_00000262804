@@ -24,51 +24,93 @@ public class AnalisisDAO implements IAnalisisDAO {
     }
 
     @Override
-    public Analisis guardar(GuardarAnalisisDTO guardar) throws Exception {
+    public Analisis guardar(Analisis analisis) throws PersistenciaException {
+
         EntityManager em = emf.createEntityManager();
 
         try {
             em.getTransaction().begin();
 
-            em.persist(guardar);
+            em.persist(analisis);
 
             em.getTransaction().commit();
 
-            return guardar;
+            return analisis;
+
         } catch (Exception e) {
+
             if (em.getTransaction().isActive()) {
                 em.getTransaction().rollback();
             }
 
-            throw new Exception("Error al guardar el análisis", e);
+            throw new PersistenciaException("Error al guardar el análisis: " + e.getMessage());
+
         } finally {
             em.close();
         }
-
     }
 
     @Override
-    public Analisis actualizar(Object actualizar) throws Exception {
+    public Analisis actualizar(Analisis analisis) throws PersistenciaException {
+
+        EntityManager em = emf.createEntityManager();
+
+        try {
+
+            em.getTransaction().begin();
+
+            Analisis analisisActualizado = em.merge(analisis);
+
+            em.getTransaction().commit();
+
+            return analisisActualizado;
+
+        } catch (Exception e) {
+
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+
+            throw new PersistenciaException("Error al actualizar el análisis: " + e.getMessage());
+
+        } finally {
+            em.close();
+        }
+    }
+
+    @Override
+    public void eliminar(Integer idAnalisis) throws PersistenciaException {
+        EntityManager em = emf.createEntityManager();
+        
+        try{
+            
+            em.getTransaction().begin();;
+            Analisis analisisRemover = em.find(Analisis.class, idAnalisis);
+            em.remove(analisisRemover);
+            em.getTransaction().commit();
+        
+        } catch (Exception e){
+            if(em.getTransaction().isActive()){
+                em.getTransaction().rollback();
+            }
+        } finally {
+            em.close();
+        }
+    }
+
+    @Override
+    public Analisis consultarPorId(Integer idAnalisis) throws PersistenciaException {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
-    public void eliminar(Object eliminar) throws Exception {
+    public List<Analisis> consultarTodos() throws PersistenciaException {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
-    public Analisis consultarPorId(Integer idAnalisis) throws Exception {
+    public List<Analisis> buscarPorNombre(String nombre) throws PersistenciaException {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
-    @Override
-    public List<Analisis> consultarTodos() throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public List<Analisis> buscarPorNombre(String nombre) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
 }

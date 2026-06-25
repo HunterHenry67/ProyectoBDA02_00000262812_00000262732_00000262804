@@ -13,15 +13,15 @@ import java.util.List;
 
 public interface IAnalisisDAO {
 
-    public Analisis guardar(GuardarAnalisisDTO guardar) throws Exception;
+    public Analisis guardar(Analisis analisis) throws PersistenciaException;
 
-    public Analisis actualizar(ActualizarAnalisisDTO actualizar) throws Exception;
+    public Analisis actualizar(Analisis analisis) throws PersistenciaException;
 
-    public void eliminar(EliminarAnalisisDTO eliminar) throws Exception;
+    public void eliminar(Integer idAnalisis) throws PersistenciaException;
 
-    public Analisis consultarPorId(Integer idAnalisis) throws Exception;
+    public Analisis consultarPorId(Integer idAnalisis) throws PersistenciaException;
 
-    public List<Analisis> consultarTodos() throws Exception;
+    public List<Analisis> consultarTodos() throws PersistenciaException;
 
-    public List<Analisis> buscarPorNombre(String nombre) throws Exception;
+    public List<Analisis> buscarPorNombre(String nombre) throws PersistenciaException;
 }
