@@ -15,9 +15,10 @@ import java.util.List;
  */
 public interface IClienteDAO {
     
-    Cliente buscarClienteId (int id) throws Exception;
+    Cliente buscarClienteId (int id) throws PersistenciaException;
     List<Cliente> buscarClienteNombre (String nombre) throws PersistenciaException;
     List<Cliente> buscarClienteFechaNacimiento (LocalDateTime fecha) throws PersistenciaException;
     List<Cliente> buscarClienteTipoSangre (String tipoSangre) throws PersistenciaException;
     List<Cliente> buscarClienteSexo (Sexo sexo) throws PersistenciaException;
+    List<Cliente> ObtenerClientes () throws PersistenciaException;
 }
