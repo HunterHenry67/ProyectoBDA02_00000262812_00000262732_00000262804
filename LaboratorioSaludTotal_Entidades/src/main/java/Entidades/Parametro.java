@@ -43,10 +43,10 @@ public class Parametro implements Serializable {
     @Column(name = "unidadMedida", nullable = false, length = 10)
     private String unidadMedida;
     
-    @OneToMany(mappedBy = "reporte", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "parametro", cascade = CascadeType.PERSIST)
     private List<Resultado> listaResultados = new ArrayList<>();
     
-    @OneToMany(mappedBy = "reporte", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "parametro", cascade = CascadeType.PERSIST)
     private List<Rango> listaRangos = new ArrayList<>();
     
     @ManyToOne
@@ -54,6 +54,23 @@ public class Parametro implements Serializable {
     private Analisis analisis;
 
     public Parametro() {
+    }
+
+    public Parametro(String nombre, Integer ordenReporte, String notaDescriptiva, String unidadMedida, Analisis analisis) {
+        this.nombre = nombre;
+        this.ordenReporte = ordenReporte;
+        this.notaDescriptiva = notaDescriptiva;
+        this.unidadMedida = unidadMedida;
+        this.analisis = analisis;
+    }
+
+    public Parametro(Integer idParametro, String nombre, Integer ordenReporte, String notaDescriptiva, String unidadMedida, Analisis analisis) {
+        this.idParametro = idParametro;
+        this.nombre = nombre;
+        this.ordenReporte = ordenReporte;
+        this.notaDescriptiva = notaDescriptiva;
+        this.unidadMedida = unidadMedida;
+        this.analisis = analisis;
     }
 
     public Integer getIdParametro() {
