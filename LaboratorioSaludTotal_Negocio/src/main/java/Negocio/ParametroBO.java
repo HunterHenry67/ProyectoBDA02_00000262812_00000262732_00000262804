@@ -13,12 +13,15 @@ import Entidades.Analisis;
 import Entidades.Parametro;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  *
  * @author BALAMRUSH
  */
 public class ParametroBO implements IParametroBO {
+
+    private static final Logger LOGGER = Logger.getLogger(ParametroBO.class.getName());
 
     private IParametroDAO parametroDAO;
     private IAnalisisDAO analisisDAO;
@@ -44,6 +47,7 @@ public class ParametroBO implements IParametroBO {
             parametro.setAnalisis(analisis);           
             return parametroDAO.registarParametro(parametro);
         }catch(PersistenciaException ex){
+            LOGGER.severe(ex.getMessage());
             throw new NegocioException("Error al registrar el parámetro: "+ex.getMessage());
         }
     }
@@ -54,7 +58,8 @@ public class ParametroBO implements IParametroBO {
             List<Parametro> parametros = parametroDAO.listarTodos();
             return conversionADTO(parametros);
         }catch(PersistenciaException ex){
-            throw new NegocioException("Error al lista todos los parámetros.");
+            LOGGER.severe(ex.getMessage());
+            throw new NegocioException("Error al lista todos los parámetros: "+ex.getMessage());
         }
     }
 
@@ -66,6 +71,7 @@ public class ParametroBO implements IParametroBO {
             }
             parametroDAO.eliminarParametro(idParametro);
         }catch(PersistenciaException ex){
+            LOGGER.severe(ex.getMessage());
             throw new NegocioException("Error al eliminar el parámetro: "+ex.getMessage());
         }
     }
@@ -78,6 +84,7 @@ public class ParametroBO implements IParametroBO {
             }
             return parametroDAO.consultarParametroPorID(idParametro);
         }catch(PersistenciaException ex){
+            LOGGER.severe(ex.getMessage());
             throw new NegocioException("Error al consultar el parámetro por ID: "+ex.getMessage());
         }
     }
@@ -91,6 +98,7 @@ public class ParametroBO implements IParametroBO {
             List<Parametro> parametros = parametroDAO.consultarParametroPorNombre(nombre.trim());
             return conversionADTO(parametros);
         }catch(PersistenciaException ex){
+            LOGGER.severe(ex.getMessage());
             throw new NegocioException("Error al consultar el parámetro por nombre: "+ex.getMessage());
         }
     }
@@ -104,6 +112,7 @@ public class ParametroBO implements IParametroBO {
             List<Parametro> parametros = parametroDAO.consultarParametroPorOrden(orden);
             return conversionADTO(parametros);
         }catch(PersistenciaException ex){
+            LOGGER.severe(ex.getMessage());
             throw new NegocioException("Error al buscar el parametro por orden: "+ex.getMessage());
         }
     }
@@ -117,6 +126,7 @@ public class ParametroBO implements IParametroBO {
             List<Parametro> parametros = parametroDAO.consultarParametroPorUnidadMedidad(unidadMedida);
             return conversionADTO(parametros);
         }catch(PersistenciaException ex){
+            LOGGER.severe(ex.getMessage());
             throw new NegocioException("Error al consultar el parámetro por unidad de medidad: "+ex.getMessage());
         }
     }
@@ -130,6 +140,7 @@ public class ParametroBO implements IParametroBO {
             List<Parametro> parametros = parametroDAO.consultarParametroPorCantidadRango(rangos);
             return conversionADTO(parametros);
         }catch(PersistenciaException ex){
+            LOGGER.severe(ex.getMessage());
             throw new NegocioException("Error al consultar el parámetro por rango: "+ex.getMessage());
         }
     }
@@ -142,6 +153,7 @@ public class ParametroBO implements IParametroBO {
             }
             return parametroDAO.contarRangos(idParametro);
         }catch(PersistenciaException ex){
+            LOGGER.severe(ex.getMessage());
             throw new NegocioException("Error al contar los rangos: "+ex.getMessage());
         }
     }
@@ -183,6 +195,7 @@ public class ParametroBO implements IParametroBO {
             }
             return listaParametrosDTO;
         } catch (PersistenciaException ex) {
+            LOGGER.severe(ex.getMessage());
             throw new NegocioException("Error al convertir el paraemtro a DTO: " + ex.getMessage());
         }
     }
