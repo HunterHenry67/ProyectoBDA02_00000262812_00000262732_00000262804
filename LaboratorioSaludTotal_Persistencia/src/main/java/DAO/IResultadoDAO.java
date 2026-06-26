@@ -18,7 +18,7 @@ public interface IResultadoDAO {
 
     Resultado consultarResultadoPorID(Integer idResultado) throws PersistenciaException;
 
-    List<Resultado> consultarResultadoPorPrueba() throws PersistenciaException;
+    List<Resultado> consultarResultadoPorPrueba(Integer idPrueba) throws PersistenciaException;
 
     List consultarResultadoPorPruebaParametro(Integer idPrueba, Integer idParametro) throws PersistenciaException;
 
