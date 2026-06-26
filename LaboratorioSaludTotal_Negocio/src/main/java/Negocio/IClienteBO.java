@@ -6,6 +6,7 @@ package Negocio;
 
 import Entidades.Cliente;
 import Entidades.Sexo;
+import enriquemadridalvarez.laboratoriosaludtotal_dto.ClienteDTO;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -14,10 +15,10 @@ import java.util.List;
  * @author user
  */
 public interface IClienteBO {
-    Cliente buscarClienteId (int id) throws NegocioException;
-    List<Cliente> buscarClienteNombre (String nombre) throws NegocioException;
-    List<Cliente> buscarClienteFechaNacimiento (LocalDateTime fecha) throws NegocioException;
-    List<Cliente> buscarClienteTipoSangre (String tipoSangre) throws NegocioException;
-    List<Cliente> buscarClienteSexo (Sexo sexo) throws NegocioException;
-    List<Cliente> ObtenerClientes () throws NegocioException;
+    ClienteDTO buscarClienteId (int id) throws NegocioException;
+    List<ClienteDTO> buscarClienteNombre (String nombre) throws NegocioException;
+    List<ClienteDTO> buscarClienteFechaNacimiento (LocalDateTime fecha) throws NegocioException;
+    List<ClienteDTO> buscarClienteTipoSangre (String tipoSangre) throws NegocioException;
+    List<ClienteDTO> buscarClienteSexo (Sexo sexo) throws NegocioException;
+    List<ClienteDTO> ObtenerClientes () throws NegocioException;
 }

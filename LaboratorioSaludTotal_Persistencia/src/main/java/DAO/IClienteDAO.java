@@ -20,5 +20,5 @@ public interface IClienteDAO {
     List<Cliente> buscarClienteFechaNacimiento (LocalDateTime fecha) throws PersistenciaException;
     List<Cliente> buscarClienteTipoSangre (String tipoSangre) throws PersistenciaException;
     List<Cliente> buscarClienteSexo (Sexo sexo) throws PersistenciaException;
-    List<Cliente> ObtenerClientes () throws PersistenciaException;
+    List<Cliente> obtenerClientes () throws PersistenciaException;
 }
