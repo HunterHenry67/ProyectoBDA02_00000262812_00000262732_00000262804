@@ -4,10 +4,16 @@
  */
 package DAO;
 
+import Entidades.Rango;
+import java.util.List;
+
 /**
  *
  * @author BALAMRUSH
  */
 public interface IRangoDAO {
-    
+    Rango agregarRango(Rango rango) throws PersistenciaException;
+    Rango eliminarRango(int idRango) throws PersistenciaException;
+    List<Rango> buscarRangosPorParametro(int idParametro) throws PersistenciaException;
+    long obtenerRangosPorParametro(int idParametro, String sexo, int edad) throws PersistenciaException;
 }
