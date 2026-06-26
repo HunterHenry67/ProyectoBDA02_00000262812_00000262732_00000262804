@@ -6,7 +6,7 @@ package Negocio;
 
 import Entidades.Cliente;
 import Entidades.Sexo;
-import enriquemadridalvarez.laboratoriosaludtotal_dto.ClienteDTO;
+import DTO.ClienteDTO;
 import java.time.LocalDateTime;
 import java.util.List;
 
