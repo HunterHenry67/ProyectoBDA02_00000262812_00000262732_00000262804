@@ -4,10 +4,19 @@
  */
 package Negocio;
 
+import DAO.PersistenciaException;
+import Entidades.Doctor;
+import Entidades.Sexo;
+import java.util.List;
+
 /**
  *
  * @author Andre
  */
 public interface IDoctorBO {
+    Doctor consultarPorID(Integer idDoctor) throws PersistenciaException;
+    List<Doctor> consultarTodos() throws PersistenciaException;
+    List<Doctor> buscarPorNombres(String nombres) throws PersistenciaException;
+    List<Doctor> buscarPorSexo(Sexo sexo) throws PersistenciaException;
     
 }
