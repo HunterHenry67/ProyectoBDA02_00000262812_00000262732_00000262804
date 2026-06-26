@@ -82,7 +82,7 @@ public class ResultadoDAO implements IResultadoDAO{
     }
 
     @Override
-    public List consultarResultadoPorPruebaParametro(Integer idPrueba, Integer idParametro) throws PersistenciaException {
+    public Resultado consultarResultadoPorPruebaParametro(Integer idPrueba, Integer idParametro) throws PersistenciaException {
         EntityManager entityManager = conexionBD.conexionBD();
         try{
             CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
@@ -93,7 +93,7 @@ public class ResultadoDAO implements IResultadoDAO{
                     .where(
                             criteriaBuilder.and(criteriaBuilder.equal(ruta.get("prueba").get("idPrueba"), idPrueba),
                             criteriaBuilder.equal(ruta.get("parametro").get("idParametro"), idParametro)));
-            return entityManager.createQuery(criteriaQuery).getResultList();
+            return entityManager.createQuery(criteriaQuery).getSingleResult();
         }catch(NumberFormatException e){
             return null;
         }catch(Exception ex){
