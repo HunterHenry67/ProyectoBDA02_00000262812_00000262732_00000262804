@@ -142,7 +142,7 @@ public class ClienteDAO implements IClienteDAO{
     }
 
     @Override
-    public List<Cliente> ObtenerClientes() throws PersistenciaException {
+    public List<Cliente> obtenerClientes() throws PersistenciaException {
         EntityManager em = conexion.conexionBD();
         
         try{
