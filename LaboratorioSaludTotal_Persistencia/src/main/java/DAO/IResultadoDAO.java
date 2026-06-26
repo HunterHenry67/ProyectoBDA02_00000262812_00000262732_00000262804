@@ -4,10 +4,23 @@
  */
 package DAO;
 
+import Entidades.Resultado;
+import java.util.List;
+import javax.persistence.PersistenceException;
+
 /**
  *
  * @author BALAMRUSH
  */
 public interface IResultadoDAO {
-    
+
+    Resultado registrarResultado(Resultado resultado) throws PersistenciaException;
+
+    Resultado consultarResultadoPorID(Integer idResultado) throws PersistenciaException;
+
+    List<Resultado> consultarResultadoPorPrueba() throws PersistenciaException;
+
+    List consultarResultadoPorPruebaParametro(Integer idPrueba, Integer idParametro) throws PersistenciaException;
+
+    boolean resultadoExiste(Integer idPrueba, Integer idParametro) throws PersistenceException;
 }
