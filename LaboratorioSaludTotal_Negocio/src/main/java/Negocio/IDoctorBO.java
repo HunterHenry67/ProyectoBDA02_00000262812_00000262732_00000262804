@@ -14,9 +14,9 @@ import java.util.List;
  * @author Andre
  */
 public interface IDoctorBO {
-    Doctor consultarPorID(Integer idDoctor) throws PersistenciaException;
-    List<Doctor> consultarTodos() throws PersistenciaException;
-    List<Doctor> buscarPorNombres(String nombres) throws PersistenciaException;
-    List<Doctor> buscarPorSexo(Sexo sexo) throws PersistenciaException;
+    Doctor consultarPorID(Integer idDoctor) throws NegocioException;
+    List<Doctor> consultarTodos() throws NegocioException;
+    List<Doctor> buscarPorNombres(String nombres) throws NegocioException;
+    List<Doctor> buscarPorSexo(Sexo sexo) throws NegocioException;
     
 }

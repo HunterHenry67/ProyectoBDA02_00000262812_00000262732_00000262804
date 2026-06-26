@@ -18,9 +18,9 @@ import javax.persistence.criteria.Root;
  */
 public class DoctorDAO implements IDoctorDAO{
 
-    private final IConexionBD conexionBD;
+    private IConexionBD conexionBD;
     
-    public DoctorDAO(IConexionBD conexionBD){
+    public DoctorDAO(){
         this.conexionBD = conexionBD;
     }
     
