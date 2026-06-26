@@ -9,6 +9,7 @@ import DAO.IClienteDAO;
 import DAO.PersistenciaException;
 import Entidades.Cliente;
 import Entidades.Sexo;
+import enriquemadridalvarez.laboratoriosaludtotal_dto.ClienteDTO;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,21 +27,21 @@ public class ClienteBO implements IClienteBO{
     }
     
     @Override
-    public Cliente buscarClienteId(int id) throws NegocioException {
+    public ClienteDTO buscarClienteId(int id) throws NegocioException {
         
         try {
-            Cliente cliente;
             
             if (id <= 0){
                 throw new NegocioException ("Error en ClienteBO, ID invalido");
             }
             
-            cliente = clienteDAO.buscarClienteId(id);
-            
+            Cliente cliente = clienteDAO.buscarClienteId(id);
             if (cliente == null){
             throw new NegocioException ("Error en ClienteBO, no se encontro ningun cliente con ese id");
             }
-            return cliente;
+            
+            
+            return convertirADTO(cliente);
             
         } catch (PersistenciaException ex) {
             throw new NegocioException ("Error al conectar negocio con dao");
@@ -50,7 +51,7 @@ public class ClienteBO implements IClienteBO{
     }
 
     @Override
-    public List<Cliente> buscarClienteNombre(String nombre) throws NegocioException {
+    public List<ClienteDTO> buscarClienteNombre(String nombre) throws NegocioException {
         try {
             
             if (nombre == null || nombre.trim().isEmpty()) {
@@ -59,18 +60,25 @@ public class ClienteBO implements IClienteBO{
             
             List<Cliente> clientes = clienteDAO.buscarClienteNombre(nombre);
             
-            if (clientes.isEmpty() || clientes == null){
+            if (clientes == null || clientes.isEmpty()){
                 throw new NegocioException("No se encontraron clientes con ese nombre");
+            } 
+            
+            List<ClienteDTO> clientesNuevos = new ArrayList<>();
+            for (Cliente pac : clientes) {
+                ClienteDTO clienteDTO = convertirADTO(pac);
+                clientesNuevos.add(clienteDTO);
+                
             }
             
-            return clientes;
+            return clientesNuevos;
         }catch (PersistenciaException ex) {
             throw new NegocioException ("Error al conectar negocio con Dao");
         }
     }
 
     @Override
-    public List<Cliente> buscarClienteFechaNacimiento(LocalDateTime fecha) throws NegocioException {
+    public List<ClienteDTO> buscarClienteFechaNacimiento(LocalDateTime fecha) throws NegocioException {
         try {
             
             if (fecha == null){
@@ -83,17 +91,24 @@ public class ClienteBO implements IClienteBO{
                 throw new NegocioException("No se encontraron clientes con esa fecha de nacimiento");
             }
             
-            return clientes;
+            List<ClienteDTO> clientesNuevos = new ArrayList<>();
+            for (Cliente pac : clientes) {
+                ClienteDTO clienteDTO = convertirADTO(pac);
+                clientesNuevos.add(clienteDTO);
+                
+            }
+            
+            return clientesNuevos;
         }catch (PersistenciaException ex) {
             throw new NegocioException ("Error al conectar negocio con Dao");
         }
     }
 
     @Override
-    public List<Cliente> buscarClienteTipoSangre(String tipoSangre) throws NegocioException {
+    public List<ClienteDTO> buscarClienteTipoSangre(String tipoSangre) throws NegocioException {
         try {
             
-            if (tipoSangre.isEmpty() || tipoSangre == null){
+            if (tipoSangre == null || tipoSangre.isEmpty()){
                 throw new NegocioException("ingrese datos válidos o correctos");
             }
             
@@ -103,14 +118,21 @@ public class ClienteBO implements IClienteBO{
                 throw new NegocioException("No se encontraron clientes con ese tipo de sangre");
             }
             
-            return clientes;
+            List<ClienteDTO> clientesNuevos = new ArrayList<>();
+            for (Cliente pac : clientes) {
+                ClienteDTO clienteDTO = convertirADTO(pac);
+                clientesNuevos.add(clienteDTO);
+                
+            }
+            
+            return clientesNuevos;
         }catch (PersistenciaException ex) {
             throw new NegocioException ("Error al conectar negocio con Dao");
         }
     }
 
     @Override
-    public List<Cliente> buscarClienteSexo(Sexo sexo) throws NegocioException {
+    public List<ClienteDTO> buscarClienteSexo(Sexo sexo) throws NegocioException {
         try {
             
             if (sexo == null){
@@ -123,26 +145,50 @@ public class ClienteBO implements IClienteBO{
                 throw new NegocioException("No se encontraron clientes con ese sexo");
             }
             
-            return clientes;
+            List<ClienteDTO> clientesNuevos = new ArrayList<>();
+            for (Cliente pac : clientes) {
+                ClienteDTO clienteDTO = convertirADTO(pac);
+                clientesNuevos.add(clienteDTO);
+                
+            }
+            
+            return clientesNuevos;
         }catch (PersistenciaException ex) {
             throw new NegocioException ("Error al conectar negocio con Dao");
         }
     }
 
     @Override
-    public List<Cliente> ObtenerClientes() throws NegocioException {
-        try{
-            List<Cliente> clientes = clienteDAO.ObtenerClientes();
-        
-            if (clientes.isEmpty() || clientes == null){
-                throw new NegocioException("No se encontraron clientes con ese sexo");
+    public List<ClienteDTO> ObtenerClientes() throws NegocioException {
+        try {
+            List<Cliente> listaEntidades = clienteDAO.obtenerClientes();
+
+            List<ClienteDTO> listaDTOs = new ArrayList<>();
+
+            for (Cliente pac : listaEntidades) {
+                ClienteDTO clienteDTO = convertirADTO(pac);
+                listaDTOs.add(clienteDTO);
+                
             }
-            
-            return clientes;
-            
+
+            return listaDTOs;
         }catch (PersistenciaException ex) {
             throw new NegocioException ("Error al conectar negocio con Dao");
         }
+    }
+    
+    private ClienteDTO convertirADTO(Cliente entidadCliente) {
+        ClienteDTO dto = new ClienteDTO();
+
+        dto.setIdCliente(entidadCliente.getIdCliente());
+        dto.setNombres(entidadCliente.getNombres());
+        dto.setApellidoPaterno(entidadCliente.getApellidoPaterno());
+        dto.setApellidoMaterno(entidadCliente.getApellidoMaterno());
+        dto.setSexo(entidadCliente.getSexo().toString());
+        dto.setFechaNacimiento(entidadCliente.getFechaNacimiento());
+        dto.setTipoSangre(entidadCliente.getTipoSangre());
+
+        return dto;
     }
     
 }
