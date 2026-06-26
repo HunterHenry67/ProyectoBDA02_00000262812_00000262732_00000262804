@@ -31,7 +31,7 @@ public class Doctor implements Serializable {
     @Column(name = "idDoctor", nullable = false)
     private Integer idDoctor;
     
-    @Column(name = "nombes", nullable = false, length = 20)
+    @Column(name = "nombres", nullable = false, length = 20)
     private String nombres;
     
     @Column(name = "apellidoPaterno", nullable = false, length = 50)
