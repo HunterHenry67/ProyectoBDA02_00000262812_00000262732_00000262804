@@ -9,5 +9,53 @@ package DTO;
  * @author BALAMRUSH
  */
 public class RegistrarParametroDTO {
-    
+    private String nombre;
+    private Integer ordenReporte;
+    private String notaDescriptiva;
+    private String unidadMedida;
+    private Integer idAnalisis;
+
+    public RegistrarParametroDTO() {
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public Integer getOrdenReporte() {
+        return ordenReporte;
+    }
+
+    public void setOrdenReporte(Integer ordenReporte) {
+        this.ordenReporte = ordenReporte;
+    }
+
+    public String getNotaDescriptiva() {
+        return notaDescriptiva;
+    }
+
+    public void setNotaDescriptiva(String notaDescriptiva) {
+        this.notaDescriptiva = notaDescriptiva;
+    }
+
+    public String getUnidadMedida() {
+        return unidadMedida;
+    }
+
+    public void setUnidadMedida(String unidadMedida) {
+        this.unidadMedida = unidadMedida;
+    }
+
+    public Integer getIdAnalisis() {
+        return idAnalisis;
+    }
+
+    public void setIdAnalisis(Integer idAnalisis) {
+        this.idAnalisis = idAnalisis;
+    }
+       
 }
