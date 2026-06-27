@@ -10,11 +10,12 @@ package Frames;
  */
 public class MenuPrincipalFORM extends javax.swing.JFrame {
 
-    /**
-     * Creates new form MenuPrincipalFORM
-     */
-    public MenuPrincipalFORM() {
+    private ControlNavegacionForms controlNavegacion;
+    
+    public MenuPrincipalFORM(ControlNavegacionForms controlNavegacion) {
         initComponents();
+        this.controlNavegacion = controlNavegacion;
+        setExtendedState(MAXIMIZED_BOTH);
     }
 
     /**
@@ -35,7 +36,7 @@ public class MenuPrincipalFORM extends javax.swing.JFrame {
         btnSalir = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(1920, 1080));
+        setTitle("Menú Principal");
 
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
         jLabel1.setText("Laboratorio Clínico Salud Total");
@@ -45,6 +46,7 @@ public class MenuPrincipalFORM extends javax.swing.JFrame {
 
         btnRegistroSoliPrueba.setBackground(new java.awt.Color(0, 0, 0));
         btnRegistroSoliPrueba.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        btnRegistroSoliPrueba.setForeground(new java.awt.Color(255, 255, 255));
         btnRegistroSoliPrueba.setText("Registro de Solicitud de Prueba");
         btnRegistroSoliPrueba.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -54,6 +56,7 @@ public class MenuPrincipalFORM extends javax.swing.JFrame {
 
         btnCatalogoAnalisis.setBackground(new java.awt.Color(0, 0, 0));
         btnCatalogoAnalisis.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        btnCatalogoAnalisis.setForeground(new java.awt.Color(255, 255, 255));
         btnCatalogoAnalisis.setText("Catálogo de Análisis");
         btnCatalogoAnalisis.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -63,6 +66,7 @@ public class MenuPrincipalFORM extends javax.swing.JFrame {
 
         btnEmisionReporte.setBackground(new java.awt.Color(0, 0, 0));
         btnEmisionReporte.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        btnEmisionReporte.setForeground(new java.awt.Color(255, 255, 255));
         btnEmisionReporte.setText("Emisión de Reporte");
         btnEmisionReporte.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -72,11 +76,18 @@ public class MenuPrincipalFORM extends javax.swing.JFrame {
 
         btnIngresoResultado.setBackground(new java.awt.Color(0, 0, 0));
         btnIngresoResultado.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        btnIngresoResultado.setForeground(new java.awt.Color(255, 255, 255));
         btnIngresoResultado.setText("Ingreso de Resultado");
 
         btnSalir.setBackground(new java.awt.Color(0, 0, 0));
         btnSalir.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        btnSalir.setForeground(new java.awt.Color(255, 255, 255));
         btnSalir.setText("Salir");
+        btnSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSalirActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -134,47 +145,17 @@ public class MenuPrincipalFORM extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRegistroSoliPruebaActionPerformed
 
     private void btnCatalogoAnalisisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCatalogoAnalisisActionPerformed
-        // TODO add your handling code here:
+        controlNavegacion.mostrarCatalogoAnalisis();
+        this.dispose();
     }//GEN-LAST:event_btnCatalogoAnalisisActionPerformed
 
     private void btnEmisionReporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEmisionReporteActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnEmisionReporteActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(MenuPrincipalFORM.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(MenuPrincipalFORM.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(MenuPrincipalFORM.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(MenuPrincipalFORM.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new MenuPrincipalFORM().setVisible(true);
-            }
-        });
-    }
+    private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_btnSalirActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCatalogoAnalisis;

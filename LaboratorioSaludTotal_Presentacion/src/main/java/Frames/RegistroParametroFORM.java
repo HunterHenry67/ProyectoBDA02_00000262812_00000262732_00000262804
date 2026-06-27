@@ -10,11 +10,12 @@ package Frames;
  */
 public class RegistroParametroFORM extends javax.swing.JFrame {
 
-    /**
-     * Creates new form RegistroParametroFORM
-     */
-    public RegistroParametroFORM() {
+    private ControlNavegacionForms controlNavegacion;
+    
+    public RegistroParametroFORM(ControlNavegacionForms controlNavegacion) {
         initComponents();
+        this.controlNavegacion = controlNavegacion;
+        setExtendedState(MAXIMIZED_BOTH);
     }
 
     /**
@@ -47,6 +48,7 @@ public class RegistroParametroFORM extends javax.swing.JFrame {
         btnRegistrarParamtero = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Registro de Parámetro");
 
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
         jLabel1.setText("Laboratorio Clínico Salud Total");
@@ -54,16 +56,16 @@ public class RegistroParametroFORM extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         jLabel2.setText("Registro / Alta de Análisis (Parámetros)");
 
-        jLabel3.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel3.setText("Nombre:");
 
-        jLabel4.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel4.setText("Nota Descriptiva: ");
 
-        jLabel5.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel5.setText("Unidad de Medida: ");
 
-        jLabel6.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        jLabel6.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel6.setText("Órden de Reporte:");
 
         txtFieldOrdenReporte.addActionListener(new java.awt.event.ActionListener() {
@@ -76,6 +78,7 @@ public class RegistroParametroFORM extends javax.swing.JFrame {
 
         btnBuscar.setBackground(new java.awt.Color(0, 0, 0));
         btnBuscar.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        btnBuscar.setForeground(new java.awt.Color(255, 255, 255));
         btnBuscar.setText("Buscar");
 
         comboFiltro.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
@@ -84,6 +87,11 @@ public class RegistroParametroFORM extends javax.swing.JFrame {
         btnAgregarRango.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         btnAgregarRango.setForeground(new java.awt.Color(0, 0, 0));
         btnAgregarRango.setText("Agregar Rango");
+        btnAgregarRango.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarRangoActionPerformed(evt);
+            }
+        });
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -103,15 +111,22 @@ public class RegistroParametroFORM extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(jTable1);
 
+        jLabel7.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
         jLabel7.setText("Filtro Búsqueda");
 
         btnCancelar.setBackground(new java.awt.Color(255, 102, 102));
         btnCancelar.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         btnCancelar.setForeground(new java.awt.Color(0, 0, 0));
         btnCancelar.setText("Cancelar");
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
 
         btnRegistrarParamtero.setBackground(new java.awt.Color(0, 0, 0));
         btnRegistrarParamtero.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        btnRegistrarParamtero.setForeground(new java.awt.Color(255, 255, 255));
         btnRegistrarParamtero.setText("Registrar");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -221,40 +236,16 @@ public class RegistroParametroFORM extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtFieldOrdenReporteActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(RegistroParametroFORM.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(RegistroParametroFORM.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(RegistroParametroFORM.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(RegistroParametroFORM.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
+    private void btnAgregarRangoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarRangoActionPerformed
+        controlNavegacion.mostrarRegistroRango();
+        this.dispose();
+    }//GEN-LAST:event_btnAgregarRangoActionPerformed
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new RegistroParametroFORM().setVisible(true);
-            }
-        });
-    }
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        controlNavegacion.mostrarRegistroAltaAnalisis();
+        this.dispose();
+    }//GEN-LAST:event_btnCancelarActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregarRango;
