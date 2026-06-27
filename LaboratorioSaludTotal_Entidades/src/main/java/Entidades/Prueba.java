@@ -21,7 +21,7 @@ import javax.persistence.Table;
 
 /**
  *
- * @author BALAMRUSH
+ * @author user
  */
 @Entity
 @Table(name = "prueba")
@@ -31,10 +31,6 @@ public class Prueba implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idPrueba", nullable = false)
     private Integer idPrueba;
-    
-//    @GeneratedValue(strategy = GenerationType.AUTO)
-//    @Column(name = "folio", nullable = false)
-//    private Integer folio;
     
     @Column(name = "fechaHora", nullable = false)
     private LocalDateTime fechaHora;
