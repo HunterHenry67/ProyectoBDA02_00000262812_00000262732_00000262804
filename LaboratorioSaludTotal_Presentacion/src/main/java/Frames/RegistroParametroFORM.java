@@ -48,6 +48,7 @@ public class RegistroParametroFORM extends javax.swing.JFrame {
         btnRegistrarParamtero = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Registro de Parámetro");
 
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
         jLabel1.setText("Laboratorio Clínico Salud Total");
@@ -55,16 +56,16 @@ public class RegistroParametroFORM extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         jLabel2.setText("Registro / Alta de Análisis (Parámetros)");
 
-        jLabel3.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel3.setText("Nombre:");
 
-        jLabel4.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel4.setText("Nota Descriptiva: ");
 
-        jLabel5.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel5.setText("Unidad de Medida: ");
 
-        jLabel6.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        jLabel6.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel6.setText("Órden de Reporte:");
 
         txtFieldOrdenReporte.addActionListener(new java.awt.event.ActionListener() {
@@ -77,6 +78,7 @@ public class RegistroParametroFORM extends javax.swing.JFrame {
 
         btnBuscar.setBackground(new java.awt.Color(0, 0, 0));
         btnBuscar.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        btnBuscar.setForeground(new java.awt.Color(255, 255, 255));
         btnBuscar.setText("Buscar");
 
         comboFiltro.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
@@ -109,6 +111,7 @@ public class RegistroParametroFORM extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(jTable1);
 
+        jLabel7.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
         jLabel7.setText("Filtro Búsqueda");
 
         btnCancelar.setBackground(new java.awt.Color(255, 102, 102));
@@ -123,6 +126,7 @@ public class RegistroParametroFORM extends javax.swing.JFrame {
 
         btnRegistrarParamtero.setBackground(new java.awt.Color(0, 0, 0));
         btnRegistrarParamtero.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        btnRegistrarParamtero.setForeground(new java.awt.Color(255, 255, 255));
         btnRegistrarParamtero.setText("Registrar");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());

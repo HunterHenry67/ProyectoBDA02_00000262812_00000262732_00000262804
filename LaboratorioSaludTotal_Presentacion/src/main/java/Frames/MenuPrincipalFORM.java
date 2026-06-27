@@ -36,6 +36,7 @@ public class MenuPrincipalFORM extends javax.swing.JFrame {
         btnSalir = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Menú Principal");
 
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
         jLabel1.setText("Laboratorio Clínico Salud Total");
@@ -45,6 +46,7 @@ public class MenuPrincipalFORM extends javax.swing.JFrame {
 
         btnRegistroSoliPrueba.setBackground(new java.awt.Color(0, 0, 0));
         btnRegistroSoliPrueba.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        btnRegistroSoliPrueba.setForeground(new java.awt.Color(255, 255, 255));
         btnRegistroSoliPrueba.setText("Registro de Solicitud de Prueba");
         btnRegistroSoliPrueba.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -54,6 +56,7 @@ public class MenuPrincipalFORM extends javax.swing.JFrame {
 
         btnCatalogoAnalisis.setBackground(new java.awt.Color(0, 0, 0));
         btnCatalogoAnalisis.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        btnCatalogoAnalisis.setForeground(new java.awt.Color(255, 255, 255));
         btnCatalogoAnalisis.setText("Catálogo de Análisis");
         btnCatalogoAnalisis.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -63,6 +66,7 @@ public class MenuPrincipalFORM extends javax.swing.JFrame {
 
         btnEmisionReporte.setBackground(new java.awt.Color(0, 0, 0));
         btnEmisionReporte.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        btnEmisionReporte.setForeground(new java.awt.Color(255, 255, 255));
         btnEmisionReporte.setText("Emisión de Reporte");
         btnEmisionReporte.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -72,10 +76,12 @@ public class MenuPrincipalFORM extends javax.swing.JFrame {
 
         btnIngresoResultado.setBackground(new java.awt.Color(0, 0, 0));
         btnIngresoResultado.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        btnIngresoResultado.setForeground(new java.awt.Color(255, 255, 255));
         btnIngresoResultado.setText("Ingreso de Resultado");
 
         btnSalir.setBackground(new java.awt.Color(0, 0, 0));
         btnSalir.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        btnSalir.setForeground(new java.awt.Color(255, 255, 255));
         btnSalir.setText("Salir");
         btnSalir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

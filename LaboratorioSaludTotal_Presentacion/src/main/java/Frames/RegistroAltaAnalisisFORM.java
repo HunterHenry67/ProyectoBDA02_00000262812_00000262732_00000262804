@@ -52,6 +52,7 @@ public class RegistroAltaAnalisisFORM extends javax.swing.JFrame {
         });
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Registro/Alta de Análisis");
 
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
         jLabel1.setText("Laboratorio Clínico Salud Total");
@@ -59,19 +60,22 @@ public class RegistroAltaAnalisisFORM extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
         jLabel2.setText("Registro / Alta de Análisis");
 
-        jLabel3.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(0, 0, 0));
         jLabel3.setText("Tipo de Muestra:");
 
-        jLabel4.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel4.setText("Nombre de Ánalisis:");
 
-        jLabel5.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(0, 0, 0));
         jLabel5.setText("Descripción:");
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         btnBuscar1.setBackground(new java.awt.Color(0, 0, 0));
         btnBuscar1.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        btnBuscar1.setForeground(new java.awt.Color(255, 255, 255));
         btnBuscar1.setText("Buscar");
         btnBuscar1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -121,6 +125,7 @@ public class RegistroAltaAnalisisFORM extends javax.swing.JFrame {
 
         btnRegistrarAnalisis.setBackground(new java.awt.Color(0, 0, 0));
         btnRegistrarAnalisis.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        btnRegistrarAnalisis.setForeground(new java.awt.Color(255, 255, 255));
         btnRegistrarAnalisis.setText("Registrar ");
 
         jLabel6.setText("Filtro Búsqueda");
