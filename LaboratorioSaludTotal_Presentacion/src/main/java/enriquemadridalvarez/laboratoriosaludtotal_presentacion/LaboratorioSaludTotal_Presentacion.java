@@ -4,14 +4,21 @@
 
 package enriquemadridalvarez.laboratoriosaludtotal_presentacion;
 
+import Frames.ControlNavegacionForms;
+
 /**
  *
  * @author BALAMRUSH
  */
 public class LaboratorioSaludTotal_Presentacion {
+    
 
     public static void main(String[] args) {
-        System.out.println("Prueba funcionamiento.");
-        System.out.println("Funcionamiento correcto de gitHub");
+        iniciarPrograma();
+    }
+    
+    private static void iniciarPrograma(){
+        ControlNavegacionForms control = new ControlNavegacionForms();
+        control.mostrarMenuPrincipal();
     }
 }
