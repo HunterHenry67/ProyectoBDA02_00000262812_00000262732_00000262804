@@ -28,13 +28,13 @@ import javax.persistence.Table;
 public class Prueba implements Serializable {
  
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idPrueba", nullable = false)
     private Integer idPrueba;
     
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "folio", nullable = false)
-    private Integer folio;
+//    @GeneratedValue(strategy = GenerationType.AUTO)
+//    @Column(name = "folio", nullable = false)
+//    private Integer folio;
     
     @Column(name = "fechaHora", nullable = false)
     private LocalDateTime fechaHora;
@@ -61,13 +61,13 @@ public class Prueba implements Serializable {
         this.idPrueba = idPrueba;
     }
 
-    public Integer getFolio() {
-        return folio;
-    }
-
-    public void setFolio(Integer folio) {
-        this.folio = folio;
-    }
+//    public Integer getFolio() {
+//        return folio;
+//    }
+//
+//    public void setFolio(Integer folio) {
+//        this.folio = folio;
+//    }
 
     public LocalDateTime getFechaHora() {
         return fechaHora;

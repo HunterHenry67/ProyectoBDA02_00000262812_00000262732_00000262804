@@ -24,7 +24,7 @@ public class Resultado implements Serializable {
 
     
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idResultado", nullable = false)
     private Integer idResultado;
     
