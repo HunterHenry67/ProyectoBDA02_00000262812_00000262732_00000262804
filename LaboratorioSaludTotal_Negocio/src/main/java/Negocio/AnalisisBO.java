@@ -5,12 +5,13 @@
 package Negocio;
 
 import DAO.AnalisisDAO;
-import DAO.ConexionBD;
 import DAO.IAnalisisDAO;
-import DAO.IConexionBD;
 import DAO.PersistenciaException;
+import DTO.ActualizarAnalisisDTO;
+import DTO.EliminarAnalisisDTO;
+import DTO.GuardarAnalisisDTO;
 import Entidades.Analisis;
-import Entidades.Doctor;
+import Entidades.Muestra;
 import java.util.List;
 
 /**
@@ -19,63 +20,74 @@ import java.util.List;
  */
 public class AnalisisBO implements IAnalisisBO {
 
-    private IAnalisisDAO analisisDAO;
+    private final IAnalisisDAO analisisDAO;
 
     public AnalisisBO() {
         this.analisisDAO = new AnalisisDAO();
     }
 
     @Override
-    public Analisis guardar(Analisis analisis) throws NegocioException {
+    public Analisis guardarAnalisis(GuardarAnalisisDTO guardarAnalisis) throws NegocioException {
         try {
-            if (analisis == null) {
-                throw new NegocioException("El análisis no puede ser nulo.");
-            }
+            validarGuardar(guardarAnalisis);
 
-            if (analisis.getNombre() == null || analisis.getNombre().isBlank()) {
-                throw new NegocioException("El nombre del análisis es obligatorio.");
-            }
+            Analisis analisis = new Analisis();
+            analisis.setNombre(guardarAnalisis.getNombre().trim());
+            analisis.setNota(guardarAnalisis.getNota().trim());
+
+            Muestra muestra = new Muestra();
+            muestra.setIdMuestra(guardarAnalisis.getIdMuestra());
+
+            analisis.setMuestra(muestra);
 
             return analisisDAO.guardar(analisis);
 
-        } catch (PersistenciaException e) {
-            throw new NegocioException("Error al guardar el análisis.", e);
+        } catch (PersistenciaException ex) {
+            throw new NegocioException("Error al guardar el análisis: " + ex.getMessage());
         }
     }
 
     @Override
-    public Analisis actualizar(Analisis analisis) throws NegocioException {
+    public Analisis actualizarAnalisis(ActualizarAnalisisDTO actualizarAnalisis) throws NegocioException {
         try {
+            validarActualizar(actualizarAnalisis);
+
+            Analisis analisis = analisisDAO.consultarPorId(actualizarAnalisis.getIdAnalisis());
+
             if (analisis == null) {
-                throw new NegocioException("El análisis no puede ser nulo.");
+                throw new NegocioException("No existe el análisis que se desea actualizar.");
             }
 
-            if (analisis.getIdAnalisis() == null || analisis.getIdAnalisis() <= 0) {
-                throw new NegocioException("ID de análisis inválido.");
-            }
+            analisis.setNombre(actualizarAnalisis.getNombre().trim());
+            analisis.setNota(actualizarAnalisis.getNota().trim());
 
-            if (analisis.getNombre() == null || analisis.getNombre().isBlank()) {
-                throw new NegocioException("El nombre del análisis es obligatorio.");
-            }
+            Muestra muestra = new Muestra();
+            muestra.setIdMuestra(actualizarAnalisis.getIdMuestra());
+
+            analisis.setMuestra(muestra);
 
             return analisisDAO.actualizar(analisis);
 
-        } catch (PersistenciaException e) {
-            throw new NegocioException("Error al actualizar el análisis.", e);
+        } catch (PersistenciaException ex) {
+            throw new NegocioException("Error al actualizar el análisis: " + ex.getMessage());
         }
     }
 
     @Override
-    public void eliminar(Integer idAnalisis) throws NegocioException {
+    public void eliminarAnalisis(EliminarAnalisisDTO eliminarAnalisis) throws NegocioException {
         try {
-            if (idAnalisis == null || idAnalisis <= 0) {
-                throw new NegocioException("ID de análisis inválido.");
+            validarEliminar(eliminarAnalisis);
+
+            Analisis analisis = analisisDAO.consultarPorId(eliminarAnalisis.getIdAnalisis());
+
+            if (analisis == null) {
+                throw new NegocioException("No existe el análisis que se desea eliminar.");
             }
 
-            analisisDAO.eliminar(idAnalisis);
+            analisisDAO.eliminar(eliminarAnalisis.getIdAnalisis());
 
-        } catch (PersistenciaException e) {
-            throw new NegocioException("Error al eliminar el análisis.", e);
+        } catch (PersistenciaException ex) {
+            throw new NegocioException("Error al eliminar el análisis: " + ex.getMessage());
         }
     }
 
@@ -83,7 +95,7 @@ public class AnalisisBO implements IAnalisisBO {
     public Analisis consultarPorId(Integer idAnalisis) throws NegocioException {
         try {
             if (idAnalisis == null || idAnalisis <= 0) {
-                throw new NegocioException("ID de análisis inválido.");
+                throw new NegocioException("El ID del análisis no es válido.");
             }
 
             Analisis analisis = analisisDAO.consultarPorId(idAnalisis);
@@ -94,8 +106,8 @@ public class AnalisisBO implements IAnalisisBO {
 
             return analisis;
 
-        } catch (PersistenciaException e) {
-            throw new NegocioException("Error al consultar el análisis.", e);
+        } catch (PersistenciaException ex) {
+            throw new NegocioException("Error al consultar el análisis: " + ex.getMessage());
         }
     }
 
@@ -104,22 +116,72 @@ public class AnalisisBO implements IAnalisisBO {
         try {
             return analisisDAO.consultarTodos();
 
-        } catch (PersistenciaException e) {
-            throw new NegocioException("Error al consultar los análisis.", e);
+        } catch (PersistenciaException ex) {
+            throw new NegocioException("Error al consultar todos los análisis: " + ex.getMessage());
         }
     }
 
     @Override
     public List<Analisis> buscarPorNombre(String nombre) throws NegocioException {
         try {
-            if (nombre == null || nombre.isBlank()) {
-                throw new NegocioException("El nombre de búsqueda es obligatorio.");
+            if (nombre == null || nombre.trim().isEmpty()) {
+                return consultarTodos();
             }
 
-            return analisisDAO.buscarPorNombre(nombre);
+            return analisisDAO.buscarPorNombre(nombre.trim());
 
-        } catch (PersistenciaException e) {
-            throw new NegocioException("Error al buscar análisis por nombre.", e);
+        } catch (PersistenciaException ex) {
+            throw new NegocioException("Error al buscar análisis por nombre: " + ex.getMessage());
+        }
+    }
+
+    private void validarGuardar(GuardarAnalisisDTO guardarAnalisis) throws NegocioException {
+        if (guardarAnalisis == null) {
+            throw new NegocioException("Favor de ingresar datos válidos.");
+        }
+
+        if (guardarAnalisis.getNombre() == null || guardarAnalisis.getNombre().trim().isEmpty()) {
+            throw new NegocioException("El nombre del análisis es obligatorio.");
+        }
+
+        if (guardarAnalisis.getNota() == null || guardarAnalisis.getNota().trim().isEmpty()) {
+            throw new NegocioException("La nota del análisis es obligatoria.");
+        }
+
+        if (guardarAnalisis.getIdMuestra() == null || guardarAnalisis.getIdMuestra() <= 0) {
+            throw new NegocioException("Debe seleccionar un tipo de muestra válido.");
+        }
+    }
+
+    private void validarActualizar(ActualizarAnalisisDTO actualizarAnalisis) throws NegocioException {
+        if (actualizarAnalisis == null) {
+            throw new NegocioException("Favor de ingresar datos válidos.");
+        }
+
+        if (actualizarAnalisis.getIdAnalisis() == null || actualizarAnalisis.getIdAnalisis() <= 0) {
+            throw new NegocioException("El ID del análisis no es válido.");
+        }
+
+        if (actualizarAnalisis.getNombre() == null || actualizarAnalisis.getNombre().trim().isEmpty()) {
+            throw new NegocioException("El nombre del análisis es obligatorio.");
+        }
+
+        if (actualizarAnalisis.getNota() == null || actualizarAnalisis.getNota().trim().isEmpty()) {
+            throw new NegocioException("La nota del análisis es obligatoria.");
+        }
+
+        if (actualizarAnalisis.getIdMuestra() == null || actualizarAnalisis.getIdMuestra() <= 0) {
+            throw new NegocioException("Debe seleccionar un tipo de muestra válido.");
+        }
+    }
+
+    private void validarEliminar(EliminarAnalisisDTO eliminarAnalisis) throws NegocioException {
+        if (eliminarAnalisis == null) {
+            throw new NegocioException("Favor de ingresar datos válidos.");
+        }
+
+        if (eliminarAnalisis.getIdAnalisis() == null || eliminarAnalisis.getIdAnalisis() <= 0) {
+            throw new NegocioException("El ID del análisis no es válido.");
         }
     }
 }
