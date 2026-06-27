@@ -43,7 +43,7 @@ public class Prueba implements Serializable {
     @JoinColumn(name = "idDoctor",  nullable = false)
     private Doctor Doctor;
     
-    @OneToMany(mappedBy = "idResultado", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "prueba", cascade = CascadeType.PERSIST)
     private List<Resultado> listaResultado = new ArrayList<>();    
 
     public Prueba() {

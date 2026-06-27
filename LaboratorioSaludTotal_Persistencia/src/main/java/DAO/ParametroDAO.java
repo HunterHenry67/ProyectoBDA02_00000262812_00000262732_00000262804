@@ -9,7 +9,6 @@ import Entidades.Rango;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
@@ -39,7 +38,7 @@ public class ParametroDAO implements IParametroDAO {
         } catch (Exception ex) {
             LOGGER.severe(ex.getMessage());
             entityManager.getTransaction().rollback();
-            throw new PersistenceException("Error al agregar el parámtero, hubo un rollback: " + ex.getMessage());
+            throw new PersistenciaException("Error al agregar el parámtero, hubo un rollback: " + ex.getMessage());
         } finally {
             entityManager.close();
         }
@@ -67,8 +66,12 @@ public class ParametroDAO implements IParametroDAO {
         EntityManager entityManager = conexionBD.conexionBD();
         try {
             entityManager.getTransaction().begin();
-            Parametro parametroEliminado = this.consultarParametroPorID(idParametro);
+            Parametro parametroEliminado = entityManager.find(Parametro.class, idParametro);
+            if(parametroEliminado == null){
+                throw new PersistenciaException("El parámetro que se desea eliminar no existe.");
+            }
             entityManager.remove(parametroEliminado);
+            entityManager.getTransaction().commit();
         } catch (Exception ex) {
             LOGGER.severe(ex.getMessage());
             entityManager.getTransaction().rollback();
@@ -140,7 +143,7 @@ public class ParametroDAO implements IParametroDAO {
             CriteriaQuery<Parametro> criteriaQuery = criteriaBuilder.createQuery(Parametro.class);
             Root<Parametro> parametro = criteriaQuery.from(Parametro.class);
             criteriaQuery.select(parametro).
-                    where(criteriaBuilder.like(criteriaBuilder.lower(parametro.get("unidadMedida").get("nombre")), "%" + unidadMedida.toLowerCase() + "%"));
+                    where(criteriaBuilder.like(criteriaBuilder.lower(parametro.get("unidadMedida")), "%" + unidadMedida.toLowerCase() + "%"));
             return entityManager.createQuery(criteriaQuery).getResultList();
         } catch (Exception ex) {
             LOGGER.severe(ex.getMessage());
@@ -158,7 +161,7 @@ public class ParametroDAO implements IParametroDAO {
             CriteriaQuery<Parametro> criteriaQuery = criteriaBuilder.createQuery(Parametro.class);
             Root<Parametro> parametro = criteriaQuery.from(Parametro.class);
             criteriaQuery.select(parametro)
-                    .where(criteriaBuilder.equal(criteriaBuilder.size(parametro.get("rangos")), rangos
+                    .where(criteriaBuilder.equal(criteriaBuilder.size(parametro.get("listaRangos")), rangos
                     ));
             return entityManager.createQuery(criteriaQuery).getResultList();
         } catch (Exception ex) {
