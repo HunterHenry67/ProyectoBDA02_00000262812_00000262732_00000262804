@@ -24,4 +24,6 @@ public interface IAnalisisDAO {
     public List<Analisis> consultarTodos() throws PersistenciaException;
 
     public List<Analisis> buscarPorNombre(String nombre) throws PersistenciaException;
+    
+    Integer contarParametros(Integer idAnalisis) throws PersistenciaException;
 }

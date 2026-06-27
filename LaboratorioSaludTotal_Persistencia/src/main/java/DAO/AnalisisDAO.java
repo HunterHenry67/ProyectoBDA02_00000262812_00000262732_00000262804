@@ -5,6 +5,7 @@
 package DAO;
 
 import Entidades.Analisis;
+import Entidades.Parametro;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -127,6 +128,24 @@ public class AnalisisDAO implements IAnalisisDAO {
             throw new PersistenciaException("Error al buscar análisis: " + e.getMessage());
         } finally {
             em.close();
+        }
+    }
+
+    @Override
+    public Integer contarParametros(Integer idAnalisis) throws PersistenciaException {
+        EntityManager entityManager = conexion.conexionBD();
+        try{
+            CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+            CriteriaQuery<Long> criteriaQuery = criteriaBuilder.createQuery(Long.class);
+            Root<Parametro> ruta = criteriaQuery.from(Parametro.class);
+            criteriaQuery.select(criteriaBuilder.count(ruta))
+                    .where(criteriaBuilder.equal(ruta.get("analisis").get("idAnalisis"), idAnalisis));
+            Long total = entityManager.createQuery(criteriaQuery).getSingleResult();
+            return total.intValue();
+        }catch(Exception ex){
+            throw new PersistenciaException("Error al contar los parámetros: "+ex.getMessage());
+        }finally{
+            entityManager.close();
         }
     }
 

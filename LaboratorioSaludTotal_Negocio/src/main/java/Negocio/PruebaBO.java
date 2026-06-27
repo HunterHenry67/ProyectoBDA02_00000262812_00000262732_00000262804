@@ -21,10 +21,11 @@ import java.util.List;
  * @author user
  */
 public class PruebaBO implements IPruebaBO{
+    
     private IPruebaDAO pruebaDAO;
     
-    public PruebaBO() {
-        this.pruebaDAO = new PruebaDAO();
+    public PruebaBO(IPruebaDAO pruebaDAO) {
+        this.pruebaDAO = pruebaDAO;
     }
 
     @Override
