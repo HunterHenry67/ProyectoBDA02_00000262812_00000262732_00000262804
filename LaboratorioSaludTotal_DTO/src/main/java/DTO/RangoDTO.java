@@ -13,8 +13,8 @@ public class RangoDTO {
     private String sexo;
     private Integer edadInicial;
     private Integer edadFinal;
-    private Integer rangoInicial;
-    private Integer rangoFinal;
+    private Float rangoInicial;
+    private Float rangoFinal;
 
     public RangoDTO() {
     }
@@ -51,19 +51,19 @@ public class RangoDTO {
         this.edadFinal = edadFinal;
     }
 
-    public Integer getRangoInicial() {
+    public Float getRangoInicial() {
         return rangoInicial;
     }
 
-    public void setRangoInicial(Integer rangoInicial) {
+    public void setRangoInicial(Float rangoInicial) {
         this.rangoInicial = rangoInicial;
     }
 
-    public Integer getRangoFinal() {
+    public Float getRangoFinal() {
         return rangoFinal;
     }
 
-    public void setRangoFinal(Integer rangoFinal) {
+    public void setRangoFinal(Float rangoFinal) {
         this.rangoFinal = rangoFinal;
     }
     
