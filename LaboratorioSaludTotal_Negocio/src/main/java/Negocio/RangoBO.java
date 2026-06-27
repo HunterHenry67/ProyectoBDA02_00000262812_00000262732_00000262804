@@ -93,11 +93,8 @@ public class RangoBO implements IRangoBO{
         dto.setEdadInicial(entidadRango.getEdadInicial());
         dto.setEdadFinal(entidadRango.getEdadFinal());
         
-        // Nota: Respeté cómo escribiste "getRangoIncial()" en tu código original
         dto.setRangoInicial(entidadRango.getRangoIncial()); 
         dto.setRangoFinal(entidadRango.getRangoFinal());
-        
-        // Validación de seguridad en caso de que un rango no tenga sexo asignado
         if (entidadRango.getSexo() != null) {
             dto.setSexo(entidadRango.getSexo().toString());
         }
