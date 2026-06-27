@@ -4,11 +4,8 @@
  */
 package Negocio;
 
-import DAO.ConexionBD;
-import DAO.IConexionBD;
 import DAO.IPruebaDAO;
 import DAO.PersistenciaException;
-import DAO.PruebaDAO;
 import DTO.PruebaDTO;
 import Entidades.Cliente;
 import Entidades.Doctor;

@@ -184,4 +184,18 @@ public class AnalisisBO implements IAnalisisBO {
             throw new NegocioException("El ID del análisis no es válido.");
         }
     }
+
+    @Override
+    public Integer contarParametro(Integer idAnalisis) throws NegocioException {
+        try{
+            if(idAnalisis == null || idAnalisis <= 0){
+                throw new NegocioException("No se encontró el id del Analisis.");
+            }
+            
+            Integer conteoParametro = analisisDAO.contarParametros(idAnalisis);
+            return conteoParametro;
+        }catch(PersistenciaException ex){
+            throw new NegocioException("Error al contar los parámetros: "+ex.getMessage());
+        }
+    }
 }

@@ -20,4 +20,5 @@ public interface IAnalisisBO {
     public Analisis consultarPorId(Integer idAnalisis) throws NegocioException;
     public List<Analisis> consultarTodos() throws NegocioException;
     public List<Analisis> buscarPorNombre(String nombre) throws NegocioException; 
+    public Integer contarParametro(Integer idAnalisis) throws NegocioException;
 }
