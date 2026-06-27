@@ -44,7 +44,7 @@ public class Prueba implements Serializable {
     private Cliente cliente;
     
     @ManyToOne
-    @JoinColumn(name = "idDcotor",  nullable = false)
+    @JoinColumn(name = "idDoctor",  nullable = false)
     private Doctor Doctor;
     
     @OneToMany(mappedBy = "idResultado", cascade = CascadeType.PERSIST)
