@@ -23,8 +23,8 @@ public class ParametroDAO implements IParametroDAO {
 
     private final IConexionBD conexionBD;
 
-    public ParametroDAO(IConexionBD conexionBD) {
-        this.conexionBD = conexionBD;
+    public ParametroDAO() {
+        this.conexionBD = new ConexionBD();
     }
 
     @Override
