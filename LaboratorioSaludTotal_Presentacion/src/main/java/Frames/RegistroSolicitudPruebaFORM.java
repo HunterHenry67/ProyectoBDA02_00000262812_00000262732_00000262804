@@ -4,19 +4,139 @@
  */
 package Frames;
 
+import DTO.AnalisisDTO;
+import DTO.ClienteDTO;
+import DTO.DoctorDTO;
+import DTO.PruebaDTO;
+import Negocio.IPruebaBO;
+import Negocio.PruebaBO;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author user
  */
 public class RegistroSolicitudPruebaFORM extends javax.swing.JFrame {
+    private ControlNavegacionForms controlNavegacion;
+    private IPruebaBO pruebaBO;
+    
+    // Variables para guardar lo que el usuario va seleccionando
+    private ClienteDTO clienteSeleccionado;
+    private DoctorDTO doctorSeleccionado;
+    private List<AnalisisDTO> analisisAgregados;
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(RegistroSolicitudPruebaFORM.class.getName());
 
     /**
      * Creates new form RegistroSolicitudPruebaFORM
      */
-    public RegistroSolicitudPruebaFORM() {
+    public RegistroSolicitudPruebaFORM(ControlNavegacionForms controlNavegacion) {
         initComponents();
+        this.controlNavegacion = controlNavegacion;
+        setExtendedState(MAXIMIZED_BOTH); // Aplicamos el mismo tamaño que usaste
+        
+        this.pruebaBO = new PruebaBO();
+        this.analisisAgregados = new ArrayList<>();
+        
+        // Configuración visual inicial
+        txtFolio.setEditable(false);
+        txtFechaHora.setEditable(false);
+        txtCliente.setEditable(false);
+        txtDoctor.setEditable(false);
+        
+        // Poner la fecha actual (puedes darle formato si lo deseas)
+        txtFechaHora.setText(java.time.LocalDateTime.now().toString());
+    }
+    
+    public void setClienteSeleccionado(ClienteDTO cliente) {
+        if (cliente != null) {
+            this.clienteSeleccionado = cliente;
+            txtCliente.setText(cliente.getNombres()); // Ajusta el get según tu DTO
+        }
+    }
+
+    public void setDoctorSeleccionado(DoctorDTO doctor) {
+        if (doctor != null) {
+            this.doctorSeleccionado = doctor;
+            // Mostramos el nombre en el TextField bloqueado
+            txtDoctor.setText(doctor.getNombres()); // Ajusta el get según tu DTO
+        }
+    }
+
+    public void agregarAnalisisTemporal(AnalisisDTO analisis) throws PresentacionException {
+        if (analisis == null) {
+            throw new PresentacionException("Debe de existir un análisis seleccionado.");
+        }
+        
+        // Validación de duplicados (Tu diagrama de flujo)
+        for (AnalisisDTO a : analisisAgregados) {
+            if (a.getIdAnalisis().equals(analisis.getIdAnalisis())) {
+                throw new PresentacionException("El análisis ya está agregado en la tabla.");
+            }
+        }
+        
+        analisisAgregados.add(analisis);
+        cargarTablaAnalisis();
+    }
+    
+    
+    private void cargarTablaAnalisis() {
+        DefaultTableModel modelo = (DefaultTableModel) tablaSolicitudPrueba.getModel();
+        modelo.setRowCount(0);
+        
+        for (AnalisisDTO analisis : analisisAgregados) {
+            modelo.addRow(new Object[]{
+                analisis.getIdAnalisis(),
+                analisis.getNombre(), // Ajusta según tu DTO
+                analisis.getTipoMuestra(), // Ajusta según tu DTO
+                "Eliminar"
+            });
+        }
+    }
+
+    private void registrarSolicitud() throws PresentacionException {
+        try {
+            // Validaciones
+            if (clienteSeleccionado == null) {
+                throw new PresentacionException("Favor de buscar y seleccionar un cliente.");
+            }
+            if (doctorSeleccionado == null) {
+                throw new PresentacionException("Favor de buscar y seleccionar un doctor.");
+            }
+            if (analisisAgregados.isEmpty()) {
+                throw new PresentacionException("No puedes registrar una solicitud sin agregar análisis.");
+            }
+
+            // Armar DTO
+            PruebaDTO nuevaPrueba = new PruebaDTO();
+            nuevaPrueba.setIdCliente(clienteSeleccionado.getIdCliente());
+            nuevaPrueba.setIdDoctor(doctorSeleccionado.getIdDoctor());
+            nuevaPrueba.setFechaHora(java.time.LocalDateTime.now());
+            // nuevaPrueba.setAnalisis(analisisAgregados); // Descomenta si tu DTO recibe la lista
+
+            // Guardar
+            PruebaDTO pruebaGuardada = pruebaBO.agregarPrueba(nuevaPrueba);
+            
+            txtFolio.setText(String.valueOf(pruebaGuardada.getIdPrueba()));
+            javax.swing.JOptionPane.showMessageDialog(this, "Registro Exitoso", "La solicitud fue registrada correctamente.", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+            
+            // Navegar de regreso
+            controlNavegacion.mostrarMenuPrincipal();
+            this.dispose();
+
+        } catch (Exception ex) { // Captura NegocioException
+            throw new PresentacionException("Error al registrar la solicitud: " + ex.getMessage());
+        }
+    }
+
+    private void saltoErrores(String mensaje) {
+        javax.swing.JOptionPane.showMessageDialog(this, mensaje, "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+    }
+
+    private void saltoAdvertencia(String mensaje) {
+        javax.swing.JOptionPane.showMessageDialog(this, mensaje, "Advertencia", javax.swing.JOptionPane.WARNING_MESSAGE);
     }
 
     /**
@@ -108,6 +228,7 @@ public class RegistroSolicitudPruebaFORM extends javax.swing.JFrame {
         btnBuscarDoctor.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnBuscarDoctor.setForeground(new java.awt.Color(204, 204, 204));
         btnBuscarDoctor.setText("Buscar Doctor");
+        btnBuscarDoctor.addActionListener(this::btnBuscarDoctorActionPerformed);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -267,30 +388,15 @@ public class RegistroSolicitudPruebaFORM extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnBuscarClienteActionPerformed
 
+    private void btnBuscarDoctorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarDoctorActionPerformed
+        // TODO add your handling code here:
+        controlNavegacion.mostrarCatalogoDoctores();
+    }//GEN-LAST:event_btnBuscarDoctorActionPerformed
+
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new RegistroSolicitudPruebaFORM().setVisible(true));
-    }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregarAnalisis;

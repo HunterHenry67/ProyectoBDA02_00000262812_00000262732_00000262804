@@ -21,7 +21,7 @@ public class PruebaBO implements IPruebaBO{
     
     private IPruebaDAO pruebaDAO;
     
-    public PruebaBO(IPruebaDAO pruebaDAO) {
+    public PruebaBO() {
         this.pruebaDAO = pruebaDAO;
     }
 

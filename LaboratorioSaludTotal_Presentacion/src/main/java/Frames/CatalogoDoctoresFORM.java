@@ -4,19 +4,24 @@
  */
 package Frames;
 
+import DTO.DoctorDTO;
+import Negocio.IDoctorBO;
+
 /**
  *
  * @author user
  */
 public class CatalogoDoctoresFORM extends javax.swing.JFrame {
-    
+    private ControlNavegacionForms controlNavegacion;
+    private IDoctorBO doctorBO;
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(CatalogoDoctoresFORM.class.getName());
 
     /**
      * Creates new form CatalogoDoctoresFORM
      */
-    public CatalogoDoctoresFORM() {
+    public CatalogoDoctoresFORM(ControlNavegacionForms controlNavegacion) {
         initComponents();
+        this.controlNavegacion = controlNavegacion;
     }
 
     /**
@@ -63,6 +68,7 @@ public class CatalogoDoctoresFORM extends javax.swing.JFrame {
         btnSeleccionar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnSeleccionar.setForeground(new java.awt.Color(255, 255, 255));
         btnSeleccionar.setText("Seleccionar");
+        btnSeleccionar.addActionListener(this::btnSeleccionarActionPerformed);
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel1.setText("Laboratorio Clinico Salud Total");
@@ -161,30 +167,26 @@ public class CatalogoDoctoresFORM extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnCancelarActionPerformed
 
+    private void btnSeleccionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSeleccionarActionPerformed
+        // TODO add your handling code here:
+        int fila = tablaDoctores.getSelectedRow();
+    
+        if (fila != -1) {
+            // 1. Sacas el DTO del doctor seleccionado...
+            DoctorDTO docElegido = doctorBO.buscarPorId( (int)tablaDoctores.getValueAt(fila, 0) );
+
+            // 2. Usas el puente del control para aventárselo a la pantalla de atrás:
+            controlNavegacion.getPantallaSolicitudActual().setDoctorSeleccionado(docElegido);
+
+            // 3. Destruyes el catálogo. Al cerrarse, la pantalla de atrás vuelve a tomar el control.
+            this.dispose(); 
+        }
+    }//GEN-LAST:event_btnSeleccionarActionPerformed
+
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new CatalogoDoctoresFORM().setVisible(true));
-    }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;
