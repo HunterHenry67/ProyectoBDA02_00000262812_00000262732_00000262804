@@ -4,10 +4,17 @@
  */
 package DAO;
 
+import Entidades.Muestra;
+import java.util.List;
+
 /**
  *
  * @author BALAMRUSH
  */
 public interface IMuestraDAO {
-    
+    Muestra agregarMuestra(Muestra muestra) throws PersistenciaException;
+    Muestra buscarMuestraPorId(int idMuestra) throws PersistenciaException;
+    List<Muestra> consultarTodasLasMuestras() throws PersistenciaException;    
+    List<Muestra> buscarMuestrasPorPrueba(int idPrueba) throws PersistenciaException;
+
 }
