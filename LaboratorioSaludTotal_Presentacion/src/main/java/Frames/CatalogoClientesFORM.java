@@ -6,6 +6,9 @@ package Frames;
 
 import DTO.ClienteDTO;
 import Negocio.IClienteBO;
+import Negocio.NegocioException;
+import java.util.List;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -23,6 +26,36 @@ public class CatalogoClientesFORM extends javax.swing.JFrame {
         initComponents();
         this.controlNavegacion = controlNavegacion;
         this.clienteBO = new Negocio.ClienteBO();
+        
+        try {
+            cargarTabla();
+        } catch (PresentacionException ex) {
+            javax.swing.JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    private void cargarTabla() throws PresentacionException {
+        try {
+            List<ClienteDTO> listaClientes = clienteBO.ObtenerClientes();
+            llenarTabla(listaClientes);
+        } catch (Exception ex) {
+            throw new PresentacionException("Error al cargar la tabla con los clientes: " + ex.getMessage());
+        }
+    }
+    
+    private void llenarTabla(List<ClienteDTO> listaClientes) {
+        DefaultTableModel modelo = (DefaultTableModel) tablaClientes.getModel();
+        modelo.setRowCount(0); 
+        
+        for (ClienteDTO cliente : listaClientes) {
+            modelo.addRow(new Object[]{
+                cliente.getIdCliente(),
+                cliente.getNombres(),        
+                cliente.getFechaNacimiento(), 
+                cliente.getTipoSangre(),      
+                cliente.getSexo()             
+            });
+        }
     }
 
     /**

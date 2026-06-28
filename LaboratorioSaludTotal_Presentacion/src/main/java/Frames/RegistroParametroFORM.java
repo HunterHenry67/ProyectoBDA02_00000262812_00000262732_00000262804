@@ -112,7 +112,7 @@ public class RegistroParametroFORM extends javax.swing.JFrame {
         if (comboFiltro.getSelectedItem() == null) {
             throw new PresentacionException("Favor de seleccionar un filtro.");
         }
-        String entrada = comboFiltro.getSelectedItem().toString().trim();
+        String entrada = txtFieldBuscar.getText().trim();
         if (entrada.isEmpty()) {
             cargarTablaRangos();
             return;
@@ -148,7 +148,7 @@ public class RegistroParametroFORM extends javax.swing.JFrame {
                     break;
                 case "Rango Inicial":
                     try {
-                        Double rangoInicial = Double.valueOf(entrada);
+                        Float rangoInicial = Float.valueOf(entrada);
                         if (rango.getRangoInicial() != null && rango.getRangoInicial().equals(rangoInicial)) {
                             resultados.add(rango);
                         }
@@ -158,7 +158,7 @@ public class RegistroParametroFORM extends javax.swing.JFrame {
                     break;
                 case "Rango Final":
                     try {
-                        Double rangoFinal = Double.valueOf(entrada);
+                        Float rangoFinal = Float.valueOf(entrada);
 
                         if (rango.getRangoFinal() != null && rango.getRangoFinal().equals(rangoFinal)) {
                             resultados.add(rango);

@@ -5,6 +5,9 @@
 package Frames;
 
 import DTO.AnalisisDTO;
+import Negocio.IAnalisisBO;
+import java.util.List;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -12,7 +15,7 @@ import DTO.AnalisisDTO;
  */
 public class CatalogoAnalisisPruebaFORM extends javax.swing.JFrame {
     private ControlNavegacionForms controlNavegacion;
-
+    private IAnalisisBO analisisBO;
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(CatalogoAnalisisPruebaFORM.class.getName());
 
     /**
@@ -22,6 +25,35 @@ public class CatalogoAnalisisPruebaFORM extends javax.swing.JFrame {
         initComponents();
         this.controlNavegacion = controlNavegacion;
         
+        try {
+            cargarTabla();
+        } catch (PresentacionException ex) {
+            javax.swing.JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+        }
+        
+    }
+    
+    private void cargarTabla() throws PresentacionException {
+        try {
+            List<AnalisisDTO> listaAnalisis = analisisBO.consultarTodos(); 
+            llenarTabla(listaAnalisis);
+        } catch (Exception ex) {
+            throw new PresentacionException("Error al cargar la tabla con los análisis: " + ex.getMessage());
+        }
+    }
+    
+    private void llenarTabla(List<AnalisisDTO> listaAnalisis) {
+        DefaultTableModel modelo = (DefaultTableModel) tablaAnalisis.getModel();
+        modelo.setRowCount(0); 
+        
+        for (AnalisisDTO analisis : listaAnalisis) {
+            modelo.addRow(new Object[]{
+                analisis.getIdAnalisis(),       
+                analisis.getNombre(),           
+                analisis.getTipoMuestra(),      
+                analisis.getCantidadParametros()
+            });
+        }
     }
 
     /**

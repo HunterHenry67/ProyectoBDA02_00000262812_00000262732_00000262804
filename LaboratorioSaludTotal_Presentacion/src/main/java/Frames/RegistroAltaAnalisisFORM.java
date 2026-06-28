@@ -61,6 +61,12 @@ public class RegistroAltaAnalisisFORM extends javax.swing.JFrame {
         if (parametroDTO.getRangos() == null || parametroDTO.getRangos().isEmpty()) {
             throw new PresentacionException("Debe haber por lo menos 1 rango.");
         }
+        for (RegistrarParametroDTO parametro : parametros) {
+            if (parametro.getOrdenReporte() != null && parametro.getOrdenReporte().equals(parametroDTO.getOrdenReporte())) {
+                throw new PresentacionException(
+                        "Ya existe un parámetro con ese órden, favor de elegir otro orden.");
+            }
+        }
         parametros.add(parametroDTO);
         cargarTablaParametros();
     }
@@ -86,7 +92,7 @@ public class RegistroAltaAnalisisFORM extends javax.swing.JFrame {
             guardarAnalisisDTO.setIdMuestra(muestraSeleccionada.getIdMuestra());
             guardarAnalisisDTO.setParametros(parametros);
             analisisBO.guardarAnalisis(guardarAnalisisDTO);
-            JOptionPane.showMessageDialog(this, "Registro Exitoso", "El análisis fue registrado correctamente.", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "El análisis fue registrado correctamente.", "Registro Exitoso", JOptionPane.INFORMATION_MESSAGE);
             controlNavegacion.mostrarCatalogoAnalisis();
             this.dispose();
         } catch (NegocioException ex) {

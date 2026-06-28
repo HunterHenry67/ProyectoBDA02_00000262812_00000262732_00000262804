@@ -73,11 +73,11 @@ public class EmisionReporteFORM extends JFrame {
         resultadoBO = new ResultadoBO(
                 new ResultadoDAO(conexion),
                 new PruebaDAO(),
-                new ParametroDAO(conexion)
+                new ParametroDAO()
         );
 
         parametroBO = new ParametroBO(
-                new ParametroDAO(conexion),
+                new ParametroDAO(),
                 new AnalisisDAO()
         );
 
