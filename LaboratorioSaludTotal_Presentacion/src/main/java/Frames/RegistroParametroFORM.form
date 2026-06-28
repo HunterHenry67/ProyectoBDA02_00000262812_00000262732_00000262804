@@ -213,11 +213,12 @@
     <Component class="javax.swing.JComboBox" name="comboUnidadMedida">
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-          <StringArray count="4">
-            <StringItem index="0" value="Item 1"/>
-            <StringItem index="1" value="Item 2"/>
-            <StringItem index="2" value="Item 3"/>
-            <StringItem index="3" value="Item 4"/>
+          <StringArray count="5">
+            <StringItem index="0" value="mg/dL"/>
+            <StringItem index="1" value="g/dL"/>
+            <StringItem index="2" value="mmol/L"/>
+            <StringItem index="3" value="U/L"/>
+            <StringItem index="4" value="%"/>
           </StringArray>
         </Property>
       </Properties>
@@ -238,17 +239,22 @@
         </Property>
         <Property name="text" type="java.lang.String" value="Buscar"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnBuscarActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JTextField" name="txtFieldBuscar">
     </Component>
     <Component class="javax.swing.JComboBox" name="comboFiltro">
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-          <StringArray count="4">
-            <StringItem index="0" value="Item 1"/>
-            <StringItem index="1" value="Item 2"/>
-            <StringItem index="2" value="Item 3"/>
-            <StringItem index="3" value="Item 4"/>
+          <StringArray count="6">
+            <StringItem index="0" value="Sexo"/>
+            <StringItem index="1" value="Edad Inicial"/>
+            <StringItem index="2" value="Edad Final"/>
+            <StringItem index="3" value="Rango Inicial"/>
+            <StringItem index="4" value="Rango Final"/>
+            <StringItem index="5" value=" "/>
           </StringArray>
         </Property>
       </Properties>
@@ -290,6 +296,9 @@
               </Table>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jTable1MouseClicked"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>
@@ -331,6 +340,9 @@
         </Property>
         <Property name="text" type="java.lang.String" value="Registrar"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnRegistrarParamteroActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>
