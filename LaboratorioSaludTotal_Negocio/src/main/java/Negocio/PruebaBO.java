@@ -5,6 +5,7 @@
 package Negocio;
 
 import DAO.IPruebaDAO;
+import DAO.PruebaDAO;
 import DAO.PersistenciaException;
 import DTO.PruebaDTO;
 import Entidades.Cliente;
@@ -22,7 +23,7 @@ public class PruebaBO implements IPruebaBO{
     private IPruebaDAO pruebaDAO;
     
     public PruebaBO() {
-        this.pruebaDAO = pruebaDAO;
+        this.pruebaDAO = new PruebaDAO();
     }
 
     @Override
