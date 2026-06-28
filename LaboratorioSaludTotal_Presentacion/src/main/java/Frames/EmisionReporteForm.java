@@ -31,7 +31,7 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRMapCollectionDataSource;
 import net.sf.jasperreports.view.JasperViewer;
 
-public class EmisionReporteFORM extends javax.swing.JFrame {
+public class EmisionReporteForm extends javax.swing.JFrame {
 
     private ControlNavegacionForms controlNavegacion;
 
@@ -43,11 +43,11 @@ public class EmisionReporteFORM extends javax.swing.JFrame {
     private List<PruebaDTO> pruebas;
     private List<PruebaDTO> pruebasMostradas;
 
-    public EmisionReporteFORM() {
+    public EmisionReporteForm() {
         initComponents();
     }
 
-    public EmisionReporteFORM(ControlNavegacionForms controlNavegacion) {
+    public EmisionReporteForm(ControlNavegacionForms controlNavegacion) {
         initComponents();
 
         this.controlNavegacion = controlNavegacion;
