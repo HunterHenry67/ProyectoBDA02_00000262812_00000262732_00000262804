@@ -112,7 +112,7 @@ public class RegistroParametroFORM extends javax.swing.JFrame {
         if (comboFiltro.getSelectedItem() == null) {
             throw new PresentacionException("Favor de seleccionar un filtro.");
         }
-        String entrada = comboFiltro.getSelectedItem().toString().trim();
+        String entrada = txtFieldBuscar.getText().trim();
         if (entrada.isEmpty()) {
             cargarTablaRangos();
             return;
