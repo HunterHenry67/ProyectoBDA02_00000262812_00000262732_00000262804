@@ -150,7 +150,8 @@ public class MenuPrincipalFORM extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCatalogoAnalisisActionPerformed
 
     private void btnEmisionReporteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEmisionReporteActionPerformed
-        // TODO add your handling code here:
+        controlNavegacion.mostrarEmisionReporte();
+        this.dispose();
     }//GEN-LAST:event_btnEmisionReporteActionPerformed
 
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed

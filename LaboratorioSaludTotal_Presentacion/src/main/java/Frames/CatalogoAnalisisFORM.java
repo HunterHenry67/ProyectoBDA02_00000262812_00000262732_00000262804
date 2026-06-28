@@ -5,6 +5,7 @@
 package Frames;
 
 import DTO.AnalisisDTO;
+import Negocio.AnalisisBO;
 import Negocio.IAnalisisBO;
 import Negocio.NegocioException;
 import java.util.List;
@@ -23,7 +24,7 @@ public class CatalogoAnalisisFORM extends javax.swing.JFrame {
     public CatalogoAnalisisFORM(ControlNavegacionForms controlNavegacion) {
         initComponents();
         this.controlNavegacion = controlNavegacion;
-        this.analisisBO = analisisBO;
+        this.analisisBO = new AnalisisBO();
         setExtendedState(MAXIMIZED_BOTH);
         try{
             cargarTabla();
