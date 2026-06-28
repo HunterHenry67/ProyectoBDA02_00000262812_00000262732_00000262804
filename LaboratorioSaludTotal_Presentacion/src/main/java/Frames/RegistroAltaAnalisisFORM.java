@@ -54,6 +54,17 @@ public class RegistroAltaAnalisisFORM extends javax.swing.JFrame {
         }
     }
 
+    public void agregarParametroAlAnalisis(RegistrarParametroDTO parametroDTO) throws PresentacionException {
+        if (parametroDTO == null) {
+            throw new PresentacionException("Debe existir al menos un parámetro.");
+        }
+        if (parametroDTO.getRangos() == null || parametroDTO.getRangos().isEmpty()) {
+            throw new PresentacionException("Debe haber por lo menos 1 rango.");
+        }
+        parametros.add(parametroDTO);
+        cargarTablaParametros();
+    }
+
     private void registrarAnalisis() throws PresentacionException {
         try {
             if (txtFieldNombreAnalisis.getText().trim().isEmpty()) {
@@ -146,7 +157,21 @@ public class RegistroAltaAnalisisFORM extends javax.swing.JFrame {
                             resultados.add(parametro);
                         }
                     } catch (NumberFormatException ex) {
-                        throw new PresentacionException("favor de buscar el número por el cual quiere filtrar.");
+                        throw new PresentacionException("Favor de buscar el número por el cual quiere filtrar.");
+                    }
+                    break;
+                case "Cantidad de Rangos":
+                    try {
+                        Integer cantidadBuscada = Integer.valueOf(entrada);
+                        int cantidadRangos = 0;
+                        if (parametro.getRangos() != null) {
+                            cantidadRangos = parametro.getRangos().size();
+                        }
+                        if (cantidadRangos == cantidadBuscada) {
+                            resultados.add(parametro);
+                        }
+                    } catch (NumberFormatException ex) {
+                        throw new PresentacionException("Para buscar por cantidad de rangos se debe escribir un número.");
                     }
                     break;
                 default:
@@ -414,7 +439,9 @@ public class RegistroAltaAnalisisFORM extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnAgregarNuevoParametroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarNuevoParametroActionPerformed
-        controlNavegacion.mostrarRegistroParametro();    
+        RegistroParametroFORM form = new RegistroParametroFORM(this);
+        form.setLocationRelativeTo(this);
+        form.setVisible(true);
     }//GEN-LAST:event_btnAgregarNuevoParametroActionPerformed
 
     private void btnRegistrarAnalisisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarAnalisisActionPerformed
@@ -426,7 +453,7 @@ public class RegistroAltaAnalisisFORM extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRegistrarAnalisisActionPerformed
 
     private void jScrollPane1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jScrollPane1MouseClicked
-        
+
     }//GEN-LAST:event_jScrollPane1MouseClicked
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked

@@ -29,16 +29,6 @@ public class ControlNavegacionForms {
         pantallaRegistroAltaAnalisis.setVisible(true);
     }
     
-    public void mostrarRegistroParametro(){
-        RegistroParametroFORM pantalaRegistroParametroFORM = new RegistroParametroFORM(this);
-        pantalaRegistroParametroFORM.setVisible(true);
-    }
-    
-    public void mostrarRegistroRango(){
-        RegistroRangoFORM pantallaRegistroRango = new RegistroRangoFORM(this);
-        pantallaRegistroRango.setVisible(true);
-    }
-    
     public void mostrarCatalogoClientes() {
         CatalogoClientesFORM pantallaCatalogoClientes = new CatalogoClientesFORM(this);
         pantallaCatalogoClientes.setVisible(true);
