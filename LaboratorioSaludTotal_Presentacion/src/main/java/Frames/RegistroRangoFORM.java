@@ -4,6 +4,9 @@
  */
 package Frames;
 
+import DTO.RangoDTO;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author BALAMRUSH
@@ -11,15 +14,95 @@ package Frames;
 public class RegistroRangoFORM extends javax.swing.JFrame {
 
     private RegistroParametroFORM registroParametroFORM;
-    private ControlNavegacionForms controlNavegacion;
     
     public RegistroRangoFORM(RegistroParametroFORM registroParametroFORM) {
         initComponents();
-        this.controlNavegacion = controlNavegacion;
         this.registroParametroFORM = registroParametroFORM;
         setExtendedState(MAXIMIZED_BOTH);
     }
 
+    private void guardarRango() throws PresentacionException {
+        if (comboBoxSexo.getSelectedItem() == null) {
+            throw new PresentacionException("Favor de seleccionar el sexo.");
+        }
+        if (txtFieldEdadInicial.getText().trim().isEmpty()) {
+            throw new PresentacionException("Favor de ingresar la edad inicial.");
+        }
+        if (txtFieldEdadFinal.getText().trim().isEmpty()) {
+            throw new PresentacionException("Favor de ingresar la edad final.");
+        }
+        if (txtFieldRangoInicial.getText().trim().isEmpty()) {
+            throw new PresentacionException("Favor de ingresar el rango inicial.");
+        }
+        if (txtFieldRangoFinal.getText().trim().isEmpty()) {
+            throw new PresentacionException("Favor de ingresar el rango final.");
+        }
+        Integer edadInicial = convertirEdadInicial();
+        Integer edadFinal = convertirEdadFinal();
+
+        if (edadInicial < 0 || edadFinal < 0) {
+            throw new PresentacionException("Favor de ingresar una edad válida.");
+        }
+        if (edadInicial > edadFinal) {
+            throw new PresentacionException("Edad inicial no válida.");
+        }
+        Float rangoInicial = convertirRangoInicial();
+        Float rangoFinal = convertirRangoFinal();
+        
+        if (rangoInicial > rangoFinal) {
+            throw new PresentacionException("Rango inicial no válido.");
+        }
+        RangoDTO rangoDTO = new RangoDTO();
+        rangoDTO.setSexo(comboBoxSexo.getSelectedItem().toString());
+        rangoDTO.setEdadInicial(convertirEdadInicial());
+        rangoDTO.setEdadFinal(convertirEdadFinal());
+        rangoDTO.setRangoInicial(convertirRangoInicial());
+        rangoDTO.setRangoFinal(convertirRangoFinal());
+
+        if (registroParametroFORM == null) {
+            throw new PresentacionException("No se encontró la pantalla de parámetro.");
+        }
+
+        registroParametroFORM.agregarRangoAlParametro(rangoDTO);
+        JOptionPane.showMessageDialog(this,"El rango ha sido agregado correctamente.","Registro exitoso",JOptionPane.INFORMATION_MESSAGE);
+        this.dispose();
+    }
+    
+     private Integer convertirEdadInicial() throws PresentacionException {
+        try {
+            return Integer.valueOf(txtFieldEdadInicial.getText().trim());
+        } catch (NumberFormatException ex) {
+            throw new PresentacionException("La edad inicial debe ser un entero.");
+        }
+    }
+     
+    private Integer convertirEdadFinal() throws PresentacionException {
+        try {
+            return Integer.valueOf(txtFieldEdadFinal.getText().trim());
+        } catch (NumberFormatException ex) {
+            throw new PresentacionException("La edad final debe ser un entero.");
+        }
+    }
+
+    private Float convertirRangoInicial() throws PresentacionException {
+        try {
+            return Float.valueOf(txtFieldRangoInicial.getText().trim());
+        } catch (NumberFormatException ex) {
+            throw new PresentacionException("El rango inicial debe ser entero..");
+        }
+    }
+
+    private Float convertirRangoFinal() throws PresentacionException {
+        try {
+            return Float.valueOf(txtFieldRangoFinal.getText().trim());
+        } catch (NumberFormatException ex) {
+            throw new PresentacionException("El rango final debe ser entero.");
+        }
+    }
+    
+    private void saltoAdvertencia(String mensaje){
+        JOptionPane.showMessageDialog(this, mensaje, "Advertencia", JOptionPane.WARNING_MESSAGE);
+    } 
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -32,7 +115,7 @@ public class RegistroRangoFORM extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        comboBoxSexo = new javax.swing.JComboBox<>();
         txtFieldEdadInicial = new javax.swing.JTextField();
         txtFieldEdadFinal = new javax.swing.JTextField();
         txtFieldRangoInicial = new javax.swing.JTextField();
@@ -64,7 +147,7 @@ public class RegistroRangoFORM extends javax.swing.JFrame {
         jLabel7.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel7.setText("Rango Final:");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        comboBoxSexo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Masculino", "Femenino" }));
 
         btnCancelar.setBackground(new java.awt.Color(255, 153, 153));
         btnCancelar.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
@@ -80,6 +163,11 @@ public class RegistroRangoFORM extends javax.swing.JFrame {
         btnRegresar.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         btnRegresar.setForeground(new java.awt.Color(255, 255, 255));
         btnRegresar.setText("Registrar");
+        btnRegresar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegresarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -97,7 +185,7 @@ public class RegistroRangoFORM extends javax.swing.JFrame {
                                     .addComponent(jLabel5))
                                 .addGap(234, 234, 234)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(comboBoxSexo, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(txtFieldEdadInicial)
                                     .addComponent(txtFieldEdadFinal, javax.swing.GroupLayout.DEFAULT_SIZE, 317, Short.MAX_VALUE)))
                             .addGroup(layout.createSequentialGroup()
@@ -133,7 +221,7 @@ public class RegistroRangoFORM extends javax.swing.JFrame {
                 .addGap(87, 87, 87)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(comboBoxSexo, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(50, 50, 50)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtFieldEdadInicial, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -161,15 +249,22 @@ public class RegistroRangoFORM extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        controlNavegacion.mostrarRegistroParametro();
         this.dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
+        try {
+            guardarRango();
+        } catch (PresentacionException ex) {
+            saltoAdvertencia(ex.getMessage());
+        }
+    }//GEN-LAST:event_btnRegresarActionPerformed
 
    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnRegresar;
-    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JComboBox<String> comboBoxSexo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

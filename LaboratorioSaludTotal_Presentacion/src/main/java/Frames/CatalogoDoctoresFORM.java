@@ -6,6 +6,7 @@ package Frames;
 
 import DTO.DoctorDTO;
 import Negocio.IDoctorBO;
+import Negocio.NegocioException;
 
 /**
  *
@@ -22,6 +23,7 @@ public class CatalogoDoctoresFORM extends javax.swing.JFrame {
     public CatalogoDoctoresFORM(ControlNavegacionForms controlNavegacion) {
         initComponents();
         this.controlNavegacion = controlNavegacion;
+        this.doctorBO = new Negocio.DoctorBO();
     }
 
     /**
@@ -165,6 +167,7 @@ public class CatalogoDoctoresFORM extends javax.swing.JFrame {
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         // TODO add your handling code here:
+        this.dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnSeleccionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSeleccionarActionPerformed
@@ -172,14 +175,15 @@ public class CatalogoDoctoresFORM extends javax.swing.JFrame {
         int fila = tablaDoctores.getSelectedRow();
     
         if (fila != -1) {
-            // 1. Sacas el DTO del doctor seleccionado...
-            DoctorDTO docElegido = doctorBO.buscarPorId( (int)tablaDoctores.getValueAt(fila, 0) );
-
-            // 2. Usas el puente del control para aventárselo a la pantalla de atrás:
-            controlNavegacion.getPantallaSolicitudActual().setDoctorSeleccionado(docElegido);
-
-            // 3. Destruyes el catálogo. Al cerrarse, la pantalla de atrás vuelve a tomar el control.
-            this.dispose(); 
+            try {
+                DoctorDTO docElegido = doctorBO.consultarPorID((int)tablaDoctores.getValueAt(fila, 0) );
+                controlNavegacion.getPantallaSolicitudActual().setDoctorSeleccionado(docElegido);
+                
+                this.dispose();
+            } catch (NegocioException ex) {
+                javax.swing.JOptionPane.showMessageDialog(this, "Error al seleccionar " + ex.getMessage());
+                System.getLogger(CatalogoDoctoresFORM.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+            }
         }
     }//GEN-LAST:event_btnSeleccionarActionPerformed
 
