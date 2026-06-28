@@ -122,16 +122,14 @@ public class RegistroParametroFORM extends javax.swing.JFrame {
         for (RangoDTO rango : rangos) {
             switch (filtro) {
                 case "Sexo":
-                    if (rango.getSexo() != null
-                            && rango.getSexo().toString().toLowerCase().contains(entrada.toLowerCase())) {
+                    if (rango.getSexo() != null && rango.getSexo().toString().toLowerCase().contains(entrada.toLowerCase())) {
                         resultados.add(rango);
                     }
                     break;
                 case "Edad Inicial":
                     try {
                         Integer edadInicial = Integer.valueOf(entrada);
-                        if (rango.getEdadInicial() != null
-                                && rango.getEdadInicial().equals(edadInicial)) {
+                        if (rango.getEdadInicial() != null && rango.getEdadInicial().equals(edadInicial)) {
                             resultados.add(rango);
                         }
                     } catch (NumberFormatException ex) {
@@ -141,8 +139,7 @@ public class RegistroParametroFORM extends javax.swing.JFrame {
                 case "Edad Final":
                     try {
                         Integer edadFinal = Integer.valueOf(entrada);
-                        if (rango.getEdadFinal() != null
-                                && rango.getEdadFinal().equals(edadFinal)) {
+                        if (rango.getEdadFinal() != null && rango.getEdadFinal().equals(edadFinal)) {
                             resultados.add(rango);
                         }
                     } catch (NumberFormatException ex) {
@@ -152,8 +149,7 @@ public class RegistroParametroFORM extends javax.swing.JFrame {
                 case "Rango Inicial":
                     try {
                         Double rangoInicial = Double.valueOf(entrada);
-                        if (rango.getRangoInicial() != null
-                                && rango.getRangoInicial().equals(rangoInicial)) {
+                        if (rango.getRangoInicial() != null && rango.getRangoInicial().equals(rangoInicial)) {
                             resultados.add(rango);
                         }
                     } catch (NumberFormatException ex) {
@@ -164,8 +160,7 @@ public class RegistroParametroFORM extends javax.swing.JFrame {
                     try {
                         Double rangoFinal = Double.valueOf(entrada);
 
-                        if (rango.getRangoFinal() != null
-                                && rango.getRangoFinal().equals(rangoFinal)) {
+                        if (rango.getRangoFinal() != null && rango.getRangoFinal().equals(rangoFinal)) {
                             resultados.add(rango);
                         }
                     } catch (NumberFormatException ex) {
@@ -444,7 +439,6 @@ public class RegistroParametroFORM extends javax.swing.JFrame {
     private void btnRegistrarParamteroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarParamteroActionPerformed
         try {
             guardarParametro();
-
         } catch (PresentacionException ex) {
             saltoAdvertencia(ex.getMessage());
         }
