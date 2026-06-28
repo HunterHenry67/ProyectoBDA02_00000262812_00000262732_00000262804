@@ -161,105 +161,85 @@ public class EmisionReporteFORM extends javax.swing.JFrame {
     }
 
     private void imprimirReporte() {
-        int fila = jTable1.getSelectedRow();
-
-        if (fila == -1) {
-            mostrarAdvertencia("Selecciona una prueba para imprimir el reporte.");
-            return;
-        }
-
-        PruebaDTO pruebaSeleccionada = pruebasMostradas.get(fila);
 
         try {
-            InputStream archivoReporte = getClass().getResourceAsStream("/reportes.jrxml");
 
-            if (archivoReporte == null) {
-                mostrarError("No se encontró reportes.jrxml en src/main/resources.");
+            int fila = jTable1.getSelectedRow();
+
+            if (fila == -1) {
+                JOptionPane.showMessageDialog(this, "Selecciona una prueba.");
                 return;
             }
 
-            JasperReport reporteCompilado = JasperCompileManager.compileReport(archivoReporte);
+            PruebaDTO prueba = pruebasMostradas.get(fila);
 
-            Map<String, Object> parametrosReporte = crearParametrosReporte(pruebaSeleccionada);
-            Collection<Map<String, ?>> datosReporte = crearDatosReporte(pruebaSeleccionada.getIdPrueba());
+            InputStream archivo = getClass().getResourceAsStream("/reportes.jrxml");
 
-            if (datosReporte.isEmpty()) {
-                mostrarAdvertencia("La prueba seleccionada no tiene resultados registrados.");
-                return;
-            }
+            JasperReport reporte = JasperCompileManager.compileReport(archivo);
 
-            JRMapCollectionDataSource dataSource = new JRMapCollectionDataSource(datosReporte);
+            Collection datos = crearDatosReporte(prueba.getIdPrueba());
 
-            JasperPrint jasperPrint = JasperFillManager.fillReport(
-                    reporteCompilado,
-                    parametrosReporte,
-                    dataSource
+            JasperPrint impresion = JasperFillManager.fillReport(
+                    reporte,
+                    crearParametrosReporte(prueba),
+                    new JRMapCollectionDataSource(datos)
             );
 
-            JasperViewer.viewReport(jasperPrint, false);
+            JasperViewer.viewReport(impresion, false);
 
         } catch (Exception ex) {
-            mostrarError("Error al generar reporte: " + ex.getMessage());
+            JOptionPane.showMessageDialog(this, ex.getMessage());
         }
     }
 
-    private Map<String,Object> crearParametrosReporte(PruebaDTO prueba){
+    private Map<String, Object> crearParametrosReporte(PruebaDTO prueba) {
+        Map<String, Object> parametros = new HashMap<>();
 
-    Map<String,Object> parametros = new HashMap<>();
+        parametros.put("folio", prueba.getIdPrueba());
 
-    parametros.put("folio", prueba.getIdPrueba());
-    parametros.put("nombre", prueba.getNombreCliente());
-    parametros.put("edad", "");
-    parametros.put("sexo", "");
-    parametros.put("fecha", prueba.getFechaHora());
-    parametros.put("analisis", prueba.get());
-    parametros.put("medico", prueba.getNombreDoctor());
+        if (prueba.getNombreCliente() != null) {
+            parametros.put("nombre", prueba.getNombreCliente());
+        } else {
+            parametros.put("nombre", "N/A");
+        }
 
-    return parametros;
-}
+        parametros.put("edad", "N/A");
+        parametros.put("sexo", "N/A");
 
-    private Collection<Map<String, ?>> crearDatosReporte(Integer idPrueba) throws NegocioException {
-        List<Map<String, ?>> datos = new ArrayList<>();
+        if (prueba.getFechaHora() != null) {
+            parametros.put("fecha", prueba.getFechaHora().toString());
+        } else {
+            parametros.put("fecha", "N/A");
+        }
 
-        List resultados = resultadoBO.consultarTablaPorPrueba(idPrueba);
+        parametros.put("analisis", "N/A");
 
-        for (Object obj : resultados) {
-            ResultadoDTO resultado = (ResultadoDTO) obj;
+        if (prueba.getNombreDoctor() != null) {
+            parametros.put("medico", prueba.getNombreDoctor());
+        } else {
+            parametros.put("medico", "N/A");
+        }
 
-            Parametro parametro = parametroBO.consultarParametroPorID(resultado.getIdParametro());
+        return parametros;
+    }
 
-            String nombreParametro = "N/A";
-            String unidad = "N/A";
-            String rangoNormal = obtenerRangoNormal(resultado.getIdParametro());
-            String observacion = "";
+    private Collection<Map<String, Object>> crearDatosReporte(Integer idPrueba) throws NegocioException {
 
-            if (parametro != null) {
-                if (parametro.getNombre() != null) {
-                    nombreParametro = parametro.getNombre();
-                }
+        List<Map<String, Object>> datos = new ArrayList<>();
 
-                if (parametro.getUnidadMedida() != null) {
-                    unidad = parametro.getUnidadMedida();
-                }
-            }
+        List<ResultadoDTO> resultados = resultadoBO.consultarTablaPorPrueba(idPrueba);
 
-            if (resultado.getObservacion() != null) {
-                observacion = resultado.getObservacion();
-            }
+        for (ResultadoDTO resultado : resultados) {
 
             Map<String, Object> fila = new HashMap<>();
 
-            fila.put("parametro", nombreParametro);
-            fila.put("unidad", unidad);
-            fila.put("rangoNormal", rangoNormal);
-            fila.put("resultado", resultado.getResultadoObtenido());
-            fila.put("observacion", observacion);
+            Parametro parametro = parametroBO.consultarParametroPorID(resultado.getIdParametro());
 
-            fila.put("PARAMETRO", nombreParametro);
-            fila.put("UNIDAD", unidad);
-            fila.put("RANGO_NORMAL", rangoNormal);
-            fila.put("RESULTADO", resultado.getResultadoObtenido());
-            fila.put("OBSERVACION", observacion);
+            fila.put("parametro", parametro.getNombre());
+            fila.put("unidad", parametro.getUnidadMedida());
+            fila.put("rango", obtenerRangoNormal(resultado.getIdParametro()));
+            fila.put("resultado", resultado.getResultadoObtenido());
+            fila.put("observacion", resultado.getObservacion());
 
             datos.add(fila);
         }

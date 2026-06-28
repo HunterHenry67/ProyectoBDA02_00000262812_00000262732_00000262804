@@ -50,6 +50,17 @@ public class ControlNavegacionForms {
         pantalla.setVisible(true);
     }
     
+
+    public void mostrarBusquedaPaciente() {
+        BusquedaPacienteFORM pantalla = new BusquedaPacienteFORM(this);
+        pantalla.setVisible(true);
+    }
+
+    public void mostrarEmisionReporte() {
+        EmisionReporteFORM pantalla = new EmisionReporteFORM(this);
+        pantalla.setVisible(true);
+    }
+    
     public RegistroSolicitudPruebaFORM getPantallaSolicitudActual() {
         return pantallaSolicitudActual;
     }
