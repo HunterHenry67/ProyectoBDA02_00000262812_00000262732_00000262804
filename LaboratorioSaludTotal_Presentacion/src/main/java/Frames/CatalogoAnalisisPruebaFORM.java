@@ -4,25 +4,24 @@
  */
 package Frames;
 
-import DTO.ClienteDTO;
-import Negocio.IClienteBO;
+import DTO.AnalisisDTO;
 
 /**
  *
  * @author user
  */
-public class CatalogoClientesFORM extends javax.swing.JFrame {
+public class CatalogoAnalisisPruebaFORM extends javax.swing.JFrame {
     private ControlNavegacionForms controlNavegacion;
-    private IClienteBO clienteBO;
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(CatalogoClientesFORM.class.getName());
+
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(CatalogoAnalisisPruebaFORM.class.getName());
 
     /**
-     * Creates new form CatalogoClientesFORM
+     * Creates new form CatalogoAnalisisPruebaFORM
      */
-    public CatalogoClientesFORM(ControlNavegacionForms controlNavegacion) {
+    public CatalogoAnalisisPruebaFORM(ControlNavegacionForms controlNavegacion) {
         initComponents();
         this.controlNavegacion = controlNavegacion;
-        this.clienteBO = new Negocio.ClienteBO();
+        
     }
 
     /**
@@ -34,47 +33,18 @@ public class CatalogoClientesFORM extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         comboBoxFiltro = new javax.swing.JComboBox<>();
         txtBuscador = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tablaClientes = new javax.swing.JTable();
+        tablaAnalisis = new javax.swing.JTable();
         btnCancelar = new javax.swing.JButton();
         btnSeleccionar = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel1.setText("Laboratorio Clinico Salud Total");
-
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel2.setText("Catalogo de Clientes");
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(42, 42, 42)
-                .addComponent(jLabel1)
-                .addContainerGap(42, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel2)
-                .addGap(78, 78, 78))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel2)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
 
         comboBoxFiltro.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
@@ -99,18 +69,18 @@ public class CatalogoClientesFORM extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        tablaClientes.setModel(new javax.swing.table.DefaultTableModel(
+        tablaAnalisis.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
-                "ID", "Nombre", "Fecha Nacimiento", "Tipo de Sangre", "Sexo"
+                "ID", "Análisis", "Tipo Muestra", "Parametro"
             }
         ));
-        jScrollPane1.setViewportView(tablaClientes);
+        jScrollPane1.setViewportView(tablaAnalisis);
 
         btnCancelar.setBackground(new java.awt.Color(255, 204, 204));
         btnCancelar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -123,6 +93,36 @@ public class CatalogoClientesFORM extends javax.swing.JFrame {
         btnSeleccionar.setText("Seleccionar");
         btnSeleccionar.addActionListener(this::btnSeleccionarActionPerformed);
 
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel1.setText("Laboratorio Clinico Salud Total");
+
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel2.setText("Catalogo de Análisi");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(42, 42, 42)
+                        .addComponent(jLabel1))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(78, 78, 78)
+                        .addComponent(jLabel2)))
+                .addContainerGap(42, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel2)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -130,21 +130,21 @@ public class CatalogoClientesFORM extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(276, 276, 276)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(239, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(85, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(268, 268, 268))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 766, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(33, 33, 33))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(btnCancelar)
                         .addGap(18, 18, 18)
                         .addComponent(btnSeleccionar)
-                        .addGap(58, 58, 58))))
+                        .addGap(58, 58, 58))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 644, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(85, 85, 85))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -166,25 +166,32 @@ public class CatalogoClientesFORM extends javax.swing.JFrame {
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         // TODO add your handling code here:
+        this.dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnSeleccionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSeleccionarActionPerformed
         // TODO add your handling code here:
-        int fila = tablaClientes.getSelectedRow();
-    
+        int fila = tablaAnalisis.getSelectedRow();
+        
         if (fila != -1) {
             try {
-                int idCliente = (int) tablaClientes.getValueAt(fila, 0);
-                ClienteDTO cliElegido = clienteBO.buscarClienteId(idCliente);
-                controlNavegacion.getPantallaSolicitudActual().setClienteSeleccionado(cliElegido);
+                int idAnalisis = (int) tablaAnalisis.getValueAt(fila, 0);
                 
+                
+                AnalisisDTO analisisElegido = new AnalisisDTO();
+                analisisElegido.setIdAnalisis(idAnalisis);
+                analisisElegido.setNombre((String)tablaAnalisis.getValueAt(fila, 1));
+                analisisElegido.setTipoMuestra((String)tablaAnalisis.getValueAt(fila, 2));                
+                controlNavegacion.getPantallaSolicitudActual().agregarAnalisisTemporal(analisisElegido);
                 this.dispose();
+                
             } catch (Exception ex) {
                 javax.swing.JOptionPane.showMessageDialog(this, "Error al seleccionar " + ex.getMessage());
             }
         } else {
-             javax.swing.JOptionPane.showMessageDialog(this, "Por favor seleccione un cliente de la tabla");
+            javax.swing.JOptionPane.showMessageDialog(this, "seleccione un análisis de la tabla.", "Advertencia", javax.swing.JOptionPane.WARNING_MESSAGE);
         }
+        
     }//GEN-LAST:event_btnSeleccionarActionPerformed
 
     /**
@@ -201,7 +208,7 @@ public class CatalogoClientesFORM extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable tablaClientes;
+    private javax.swing.JTable tablaAnalisis;
     private javax.swing.JTextField txtBuscador;
     // End of variables declaration//GEN-END:variables
 }
