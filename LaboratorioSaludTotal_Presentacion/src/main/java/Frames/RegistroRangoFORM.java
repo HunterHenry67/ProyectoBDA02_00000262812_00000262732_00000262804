@@ -10,11 +10,13 @@ package Frames;
  */
 public class RegistroRangoFORM extends javax.swing.JFrame {
 
+    private RegistroParametroFORM registroParametroFORM;
     private ControlNavegacionForms controlNavegacion;
     
-    public RegistroRangoFORM(ControlNavegacionForms controlNavegacion) {
+    public RegistroRangoFORM(RegistroParametroFORM registroParametroFORM) {
         initComponents();
         this.controlNavegacion = controlNavegacion;
+        this.registroParametroFORM = registroParametroFORM;
         setExtendedState(MAXIMIZED_BOTH);
     }
 
