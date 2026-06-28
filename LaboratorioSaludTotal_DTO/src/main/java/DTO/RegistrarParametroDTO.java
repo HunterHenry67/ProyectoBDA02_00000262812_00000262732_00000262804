@@ -4,6 +4,8 @@
  */
 package DTO;
 
+import java.util.List;
+
 /**
  *
  * @author BALAMRUSH
@@ -14,6 +16,7 @@ public class RegistrarParametroDTO {
     private String notaDescriptiva;
     private String unidadMedida;
     private Integer idAnalisis;
+    private List<RangoDTO> rangos;
 
     public RegistrarParametroDTO() {
     }
@@ -57,5 +60,12 @@ public class RegistrarParametroDTO {
     public void setIdAnalisis(Integer idAnalisis) {
         this.idAnalisis = idAnalisis;
     }
-       
+
+    public List<RangoDTO> getRangos() {
+        return rangos;
+    }
+
+    public void setRangos(List<RangoDTO> rangos) {
+        this.rangos = rangos;
+    }  
 }

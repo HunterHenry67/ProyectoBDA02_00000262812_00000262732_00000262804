@@ -4,6 +4,8 @@
  */
 package DTO;
 
+import java.util.List;
+
 /**
  *
  * @author Andre
@@ -12,6 +14,7 @@ public class GuardarAnalisisDTO {
     private String nombre;
     private String nota;
     private Integer idMuestra;
+    private List<RegistrarParametroDTO> parametros;
 
     public GuardarAnalisisDTO() {
     }
@@ -39,6 +42,12 @@ public class GuardarAnalisisDTO {
     public void setIdMuestra(Integer idMuestra) {
         this.idMuestra = idMuestra;
     }
-    
-    
+
+    public List<RegistrarParametroDTO> getParametros() {
+        return parametros;
+    }
+
+    public void setParametros(List<RegistrarParametroDTO> parametros) {
+        this.parametros = parametros;
+    }   
 }

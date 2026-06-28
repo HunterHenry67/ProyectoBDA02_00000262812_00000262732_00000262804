@@ -15,6 +15,11 @@ public class MuestraDTO {
     public MuestraDTO() {
     }
 
+    public MuestraDTO(Integer idMuestra, String nombre) {
+        this.idMuestra = idMuestra;
+        this.nombre = nombre;
+    }
+
     public Integer getIdMuestra() {
         return idMuestra;
     }
