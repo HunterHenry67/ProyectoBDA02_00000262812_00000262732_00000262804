@@ -185,7 +185,7 @@ public class ParametroBO implements IParametroBO {
             for (Parametro parametro : parametros) {
                 ParametroDTO parametroDTO = new ParametroDTO();
                 parametroDTO.setIdParametro(parametro.getIdParametro());
-                parametroDTO.setNombre(parametroDTO.getNombre());
+                parametroDTO.setNombre(parametro.getNombre());
                 parametroDTO.setOrdenReporte(parametro.getOrdenReporte());
                 parametroDTO.setNotaDescriptiva(parametro.getNotaDescriptiva());
                 parametroDTO.setUnidadMedida(parametro.getUnidadMedida());
