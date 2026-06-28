@@ -1,9 +1,8 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package Frames;
-
 import DTO.ClienteDTO;
 import DTO.DoctorDTO;
 import DTO.PruebaDTO;
@@ -11,201 +10,120 @@ import Negocio.ClienteBO;
 import Negocio.DoctorBO;
 import Negocio.NegocioException;
 import Negocio.PruebaBO;
+import java.awt.Font;
 import java.time.LocalDate;
 import java.time.Period;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+
 
 /**
  *
- * @author BALAMRUSH
+ * @author Andre
  */
-public class BusquedaPacienteFORM extends javax.swing.JFrame {
+
+public class BusquedaPacienteFORM extends JFrame {
 
     private ControlNavegacionForms controlNavegacion;
+
+    private JTextField txtFolio;
+    private JTextField txtPaciente;
+    private JTextField txtEdad;
+    private JTextField txtDoctor;
 
     private PruebaDTO pruebaSeleccionada;
     private ClienteDTO clienteSeleccionado;
     private DoctorDTO doctorSeleccionado;
 
     public BusquedaPacienteFORM(ControlNavegacionForms controlNavegacion) {
-        initComponents();
         this.controlNavegacion = controlNavegacion;
-        setExtendedState(MAXIMIZED_BOTH);
-
-        txtPaciente.setEditable(false);
-        txtEdad.setEditable(false);
-        txtDoctorAsignado.setEditable(false);
+        initComponents();
     }
 
-    @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        setTitle("Búsqueda de Paciente");
+        setSize(900, 600);
+        setLocationRelativeTo(null);
+        setResizable(false);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLayout(null);
 
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        lblPaciente = new javax.swing.JLabel();
-        lblEdad = new javax.swing.JLabel();
-        lblDoctor = new javax.swing.JLabel();
-        txtFieldEdadInicial = new javax.swing.JTextField();
-        txtEdad = new javax.swing.JTextField();
-        txtDoctorAsignado = new javax.swing.JTextField();
-        btnCancelar = new javax.swing.JButton();
-        btnRegresar = new javax.swing.JButton();
-        lblLinea = new javax.swing.JLabel();
-        btnBuscar = new javax.swing.JButton();
-        txtPaciente = new javax.swing.JTextField();
+        JLabel lblTitulo = new JLabel("Laboratorio Clínico Salud Total");
+        lblTitulo.setFont(new Font("Dialog", Font.BOLD, 22));
+        lblTitulo.setBounds(280, 40, 400, 35);
+        add(lblTitulo);
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Registro de Rango");
+        JLabel lblSubtitulo = new JLabel("Búsqueda de Paciente");
+        lblSubtitulo.setFont(new Font("Dialog", Font.PLAIN, 18));
+        lblSubtitulo.setBounds(350, 85, 250, 30);
+        add(lblSubtitulo);
 
-        jLabel1.setFont(new java.awt.Font("Dialog", 1, 24)); // NOI18N
-        jLabel1.setText("Laboratorio Clínico Salud Total");
+        JLabel lblFolio = new JLabel("Número de folio:");
+        lblFolio.setFont(new Font("Dialog", Font.BOLD, 14));
+        lblFolio.setBounds(180, 160, 150, 30);
+        add(lblFolio);
 
-        jLabel2.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
-        jLabel2.setText("Busqueda de Paciente");
+        txtFolio = new JTextField();
+        txtFolio.setBounds(340, 160, 250, 35);
+        add(txtFolio);
 
-        jLabel3.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        jLabel3.setText("Numero de folio:");
+        JButton btnBuscar = new JButton("Buscar");
+        btnBuscar.setBounds(610, 160, 120, 35);
+        btnBuscar.addActionListener(e -> buscarPaciente());
+        add(btnBuscar);
 
-        lblPaciente.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        lblPaciente.setText("Paciente:");
+        JLabel lblPaciente = new JLabel("Paciente:");
+        lblPaciente.setFont(new Font("Dialog", Font.BOLD, 14));
+        lblPaciente.setBounds(180, 250, 150, 30);
+        add(lblPaciente);
 
-        lblEdad.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        lblEdad.setText("Edad: ");
+        txtPaciente = new JTextField();
+        txtPaciente.setBounds(340, 250, 390, 35);
+        txtPaciente.setEditable(false);
+        add(txtPaciente);
 
-        lblDoctor.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        lblDoctor.setText("Doctor Asignado:");
+        JLabel lblEdad = new JLabel("Edad:");
+        lblEdad.setFont(new Font("Dialog", Font.BOLD, 14));
+        lblEdad.setBounds(180, 300, 150, 30);
+        add(lblEdad);
 
-        btnCancelar.setBackground(new java.awt.Color(255, 153, 153));
-        btnCancelar.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        btnCancelar.setText("Cancelar");
-        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCancelarActionPerformed(evt);
-            }
-        });
+        txtEdad = new JTextField();
+        txtEdad.setBounds(340, 300, 150, 35);
+        txtEdad.setEditable(false);
+        add(txtEdad);
 
-        btnRegresar.setBackground(new java.awt.Color(0, 0, 0));
-        btnRegresar.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        btnRegresar.setForeground(new java.awt.Color(255, 255, 255));
-        btnRegresar.setText("Registrar Resultados");
-        btnRegresar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRegresarActionPerformed(evt);
-            }
-        });
+        JLabel lblDoctor = new JLabel("Doctor asignado:");
+        lblDoctor.setFont(new Font("Dialog", Font.BOLD, 14));
+        lblDoctor.setBounds(180, 350, 150, 30);
+        add(lblDoctor);
 
-        lblLinea.setText("------------------------------------------------------------------------------------------------------------------------------------------");
+        txtDoctor = new JTextField();
+        txtDoctor.setBounds(340, 350, 390, 35);
+        txtDoctor.setEditable(false);
+        add(txtDoctor);
 
-        btnBuscar.setBackground(new java.awt.Color(0, 0, 0));
-        btnBuscar.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        btnBuscar.setForeground(new java.awt.Color(255, 255, 255));
-        btnBuscar.setText("Buscar");
-        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnBuscarActionPerformed(evt);
-            }
-        });
+        JButton btnCancelar = new JButton("Cancelar");
+        btnCancelar.setBounds(300, 450, 140, 45);
+        btnCancelar.addActionListener(e -> regresarMenu());
+        add(btnCancelar);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jLabel2)
-                .addGap(842, 842, 842))
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(794, 794, 794)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 370, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(256, 256, 256)
-                        .addComponent(lblLinea, javax.swing.GroupLayout.PREFERRED_SIZE, 669, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(248, 248, 248)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(lblEdad)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(jLabel3)
-                                    .addGap(234, 234, 234)
-                                    .addComponent(txtFieldEdadInicial, javax.swing.GroupLayout.DEFAULT_SIZE, 317, Short.MAX_VALUE))
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(lblDoctor)
-                                        .addComponent(lblPaciente))
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(txtDoctorAsignado, javax.swing.GroupLayout.DEFAULT_SIZE, 317, Short.MAX_VALUE)
-                                        .addComponent(txtEdad)
-                                        .addComponent(txtPaciente)))
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                    .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(82, 82, 82)
-                                    .addComponent(btnRegresar))))))
-                .addContainerGap(756, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(57, 57, 57)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel2)
-                .addGap(90, 90, 90)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(txtFieldEdadInicial, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(35, 35, 35)
-                .addComponent(lblLinea)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 176, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblPaciente)
-                    .addComponent(txtPaciente, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(42, 42, 42)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblEdad)
-                    .addComponent(txtEdad, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(34, 34, 34)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblDoctor)
-                    .addComponent(txtDoctorAsignado, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(56, 56, 56)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnRegresar, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(107, 107, 107))
-        );
+        JButton btnRegistrar = new JButton("Registrar Resultados");
+        btnRegistrar.setBounds(470, 450, 190, 45);
+        btnRegistrar.addActionListener(e -> abrirRegistrarResultados());
+        add(btnRegistrar);
+    }
 
-        pack();
-    }// </editor-fold>//GEN-END:initComponents
-
-    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        controlNavegacion.mostrarMenuPrincipal();
-        this.dispose();
-    }//GEN-LAST:event_btnCancelarActionPerformed
-
-    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        buscarPaciente();
-    }//GEN-LAST:event_btnBuscarActionPerformed
-
-    private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
-        abrirRegistrarResultados();
-    }//GEN-LAST:event_btnRegresarActionPerformed
     private void buscarPaciente() {
         try {
             limpiarCampos();
 
-            String folioTexto = txtFieldEdadInicial.getText().trim();
+            String folioTexto = txtFolio.getText().trim();
 
             if (folioTexto.isEmpty()) {
-                mostrarAdvertencia("Ingresa el número de folio.");
+                JOptionPane.showMessageDialog(this, "Ingresa el número de folio.");
                 return;
             }
 
@@ -214,7 +132,7 @@ public class BusquedaPacienteFORM extends javax.swing.JFrame {
             try {
                 folio = Integer.parseInt(folioTexto);
             } catch (NumberFormatException ex) {
-                mostrarAdvertencia("El folio debe ser numérico.");
+                JOptionPane.showMessageDialog(this, "El folio debe ser numérico.");
                 return;
             }
 
@@ -225,7 +143,7 @@ public class BusquedaPacienteFORM extends javax.swing.JFrame {
             pruebaSeleccionada = pruebaBO.buscarPruebaPorId(folio);
 
             if (pruebaSeleccionada == null) {
-                mostrarAdvertencia("No se encontró una prueba con ese folio.");
+                JOptionPane.showMessageDialog(this, "No se encontró la prueba.");
                 return;
             }
 
@@ -243,26 +161,24 @@ public class BusquedaPacienteFORM extends javax.swing.JFrame {
             }
 
             if (doctorSeleccionado != null) {
-                txtDoctorAsignado.setText(nombreCompletoDoctor(doctorSeleccionado));
+                txtDoctor.setText(nombreCompletoDoctor(doctorSeleccionado));
             } else {
-                txtDoctorAsignado.setText("N/A");
+                txtDoctor.setText("N/A");
             }
 
         } catch (NegocioException ex) {
-            mostrarError(ex.getMessage());
-        } catch (Exception ex) {
-            mostrarError("Error al buscar paciente: " + ex.getMessage());
+            JOptionPane.showMessageDialog(this, ex.getMessage());
         }
     }
 
     private void abrirRegistrarResultados() {
         if (pruebaSeleccionada == null) {
-            mostrarAdvertencia("Primero busca una prueba válida.");
+            JOptionPane.showMessageDialog(this, "Primero busca una prueba.");
             return;
         }
 
         if (clienteSeleccionado == null) {
-            mostrarAdvertencia("La prueba no tiene paciente asignado.");
+            JOptionPane.showMessageDialog(this, "La prueba no tiene paciente.");
             return;
         }
 
@@ -274,7 +190,7 @@ public class BusquedaPacienteFORM extends javax.swing.JFrame {
         );
 
         pantalla.setVisible(true);
-        this.dispose();
+        dispose();
     }
 
     private void limpiarCampos() {
@@ -284,47 +200,43 @@ public class BusquedaPacienteFORM extends javax.swing.JFrame {
 
         txtPaciente.setText("");
         txtEdad.setText("");
-        txtDoctorAsignado.setText("");
+        txtDoctor.setText("");
     }
 
     private String nombreCompletoCliente(ClienteDTO cliente) {
-        String nombres = "";
-        String paterno = "";
-        String materno = "";
+        String nombre = "";
 
         if (cliente.getNombres() != null) {
-            nombres = cliente.getNombres();
+            nombre = nombre + cliente.getNombres() + " ";
         }
 
         if (cliente.getApellidoPaterno() != null) {
-            paterno = cliente.getApellidoPaterno();
+            nombre = nombre + cliente.getApellidoPaterno() + " ";
         }
 
         if (cliente.getApellidoMaterno() != null) {
-            materno = cliente.getApellidoMaterno();
+            nombre = nombre + cliente.getApellidoMaterno();
         }
 
-        return (nombres + " " + paterno + " " + materno).trim();
+        return nombre.trim();
     }
 
     private String nombreCompletoDoctor(DoctorDTO doctor) {
-        String nombres = "";
-        String paterno = "";
-        String materno = "";
+        String nombre = "";
 
         if (doctor.getNombres() != null) {
-            nombres = doctor.getNombres();
+            nombre = nombre + doctor.getNombres() + " ";
         }
 
         if (doctor.getApellidoPaterno() != null) {
-            paterno = doctor.getApellidoPaterno();
+            nombre = nombre + doctor.getApellidoPaterno() + " ";
         }
 
         if (doctor.getApellidoMaterno() != null) {
-            materno = doctor.getApellidoMaterno();
+            nombre = nombre + doctor.getApellidoMaterno();
         }
 
-        return (nombres + " " + paterno + " " + materno).trim();
+        return nombre.trim();
     }
 
     private String calcularEdad(ClienteDTO cliente) {
@@ -332,34 +244,14 @@ public class BusquedaPacienteFORM extends javax.swing.JFrame {
             return "N/A";
         }
 
-        LocalDate nacimiento = cliente.getFechaNacimiento().toLocalDate();
-        int edad = Period.between(nacimiento, LocalDate.now()).getYears();
+        LocalDate fechaNacimiento = cliente.getFechaNacimiento().toLocalDate();
+        int edad = Period.between(fechaNacimiento, LocalDate.now()).getYears();
 
         return String.valueOf(edad);
     }
 
-    private void mostrarAdvertencia(String mensaje) {
-        JOptionPane.showMessageDialog(this, mensaje, "Advertencia", JOptionPane.WARNING_MESSAGE);
+    private void regresarMenu() {
+        controlNavegacion.mostrarMenuPrincipal();
+        dispose();
     }
-
-    private void mostrarError(String mensaje) {
-        JOptionPane.showMessageDialog(this, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
-    }
-
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnBuscar;
-    private javax.swing.JButton btnCancelar;
-    private javax.swing.JButton btnRegresar;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel lblDoctor;
-    private javax.swing.JLabel lblEdad;
-    private javax.swing.JLabel lblLinea;
-    private javax.swing.JLabel lblPaciente;
-    private javax.swing.JTextField txtDoctorAsignado;
-    private javax.swing.JTextField txtEdad;
-    private javax.swing.JTextField txtFieldEdadInicial;
-    private javax.swing.JTextField txtPaciente;
-    // End of variables declaration//GEN-END:variables
 }
