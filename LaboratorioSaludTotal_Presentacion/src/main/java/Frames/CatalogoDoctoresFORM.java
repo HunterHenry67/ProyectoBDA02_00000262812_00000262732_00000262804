@@ -7,6 +7,8 @@ package Frames;
 import DTO.DoctorDTO;
 import Negocio.IDoctorBO;
 import Negocio.NegocioException;
+import java.util.List;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -24,6 +26,32 @@ public class CatalogoDoctoresFORM extends javax.swing.JFrame {
         initComponents();
         this.controlNavegacion = controlNavegacion;
         this.doctorBO = new Negocio.DoctorBO();
+        try {
+            cargarTabla();
+        } catch (PresentacionException ex) {
+            javax.swing.JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    private void cargarTabla() throws PresentacionException {
+        try {
+            List<DoctorDTO> listaDoctores = doctorBO.consultarTodos(); 
+            llenarTabla(listaDoctores);
+        } catch (NegocioException ex) {
+            throw new PresentacionException("Error al cargar la tabla con los doctores" + ex.getMessage());
+        }
+    }
+    
+    private void llenarTabla(List<DoctorDTO> listaDoctores) {
+        DefaultTableModel modelo = (DefaultTableModel) tablaDoctores.getModel();
+        modelo.setRowCount(0); 
+        for (DoctorDTO doctor : listaDoctores) {
+            modelo.addRow(new Object[]{
+                doctor.getIdDoctor(),
+                doctor.getNombres(), 
+                doctor.getSexo()
+            });
+        }
     }
 
     /**
