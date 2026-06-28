@@ -4,6 +4,7 @@
  */
 package Negocio;
 import DTO.ActualizarAnalisisDTO;
+import DTO.AnalisisDTO;
 import DTO.EliminarAnalisisDTO;
 import DTO.GuardarAnalisisDTO;
 import Entidades.Analisis;
@@ -18,7 +19,9 @@ public interface IAnalisisBO {
     public Analisis actualizarAnalisis(ActualizarAnalisisDTO actualizarAnalisis) throws NegocioException;
     public void eliminarAnalisis(EliminarAnalisisDTO eliminarAnalisis) throws NegocioException;
     public Analisis consultarPorId(Integer idAnalisis) throws NegocioException;
-    public List<Analisis> consultarTodos() throws NegocioException;
-    public List<Analisis> buscarPorNombre(String nombre) throws NegocioException; 
+    public List<AnalisisDTO> consultarTodos() throws NegocioException;
+    public List<AnalisisDTO> buscarPorNombre(String nombre) throws NegocioException; 
     public Integer contarParametro(Integer idAnalisis) throws NegocioException;
+    List<AnalisisDTO> buscarPorTipoMuestra(String tipoMuestra) throws NegocioException;
+    List<AnalisisDTO> buscarPorCantidadParametro(Integer cantidad) throws NegocioException;
 }

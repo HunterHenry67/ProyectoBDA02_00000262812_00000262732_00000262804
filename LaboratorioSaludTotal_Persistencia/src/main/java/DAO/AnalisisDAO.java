@@ -11,6 +11,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import javax.persistence.criteria.Subquery;
 
 /**
  * @author BALAMRUSH
@@ -134,7 +135,7 @@ public class AnalisisDAO implements IAnalisisDAO {
     @Override
     public Integer contarParametros(Integer idAnalisis) throws PersistenciaException {
         EntityManager entityManager = conexion.conexionBD();
-        try{
+        try {
             CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
             CriteriaQuery<Long> criteriaQuery = criteriaBuilder.createQuery(Long.class);
             Root<Parametro> ruta = criteriaQuery.from(Parametro.class);
@@ -142,9 +143,54 @@ public class AnalisisDAO implements IAnalisisDAO {
                     .where(criteriaBuilder.equal(ruta.get("analisis").get("idAnalisis"), idAnalisis));
             Long total = entityManager.createQuery(criteriaQuery).getSingleResult();
             return total.intValue();
-        }catch(Exception ex){
-            throw new PersistenciaException("Error al contar los parámetros: "+ex.getMessage());
-        }finally{
+        } catch (Exception ex) {
+            throw new PersistenciaException("Error al contar los parámetros: " + ex.getMessage());
+        } finally {
+            entityManager.close();
+        }
+    }
+
+    @Override
+    public List<Analisis> buscarPorTipoMuestra(String tipoMuestra) throws PersistenciaException {
+        EntityManager entityManager = conexion.conexionBD();
+        try {
+            CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+            CriteriaQuery<Analisis> criteriaQuery = criteriaBuilder.createQuery(Analisis.class);
+            Root<Analisis> ruta = criteriaQuery.from(Analisis.class);
+            criteriaQuery.select(ruta)
+                    .where(criteriaBuilder
+                            .like(criteriaBuilder.lower(ruta.get("muestra").get("nombre")), "%" + tipoMuestra.toLowerCase() + "%"));
+            return entityManager.createQuery(criteriaQuery).getResultList();
+        } catch (Exception ex) {
+            throw new PersistenciaException("Error al buscar por tipo de muestra: " + ex.getMessage());
+        } finally {
+            entityManager.close();
+        }
+    }
+
+    @Override
+    public List<Analisis> buscarPorCantidadParametro(Integer cantidad) throws PersistenciaException {
+        EntityManager entityManager = conexion.conexionBD();
+        try {
+            CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+            CriteriaQuery<Analisis> criteriaQuery = criteriaBuilder.createQuery(Analisis.class);
+            Root<Analisis> rutaAnalisis = criteriaQuery.from(Analisis.class);
+            Subquery<Long> subquery = criteriaQuery.subquery(Long.class);
+            Root<Parametro> rutaParametro = subquery.from(Parametro.class);
+
+            subquery.select(criteriaBuilder
+                    .count(rutaParametro))
+                    .where(criteriaBuilder
+                            .equal(rutaParametro.get("analisis").get("idAnalisis"), rutaAnalisis.get("idAnalisis")));
+            criteriaQuery.select(rutaAnalisis)
+                    .where(criteriaBuilder.equal(
+                            subquery,
+                            cantidad.longValue()
+                    ));
+            return entityManager.createQuery(criteriaQuery).getResultList();
+        } catch (Exception ex) {
+            throw new PersistenciaException("Error al buscar el analisis por cantidad de parámetro: "+ex.getMessage());
+        } finally {
             entityManager.close();
         }
     }
