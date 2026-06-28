@@ -86,7 +86,7 @@ public class RegistroAltaAnalisisFORM extends javax.swing.JFrame {
             guardarAnalisisDTO.setIdMuestra(muestraSeleccionada.getIdMuestra());
             guardarAnalisisDTO.setParametros(parametros);
             analisisBO.guardarAnalisis(guardarAnalisisDTO);
-            JOptionPane.showMessageDialog(this, "Registro Exitoso", "El análisis fue registrado correctamente.", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "El análisis fue registrado correctamente.", "Registro Exitoso", JOptionPane.INFORMATION_MESSAGE);
             controlNavegacion.mostrarCatalogoAnalisis();
             this.dispose();
         } catch (NegocioException ex) {

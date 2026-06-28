@@ -9,6 +9,7 @@ package DTO;
  * @author user
  */
 public class MuestraDTO {
+
     private Integer idMuestra;
     private String nombre;
 
@@ -34,5 +35,10 @@ public class MuestraDTO {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    @Override
+    public String toString() {
+        return nombre;
     }
 }
