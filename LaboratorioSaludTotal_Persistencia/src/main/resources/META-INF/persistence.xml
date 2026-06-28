@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
-Click nbfs://nbhost/SystemFileSystem/Templates/XML/XMLDocument.xml to edit this template
--->
-<persistence version="2.2" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistencehttp://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd">
+<persistence version="2.2"
+ xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence
+             http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd">
+
     <persistence-unit name="LaboratorioSaludPU" transaction-type="RESOURCE_LOCAL">
+
         <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+
         <class>Entidades.Cliente</class>
         <class>Entidades.Prueba</class>
         <class>Entidades.Resultado</class>
@@ -14,13 +17,17 @@ Click nbfs://nbhost/SystemFileSystem/Templates/XML/XMLDocument.xml to edit this 
         <class>Entidades.Analisis</class>
         <class>Entidades.Parametro</class>
         <class>Entidades.Rango</class>
+
         <properties>
             <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
-            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/laboratorioSaludTotal?zeroDateTimeBehavior=CONVERT_TO_NULL"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/laboratoriosaludtotal?zeroDateTimeBehavior=CONVERT_TO_NULL"/>
             <property name="javax.persistence.jdbc.user" value="root"/>
             <property name="javax.persistence.jdbc.password" value="eug57.BS79"/>
+
             <property name="javax.persistence.schema-generation.database.action" value="create"/>
             <property name="eclipselink.logging.level" value="FINE"/>
         </properties>
+
     </persistence-unit>
+
 </persistence>
