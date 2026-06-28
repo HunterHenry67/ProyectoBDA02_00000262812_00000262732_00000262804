@@ -10,6 +10,7 @@ package Frames;
  */
 public class ControlNavegacionForms {
 
+    private RegistroSolicitudPruebaFORM pantallaSolicitudActual;
     public ControlNavegacionForms() {
     }
     
@@ -26,5 +27,35 @@ public class ControlNavegacionForms {
     public void mostrarRegistroAltaAnalisis(){
         RegistroAltaAnalisisFORM pantallaRegistroAltaAnalisis = new RegistroAltaAnalisisFORM(this);
         pantallaRegistroAltaAnalisis.setVisible(true);
+    }
+    
+    public void mostrarRegistroParametro(){
+        RegistroParametroFORM pantalaRegistroParametroFORM = new RegistroParametroFORM(this);
+        pantalaRegistroParametroFORM.setVisible(true);
+    }
+    
+    public void mostrarRegistroRango(){
+        RegistroRangoFORM pantallaRegistroRango = new RegistroRangoFORM(this);
+        pantallaRegistroRango.setVisible(true);
+    }
+    
+    public void mostrarCatalogoClientes() {
+        CatalogoClientesFORM pantallaCatalogoClientes = new CatalogoClientesFORM(this);
+        pantallaCatalogoClientes.setVisible(true);
+    }
+
+    public void mostrarCatalogoDoctores() {
+        CatalogoDoctoresFORM pantallaCatalogoDoctores = new CatalogoDoctoresFORM(this);
+        pantallaCatalogoDoctores.setVisible(true);
+    }
+    
+    public void mostrarRegistroSolicitudPrueba() {
+        RegistroSolicitudPruebaFORM pantalla = new RegistroSolicitudPruebaFORM(this);
+        this.pantallaSolicitudActual = pantalla; // <--- La única línea extra: tomamos foto de la pantalla
+        pantalla.setVisible(true);
+    }
+    
+    public RegistroSolicitudPruebaFORM getPantallaSolicitudActual() {
+        return pantallaSolicitudActual;
     }
 }
