@@ -131,7 +131,7 @@ public class AnalisisBO implements IAnalisisBO {
             if (nombre == null || nombre.trim().isEmpty()) {
                 return consultarTodos();
             }
-            List<Analisis> listaAnalisis = analisisDAO.consultarTodos();
+            List<Analisis> listaAnalisis = analisisDAO.buscarPorNombre(nombre.trim());
             return convertirATablaDTO(listaAnalisis);
 
         } catch (PersistenciaException ex) {

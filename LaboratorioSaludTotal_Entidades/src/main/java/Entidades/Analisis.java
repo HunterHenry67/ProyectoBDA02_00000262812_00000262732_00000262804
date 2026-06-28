@@ -23,7 +23,7 @@ import javax.persistence.Table;
 public class Analisis implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idAnalisis", nullable = false)
     private Integer idAnalisis;
     
