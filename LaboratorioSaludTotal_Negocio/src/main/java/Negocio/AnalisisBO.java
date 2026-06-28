@@ -8,10 +8,12 @@ import DAO.AnalisisDAO;
 import DAO.IAnalisisDAO;
 import DAO.PersistenciaException;
 import DTO.ActualizarAnalisisDTO;
+import DTO.AnalisisDTO;
 import DTO.EliminarAnalisisDTO;
 import DTO.GuardarAnalisisDTO;
 import Entidades.Analisis;
 import Entidades.Muestra;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -112,9 +114,10 @@ public class AnalisisBO implements IAnalisisBO {
     }
 
     @Override
-    public List<Analisis> consultarTodos() throws NegocioException {
+    public List<AnalisisDTO> consultarTodos() throws NegocioException {
         try {
-            return analisisDAO.consultarTodos();
+            List<Analisis> listaAnalisis = analisisDAO.consultarTodos();
+            return convertirATablaDTO(listaAnalisis);
 
         } catch (PersistenciaException ex) {
             throw new NegocioException("Error al consultar todos los análisis: " + ex.getMessage());
@@ -122,13 +125,13 @@ public class AnalisisBO implements IAnalisisBO {
     }
 
     @Override
-    public List<Analisis> buscarPorNombre(String nombre) throws NegocioException {
+    public List<AnalisisDTO> buscarPorNombre(String nombre) throws NegocioException {
         try {
             if (nombre == null || nombre.trim().isEmpty()) {
                 return consultarTodos();
             }
-
-            return analisisDAO.buscarPorNombre(nombre.trim());
+            List<Analisis> listaAnalisis = analisisDAO.consultarTodos();
+            return convertirATablaDTO(listaAnalisis);
 
         } catch (PersistenciaException ex) {
             throw new NegocioException("Error al buscar análisis por nombre: " + ex.getMessage());
@@ -187,15 +190,63 @@ public class AnalisisBO implements IAnalisisBO {
 
     @Override
     public Integer contarParametro(Integer idAnalisis) throws NegocioException {
-        try{
-            if(idAnalisis == null || idAnalisis <= 0){
+        try {
+            if (idAnalisis == null || idAnalisis <= 0) {
                 throw new NegocioException("No se encontró el id del Analisis.");
             }
-            
+
             Integer conteoParametro = analisisDAO.contarParametros(idAnalisis);
             return conteoParametro;
+        } catch (PersistenciaException ex) {
+            throw new NegocioException("Error al contar los parámetros: " + ex.getMessage());
+        }
+    }
+
+    private List<AnalisisDTO> convertirATablaDTO(List<Analisis> listaAnalisis) throws NegocioException {
+        try {
+            List<AnalisisDTO> listaDTO = new ArrayList<>();
+            for (Analisis analisis : listaAnalisis) {
+                AnalisisDTO dto = new AnalisisDTO();
+                dto.setIdAnalisis(analisis.getIdAnalisis());
+                dto.setNombre(analisis.getNombre());
+                if (analisis.getMuestra() != null) {
+                    dto.setTipoMuestra(analisis.getMuestra().getNombre());
+                } else {
+                    dto.setTipoMuestra("N/A");
+                }
+                Integer cantidadParametros = analisisDAO.contarParametros(analisis.getIdAnalisis());
+                dto.setCantidadParametros(cantidadParametros);
+                listaDTO.add(dto);
+            }
+            return listaDTO;
+        } catch (PersistenciaException ex) {
+            throw new NegocioException("Error al conevrtir entidad análisis a DTO: " + ex.getMessage());
+        }
+    }
+
+    @Override
+    public List<AnalisisDTO> buscarPorTipoMuestra(String tipoMuestra) throws NegocioException {
+        try{
+            if(tipoMuestra == null || tipoMuestra.isEmpty()){
+                return consultarTodos();
+            }
+            List<Analisis> analisis = analisisDAO.buscarPorTipoMuestra(tipoMuestra.trim());
+            return convertirATablaDTO(analisis);
         }catch(PersistenciaException ex){
-            throw new NegocioException("Error al contar los parámetros: "+ex.getMessage());
+            throw new NegocioException("Error al buscar el análisis por tipo de muestra: "+ex.getMessage());
+        }
+    }
+
+    @Override
+    public List<AnalisisDTO> buscarPorCantidadParametro(Integer cantidad) throws NegocioException {
+        try{
+            if(cantidad == null || cantidad < 0){
+                throw new NegocioException("Error al buscar el analisis por parámetro.");
+            }
+            List<Analisis> analisis = analisisDAO.buscarPorCantidadParametro(cantidad);
+            return convertirATablaDTO(analisis);
+        }catch(PersistenciaException ex){
+            throw new NegocioException("Error al buscar el análisis por cantidad de parámetro: "+ex.getMessage());
         }
     }
 }
