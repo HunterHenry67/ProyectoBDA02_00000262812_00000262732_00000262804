@@ -142,6 +142,8 @@ public class MenuPrincipalFORM extends javax.swing.JFrame {
 
     private void btnRegistroSoliPruebaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistroSoliPruebaActionPerformed
         // TODO add your handling code here:
+        controlNavegacion.mostrarRegistroSolicitudPrueba();
+        this.dispose();
     }//GEN-LAST:event_btnRegistroSoliPruebaActionPerformed
 
     private void btnCatalogoAnalisisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCatalogoAnalisisActionPerformed
