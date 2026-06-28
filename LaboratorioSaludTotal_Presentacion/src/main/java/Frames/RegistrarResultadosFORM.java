@@ -4,14 +4,20 @@
  */
 package Frames;
 
-import DTO.GuardarAnalisisDTO;
-import DTO.MuestraDTO;
-import DTO.RegistrarParametroDTO;
-import Negocio.AnalisisBO;
-import Negocio.IAnalisisBO;
-import Negocio.IMuestraBO;
-import Negocio.MuestraBO;
+import DAO.AnalisisDAO;
+import DAO.ConexionBD;
+import DAO.IConexionBD;
+import DAO.ParametroDAO;
+import DAO.PruebaDAO;
+import DAO.ResultadoDAO;
+import DTO.ClienteDTO;
+import DTO.DoctorDTO;
+import DTO.ParametroDTO;
+import DTO.PruebaDTO;
+import DTO.RegistrarResultadoDTO;
 import Negocio.NegocioException;
+import Negocio.ParametroBO;
+import Negocio.ResultadoBO;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -21,150 +27,137 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author BALAMRUSH
  */
-public class frmRegistrarResultados extends javax.swing.JFrame {
+public class RegistrarResultadosFORM extends javax.swing.JFrame {
 
     private ControlNavegacionForms controlNavegacion;
-    private IMuestraBO muestraBO;
-    private IAnalisisBO analisisBO;
-    private List<RegistrarParametroDTO> parametros;
 
-    public frmRegistrarResultados(ControlNavegacionForms controlNavegacion) {
+    private PruebaDTO prueba;
+    private ClienteDTO cliente;
+    private DoctorDTO doctor;
+
+    private ParametroBO parametroBO;
+    private ResultadoBO resultadoBO;
+    IConexionBD conexion = new ConexionBD();
+    private List<ParametroDTO> parametros;
+
+    public RegistrarResultadosFORM(
+            ControlNavegacionForms controlNavegacion,
+            PruebaDTO prueba,
+            ClienteDTO cliente,
+            DoctorDTO doctor
+    ) {
         initComponents();
+
         this.controlNavegacion = controlNavegacion;
-        setExtendedState(MAXIMIZED_BOTH);
-        this.muestraBO = new MuestraBO();
-        this.analisisBO = new AnalisisBO();
+        this.prueba = prueba;
+        this.cliente = cliente;
+        this.doctor = doctor;
+
+        this.resultadoBO = new ResultadoBO(
+                new ResultadoDAO(conexion),
+                new PruebaDAO(),
+                new ParametroDAO(conexion)
+        );
+        this.parametroBO = new ParametroBO(
+                new ParametroDAO(conexion),
+                new AnalisisDAO()
+        );
         this.parametros = new ArrayList<>();
-        try {
-            this.cargarMuestra();
-        } catch (PresentacionException ex) {
-            saltoErrores(ex.getMessage());
-        }
+
+        setExtendedState(MAXIMIZED_BOTH);
+
+        txtFieldNombrePaciente.setEditable(false);
+        txtFieldNombreAnalisis1.setEditable(false);
+
+        cargarDatosPaciente();
+        cargarTablaResultados();
     }
 
-    private void cargarMuestra() throws PresentacionException {
+    private void cargarDatosPaciente() {
+        String nombreCompleto = "";
+
+        if (cliente.getNombres() != null) {
+            nombreCompleto = nombreCompleto + cliente.getNombres() + " ";
+        }
+
+        if (cliente.getApellidoPaterno() != null) {
+            nombreCompleto = nombreCompleto + cliente.getApellidoPaterno() + " ";
+        }
+
+        if (cliente.getApellidoMaterno() != null) {
+            nombreCompleto = nombreCompleto + cliente.getApellidoMaterno();
+        }
+
+        txtFieldNombrePaciente.setText(nombreCompleto.trim());
+        txtFieldNombreAnalisis1.setText("Folio: " + prueba.getIdPrueba());
+    }
+
+    private void cargarTablaResultados() {
         try {
-            comboBoxTipoMuestra.removeAllItems();
-            List<MuestraDTO> muestras = muestraBO.consultarTodasLasMuestras();
-            for (MuestraDTO muestra : muestras) {
-                comboBoxTipoMuestra.addItem(muestra);
+            parametros = parametroBO.listarTodos();
+
+            DefaultTableModel modelo = (DefaultTableModel) tblResultados.getModel();
+            modelo.setRowCount(0);
+
+            for (ParametroDTO parametro : parametros) {
+                modelo.addRow(new Object[]{
+                    parametro.getNombre(),
+                    parametro.getUnidadMedida(),
+                    "",
+                    "",
+                    ""
+                });
             }
+
         } catch (NegocioException ex) {
-            throw new PresentacionException("No se pudieran cargar los tipo de muestra: " + ex.getMessage());
+            JOptionPane.showMessageDialog(this, ex.getMessage());
         }
     }
 
-    private void registrarAnalisis() throws PresentacionException {
+    private void registrarResultados() {
         try {
-            if (txtFieldNombrePaciente.getText().trim().isEmpty()) {
-                throw new PresentacionException("Favor de ingresar nombre del análisis.");
-            }
-            if (txtFieldDescripcion.getText().trim().isEmpty()) {
-                throw new PresentacionException("Favor de ingresar una descripción.");
-            }
-            if (comboBoxTipoMuestra.getSelectedItem() == null) {
-                throw new PresentacionException("Favor de seleccionar un tipo de muestra.");
-            }
-            if (parametros.isEmpty()) {
-                throw new PresentacionException("No puedes agregar un análisis sin parámetros.");
-            }
-            MuestraDTO muestraSeleccionada = (MuestraDTO) comboBoxTipoMuestra.getSelectedItem();
-            GuardarAnalisisDTO guardarAnalisisDTO = new GuardarAnalisisDTO();
-            guardarAnalisisDTO.setNombre(txtFieldNombrePaciente.getText().trim());
-            guardarAnalisisDTO.setNota(txtFieldDescripcion.getText().trim());
-            guardarAnalisisDTO.setIdMuestra(muestraSeleccionada.getIdMuestra());
-            guardarAnalisisDTO.setParametros(parametros);
-            analisisBO.guardarAnalisis(guardarAnalisisDTO);
-            JOptionPane.showMessageDialog(this, "Registro Exitoso", "El análisis fue registrado correctamente.", JOptionPane.INFORMATION_MESSAGE);
-            controlNavegacion.mostrarCatalogoAnalisis();
-            this.dispose();
-        } catch (NegocioException ex) {
-            throw new PresentacionException("Error al registrar el análisis." + ex.getMessage());
-        }
-    }
+            DefaultTableModel modelo = (DefaultTableModel) tblResultados.getModel();
 
-    private void cargarTablaParametros() {
-        llenadoTablaParametros(parametros);
-    }
+            for (int i = 0; i < modelo.getRowCount(); i++) {
+                Object valor = modelo.getValueAt(i, 3);
 
-    public void parametrosTemporales(RegistrarParametroDTO parametroDTO) throws PresentacionException {
-        if (parametroDTO == null) {
-            throw new PresentacionException("Debe de existir al menos un parámetro.");
-        }
-        if (parametroDTO.getRangos() == null || parametroDTO.getRangos().isEmpty()) {
-            throw new PresentacionException("Debe de haber por lo menos 1 rango.");
-        }
+                if (valor != null) {
+                    String resultadoTexto = valor.toString().trim();
 
-        parametros.add(parametroDTO);
-        cargarTablaParametros();
-    }
+                    if (!resultadoTexto.isEmpty()) {
+                        double resultadoNumero = Double.parseDouble(resultadoTexto);
 
-    private void llenadoTablaParametros(List<RegistrarParametroDTO> listaParametros) {
-        DefaultTableModel modelo = (DefaultTableModel) tblResultados.getModel();
-        modelo.setRowCount(0);
-        for (RegistrarParametroDTO parametro : listaParametros) {
-            int cantidadRangos = 0;
-            if (parametro.getRangos() != null) {
-                cantidadRangos = parametro.getRangos().size();
-            }
-            modelo.addRow(new Object[]{
-                parametro.getNombre(),
-                parametro.getOrdenReporte(),
-                parametro.getNotaDescriptiva(),
-                parametro.getUnidadMedida(),
-                cantidadRangos,
-                "Eliminar"
-            });
-        }
-    }
+                        ParametroDTO parametro = parametros.get(i);
 
-    private void buscarParametro() throws PresentacionException {
-        String entrada = txtFieldBuscar.getText();
-        if (entrada.isEmpty()) {
-            cargarTablaParametros();
-            return;
-        }
-        String filtro = comboBoxFiltros.getSelectedItem().toString();
-        List<RegistrarParametroDTO> resultados = new ArrayList<>();
+                        String observacion = "";
 
-        for (RegistrarParametroDTO parametro : parametros) {
-            switch (filtro) {
-                case "Nombre":
-                    if (parametro.getNombre() != null && parametro.getNombre().toLowerCase().contains(entrada.toLowerCase())) {
-                        resultados.add(parametro);
-                    }
-                    break;
-                case "Unidad de Medida":
-                    if (parametro.getUnidadMedida() != null && parametro.getUnidadMedida().toLowerCase().contains(entrada.toLowerCase())) {
-                        resultados.add(parametro);
-                    }
-                    break;
-                case "Orden":
-                    try {
-                        Integer orden = Integer.valueOf(entrada);
-                        if (parametro.getOrdenReporte() != null && parametro.getOrdenReporte().equals(orden)) {
-                            resultados.add(parametro);
+                        Object valorObservacion = modelo.getValueAt(i, 4);
+
+                        if (valorObservacion != null) {
+                            observacion = valorObservacion.toString();
                         }
-                    } catch (NumberFormatException ex) {
-                        throw new PresentacionException("favor de buscar el número por el cual quiere filtrar.");
+
+                        RegistrarResultadoDTO dto = new RegistrarResultadoDTO();
+                        dto.setIdPrueba(prueba.getIdPrueba());
+                        dto.setIdParametro(parametro.getIdParametro());
+                        dto.setResultadoObtenido(resultadoNumero);
+                        dto.setObservacion(observacion);
+
+                        resultadoBO.registrarResultado(dto);
                     }
-                    break;
-                default:
-                    if (parametro.getNombre() != null && parametro.getNombre().toLowerCase().contains(entrada.toLowerCase())) {
-                        resultados.add(parametro);
-                    }
-                    break;
+                }
             }
+
+            JOptionPane.showMessageDialog(this, "Resultados registrados correctamente.");
+
+            controlNavegacion.mostrarMenuPrincipal();
+            this.dispose();
+
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "El resultado debe ser numérico.");
+        } catch (NegocioException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage());
         }
-        llenadoTablaParametros(resultados);
-    }
-
-    private void saltoErrores(String mensaje) {
-        JOptionPane.showMessageDialog(this, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
-    }
-
-    private void saltoAdvertencia(String mensaje) {
-        JOptionPane.showMessageDialog(this, mensaje, "Advertencia", JOptionPane.WARNING_MESSAGE);
     }
 
     @SuppressWarnings("unchecked")
@@ -351,36 +344,15 @@ public class frmRegistrarResultados extends javax.swing.JFrame {
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void btnRegistrarAnalisisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarAnalisisActionPerformed
-        try {
-            this.registrarAnalisis();
-        } catch (PresentacionException ex) {
-            saltoAdvertencia(ex.getMessage());
-        }
+        registrarResultados();
     }//GEN-LAST:event_btnRegistrarAnalisisActionPerformed
 
     private void jScrollPane1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jScrollPane1MouseClicked
-        
+
     }//GEN-LAST:event_jScrollPane1MouseClicked
 
     private void tblResultadosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblResultadosMouseClicked
-        int fila = tblResultados.getSelectedRow();
-        int columna = tblResultados.getSelectedColumn();
-        if (fila == -1) {
-            return;
-        }
-        int columnaEliminar = 5;
-        if (columna == columnaEliminar) {
-            int confirmacion = JOptionPane.showConfirmDialog(
-                    this,
-                    "¿Quiéres eliminar el parámetro?",
-                    "Confirmar eliminación",
-                    JOptionPane.YES_NO_OPTION
-            );
-            if (confirmacion == JOptionPane.YES_OPTION) {
-                parametros.remove(fila);
-                cargarTablaParametros();
-            }
-        }
+
     }//GEN-LAST:event_tblResultadosMouseClicked
 
     private void txtFieldNombreAnalisis1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFieldNombreAnalisis1ActionPerformed
@@ -392,10 +364,10 @@ public class frmRegistrarResultados extends javax.swing.JFrame {
     }//GEN-LAST:event_txtFieldNombrePacienteActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        controlNavegacion.mostrarCatalogoAnalisis();
+        BusquedaPacienteFORM pantalla = new BusquedaPacienteFORM(controlNavegacion);
+        pantalla.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscar;

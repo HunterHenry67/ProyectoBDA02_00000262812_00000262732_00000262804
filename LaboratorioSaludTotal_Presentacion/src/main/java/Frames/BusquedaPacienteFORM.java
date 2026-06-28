@@ -4,21 +4,39 @@
  */
 package Frames;
 
+import DTO.ClienteDTO;
+import DTO.DoctorDTO;
+import DTO.PruebaDTO;
+import Negocio.ClienteBO;
+import Negocio.DoctorBO;
+import Negocio.NegocioException;
+import Negocio.PruebaBO;
+import java.time.LocalDate;
+import java.time.Period;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author BALAMRUSH
  */
-public class frmBusquedaPaciente extends javax.swing.JFrame {
+public class BusquedaPacienteFORM extends javax.swing.JFrame {
 
     private ControlNavegacionForms controlNavegacion;
-    
-    public frmBusquedaPaciente(ControlNavegacionForms controlNavegacion) {
+
+    private PruebaDTO pruebaSeleccionada;
+    private ClienteDTO clienteSeleccionado;
+    private DoctorDTO doctorSeleccionado;
+
+    public BusquedaPacienteFORM(ControlNavegacionForms controlNavegacion) {
         initComponents();
         this.controlNavegacion = controlNavegacion;
         setExtendedState(MAXIMIZED_BOTH);
+
+        txtPaciente.setEditable(false);
+        txtEdad.setEditable(false);
+        txtDoctorAsignado.setEditable(false);
     }
 
-    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -169,23 +187,165 @@ public class frmBusquedaPaciente extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        controlNavegacion.mostrarRegistroParametro();
+        controlNavegacion.mostrarMenuPrincipal();
         this.dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        try {
-            this.registrarAnalisis();
-        } catch (PresentacionException ex) {
-            saltoAdvertencia(ex.getMessage());
-        }
+        buscarPaciente();
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
-        // TODO add your handling code here:
+        abrirRegistrarResultados();
     }//GEN-LAST:event_btnRegresarActionPerformed
+    private void buscarPaciente() {
+        try {
+            limpiarCampos();
 
-   
+            String folioTexto = txtFieldEdadInicial.getText().trim();
+
+            if (folioTexto.isEmpty()) {
+                mostrarAdvertencia("Ingresa el número de folio.");
+                return;
+            }
+
+            int folio;
+
+            try {
+                folio = Integer.parseInt(folioTexto);
+            } catch (NumberFormatException ex) {
+                mostrarAdvertencia("El folio debe ser numérico.");
+                return;
+            }
+
+            PruebaBO pruebaBO = new PruebaBO();
+            ClienteBO clienteBO = new ClienteBO();
+            DoctorBO doctorBO = new DoctorBO();
+
+            pruebaSeleccionada = pruebaBO.buscarPruebaPorId(folio);
+
+            if (pruebaSeleccionada == null) {
+                mostrarAdvertencia("No se encontró una prueba con ese folio.");
+                return;
+            }
+
+            if (pruebaSeleccionada.getIdCliente() != null) {
+                clienteSeleccionado = clienteBO.buscarClienteId(pruebaSeleccionada.getIdCliente());
+            }
+
+            if (pruebaSeleccionada.getIdDoctor() != null) {
+                doctorSeleccionado = doctorBO.consultarPorID(pruebaSeleccionada.getIdDoctor());
+            }
+
+            if (clienteSeleccionado != null) {
+                txtPaciente.setText(nombreCompletoCliente(clienteSeleccionado));
+                txtEdad.setText(calcularEdad(clienteSeleccionado));
+            }
+
+            if (doctorSeleccionado != null) {
+                txtDoctorAsignado.setText(nombreCompletoDoctor(doctorSeleccionado));
+            } else {
+                txtDoctorAsignado.setText("N/A");
+            }
+
+        } catch (NegocioException ex) {
+            mostrarError(ex.getMessage());
+        } catch (Exception ex) {
+            mostrarError("Error al buscar paciente: " + ex.getMessage());
+        }
+    }
+
+    private void abrirRegistrarResultados() {
+        if (pruebaSeleccionada == null) {
+            mostrarAdvertencia("Primero busca una prueba válida.");
+            return;
+        }
+
+        if (clienteSeleccionado == null) {
+            mostrarAdvertencia("La prueba no tiene paciente asignado.");
+            return;
+        }
+
+        RegistrarResultadosFORM pantalla = new RegistrarResultadosFORM(
+                controlNavegacion,
+                pruebaSeleccionada,
+                clienteSeleccionado,
+                doctorSeleccionado
+        );
+
+        pantalla.setVisible(true);
+        this.dispose();
+    }
+
+    private void limpiarCampos() {
+        pruebaSeleccionada = null;
+        clienteSeleccionado = null;
+        doctorSeleccionado = null;
+
+        txtPaciente.setText("");
+        txtEdad.setText("");
+        txtDoctorAsignado.setText("");
+    }
+
+    private String nombreCompletoCliente(ClienteDTO cliente) {
+        String nombres = "";
+        String paterno = "";
+        String materno = "";
+
+        if (cliente.getNombres() != null) {
+            nombres = cliente.getNombres();
+        }
+
+        if (cliente.getApellidoPaterno() != null) {
+            paterno = cliente.getApellidoPaterno();
+        }
+
+        if (cliente.getApellidoMaterno() != null) {
+            materno = cliente.getApellidoMaterno();
+        }
+
+        return (nombres + " " + paterno + " " + materno).trim();
+    }
+
+    private String nombreCompletoDoctor(DoctorDTO doctor) {
+        String nombres = "";
+        String paterno = "";
+        String materno = "";
+
+        if (doctor.getNombres() != null) {
+            nombres = doctor.getNombres();
+        }
+
+        if (doctor.getApellidoPaterno() != null) {
+            paterno = doctor.getApellidoPaterno();
+        }
+
+        if (doctor.getApellidoMaterno() != null) {
+            materno = doctor.getApellidoMaterno();
+        }
+
+        return (nombres + " " + paterno + " " + materno).trim();
+    }
+
+    private String calcularEdad(ClienteDTO cliente) {
+        if (cliente.getFechaNacimiento() == null) {
+            return "N/A";
+        }
+
+        LocalDate nacimiento = cliente.getFechaNacimiento().toLocalDate();
+        int edad = Period.between(nacimiento, LocalDate.now()).getYears();
+
+        return String.valueOf(edad);
+    }
+
+    private void mostrarAdvertencia(String mensaje) {
+        JOptionPane.showMessageDialog(this, mensaje, "Advertencia", JOptionPane.WARNING_MESSAGE);
+    }
+
+    private void mostrarError(String mensaje) {
+        JOptionPane.showMessageDialog(this, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnCancelar;
