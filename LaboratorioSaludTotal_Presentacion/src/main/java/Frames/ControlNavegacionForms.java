@@ -45,6 +45,11 @@ public class ControlNavegacionForms {
         pantalla.setVisible(true);
     }
     
+    public void mostrarCatalogoAnalisisPrueba() {
+        CatalogoAnalisisPruebaFORM pantalla = new CatalogoAnalisisPruebaFORM(this);
+        pantalla.setVisible(true);
+    }
+    
     public RegistroSolicitudPruebaFORM getPantallaSolicitudActual() {
         return pantallaSolicitudActual;
     }
