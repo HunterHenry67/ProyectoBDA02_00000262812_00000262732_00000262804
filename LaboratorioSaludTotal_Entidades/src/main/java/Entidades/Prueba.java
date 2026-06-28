@@ -41,7 +41,7 @@ public class Prueba implements Serializable {
     
     @ManyToOne
     @JoinColumn(name = "idDoctor",  nullable = false)
-    private Doctor Doctor;
+    private Doctor doctor;
     
     @OneToMany(mappedBy = "prueba", cascade = CascadeType.PERSIST)
     private List<Resultado> listaResultado = new ArrayList<>();    
@@ -82,11 +82,11 @@ public class Prueba implements Serializable {
     }
 
     public Doctor getDoctor() {
-        return Doctor;
+        return doctor;
     }
 
     public void setDoctor(Doctor Doctor) {
-        this.Doctor = Doctor;
+        this.doctor = Doctor;
     }
 
     public List<Resultado> getListaResultado() {
