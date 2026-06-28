@@ -228,6 +228,7 @@ public class RegistroSolicitudPruebaFORM extends javax.swing.JFrame {
         btnBuscarDoctor.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnBuscarDoctor.setForeground(new java.awt.Color(204, 204, 204));
         btnBuscarDoctor.setText("Buscar Doctor");
+        btnBuscarDoctor.addActionListener(this::btnBuscarDoctorActionPerformed);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -386,6 +387,11 @@ public class RegistroSolicitudPruebaFORM extends javax.swing.JFrame {
     private void btnBuscarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarClienteActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnBuscarClienteActionPerformed
+
+    private void btnBuscarDoctorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarDoctorActionPerformed
+        // TODO add your handling code here:
+        controlNavegacion.mostrarCatalogoDoctores();
+    }//GEN-LAST:event_btnBuscarDoctorActionPerformed
 
     /**
      * @param args the command line arguments
