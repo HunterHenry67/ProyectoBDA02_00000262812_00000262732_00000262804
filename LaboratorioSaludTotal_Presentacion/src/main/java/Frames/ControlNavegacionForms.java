@@ -57,7 +57,7 @@ public class ControlNavegacionForms {
     }
 
     public void mostrarEmisionReporte() {
-        EmisionReporteForm pantalla = new EmisionReporteForm(this);
+        EmisionReporteFORM pantalla = new EmisionReporteFORM(this);
         pantalla.setVisible(true);
     }
     
