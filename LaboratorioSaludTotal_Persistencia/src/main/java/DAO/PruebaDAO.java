@@ -30,7 +30,7 @@ public class PruebaDAO implements IPruebaDAO {
     }
 
     /**
-     * Persiste una nueva prueba en la base de datos
+     * Persiste una nueva prueba en la base de datos.
      * Antes de guardar, verifica la existencia de las entidades relacionadas (Cliente, Doctor, Analisis)
      * en el sistema para evitar errores de persistencia
      * * @param prueba El objeto {@link Prueba} a guardar

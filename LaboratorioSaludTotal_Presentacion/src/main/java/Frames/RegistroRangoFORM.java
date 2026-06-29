@@ -8,7 +8,7 @@ import DTO.RangoDTO;
 import javax.swing.JOptionPane;
 
 /**
- *
+ * Pantalla que permite capturar los rangos de edad y valores para un parámetro
  * @author BALAMRUSH
  */
 public class RegistroRangoFORM extends javax.swing.JFrame {
