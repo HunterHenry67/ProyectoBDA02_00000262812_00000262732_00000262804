@@ -56,7 +56,11 @@ public class EmisionReporteFORM extends JFrame {
     private RangoBO rangoBO;
     private AnalisisBO analisisBO;
     private ClienteBO clienteBO;
-
+    private int paginaActual = 1;
+    private final int registrosPorPagina = 5;
+    private JButton btnAnterior;
+    private JButton btnSiguiente;
+    private JLabel lblPagina;
     private List<PruebaDTO> pruebas = new ArrayList<>();
     private List<PruebaDTO> pruebasMostradas = new ArrayList<>();
 
@@ -91,6 +95,7 @@ public class EmisionReporteFORM extends JFrame {
 
         rangoBO = new RangoBO();
         analisisBO = new AnalisisBO();
+        clienteBO = new ClienteBO();
     }
 
     private void initComponents() {
@@ -157,6 +162,30 @@ public class EmisionReporteFORM extends JFrame {
         JScrollPane scroll = new JScrollPane(tabla);
         scroll.setBounds(170, 360, 830, 220);
         add(scroll);
+        btnAnterior = new JButton("Anterior");
+        btnAnterior.setBounds(170, 590, 120, 35);
+        btnAnterior.addActionListener(e -> {
+            if (paginaActual > 1) {
+                paginaActual--;
+                llenarTabla(pruebasMostradas);
+            }
+        });
+        add(btnAnterior);
+
+        lblPagina = new JLabel("Página 1/1");
+        lblPagina.setBounds(310, 590, 120, 35);
+        add(lblPagina);
+
+        btnSiguiente = new JButton("Siguiente");
+        btnSiguiente.setBounds(430, 590, 120, 35);
+        btnSiguiente.addActionListener(e -> {
+            int totalPaginas = obtenerTotalPaginas(pruebasMostradas.size());
+            if (paginaActual < totalPaginas) {
+                paginaActual++;
+                llenarTabla(pruebasMostradas);
+            }
+        });
+        add(btnSiguiente);
     }
 
     private void cargarPruebas() {
@@ -219,7 +248,8 @@ public class EmisionReporteFORM extends JFrame {
                 pruebasMostradas.add(prueba);
             }
         }
-
+        paginaActual = 1;
+        llenarTabla(pruebasMostradas);
         llenarTabla(pruebasMostradas);
     }
 
@@ -227,13 +257,36 @@ public class EmisionReporteFORM extends JFrame {
         DefaultTableModel modelo = (DefaultTableModel) tabla.getModel();
         modelo.setRowCount(0);
 
-        for (PruebaDTO prueba : lista) {
+        int totalPaginas = obtenerTotalPaginas(lista.size());
+
+        if (paginaActual > totalPaginas) {
+            paginaActual = totalPaginas;
+        }
+
+        int inicio = (paginaActual - 1) * registrosPorPagina;
+        int fin = Math.min(inicio + registrosPorPagina, lista.size());
+
+        for (int i = inicio; i < fin; i++) {
+            PruebaDTO prueba = lista.get(i);
+
             modelo.addRow(new Object[]{
                 prueba.getIdPrueba(),
                 prueba.getNombreCliente(),
                 obtenerAnalisisTabla(prueba.getIdPrueba())
             });
         }
+
+        lblPagina.setText("Página " + paginaActual + "/" + totalPaginas);
+        btnAnterior.setEnabled(paginaActual > 1);
+        btnSiguiente.setEnabled(paginaActual < totalPaginas);
+    }
+
+    private int obtenerTotalPaginas(int totalRegistros) {
+        if (totalRegistros == 0) {
+            return 1;
+        }
+
+        return (int) Math.ceil((double) totalRegistros / registrosPorPagina);
     }
 
     private String obtenerAnalisisTabla(Integer idPrueba) {
@@ -260,7 +313,7 @@ public class EmisionReporteFORM extends JFrame {
             JOptionPane.showMessageDialog(this, "Error al cargar el reporte:\n" + e.getMessage());
         }
     }
-    
+
     private int calcularEdad(LocalDateTime fechaNacimiento) {
         return java.time.Period.between(
                 fechaNacimiento.toLocalDate(),
@@ -333,6 +386,7 @@ public class EmisionReporteFORM extends JFrame {
             JOptionPane.showMessageDialog(this, causa.toString());
         }
     }
+
     /*
     private Map<String, Object> crearParametrosReporte(PruebaDTO prueba) {
         Map<String, Object> parametros = new HashMap<>();
@@ -365,53 +419,57 @@ public class EmisionReporteFORM extends JFrame {
         return parametros;
     }*/
     private Map<String, Object> crearParametrosReporte(PruebaDTO prueba) {
-    Map<String, Object> parametros = new HashMap<>();
+        Map<String, Object> parametros = new HashMap<>();
 
-    parametros.put("folio", prueba.getIdPrueba());
+        parametros.put("folio", prueba.getIdPrueba());
+        parametros.put("nombre", prueba.getNombreCliente() != null ? prueba.getNombreCliente() : "N/A");
 
-    if (prueba.getNombreCliente() != null) {
-        parametros.put("nombre", prueba.getNombreCliente());
-    } else {
-        parametros.put("nombre", "N/A");
+        try {
+            if (prueba.getIdCliente() != null) {
+                ClienteDTO cliente = clienteBO.buscarClienteId(prueba.getIdCliente());
+
+                if (cliente != null) {
+                    if (cliente.getFechaNacimiento() != null) {
+                        parametros.put("edad", calcularEdad(cliente.getFechaNacimiento()) + " años");
+                    } else {
+                        parametros.put("edad", "N/A");
+                    }
+
+                    if (cliente.getSexo() != null) {
+                        parametros.put("sexo", cliente.getSexo().toString());
+                    } else {
+                        parametros.put("sexo", "N/A");
+                    }
+                } else {
+                    parametros.put("edad", "N/A");
+                    parametros.put("sexo", "N/A");
+                }
+            } else {
+                parametros.put("edad", "N/A");
+                parametros.put("sexo", "N/A");
+            }
+        } catch (Exception e) {
+            parametros.put("edad", "N/A");
+            parametros.put("sexo", "N/A");
+        }
+
+        if (prueba.getFechaHora() != null) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+            parametros.put("fecha", prueba.getFechaHora().format(formatter));
+        } else {
+            parametros.put("fecha", "N/A");
+        }
+
+        try {
+            parametros.put("analisis", analisisBO.obtenerNombreAnalisisPorPrueba(prueba.getIdPrueba()));
+        } catch (Exception e) {
+            parametros.put("analisis", "N/A");
+        }
+
+        parametros.put("medico", prueba.getNombreDoctor() != null ? prueba.getNombreDoctor() : "N/A");
+
+        return parametros;
     }
-
-    try {
-        ClienteDTO cliente = clienteBO.buscarClienteId(prueba.getIdCliente());
-
-        parametros.put("edad", calcularEdad(cliente.getFechaNacimiento()) + " años");
-        parametros.put("sexo", cliente.getSexo());
-
-    } catch (Exception e) {
-        parametros.put("edad", "N/A");
-        parametros.put("sexo", "N/A");
-    }
-
-    if (prueba.getFechaHora() != null) {
-        DateTimeFormatter formatter =
-                DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-
-        parametros.put("fecha", prueba.getFechaHora().format(formatter));
-    } else {
-        parametros.put("fecha", "N/A");
-    }
-
-    try {
-        parametros.put(
-                "analisis",
-                analisisBO.obtenerNombreAnalisisPorPrueba(prueba.getIdPrueba())
-        );
-    } catch (Exception e) {
-        parametros.put("analisis", "N/A");
-    }
-
-    if (prueba.getNombreDoctor() != null) {
-        parametros.put("medico", prueba.getNombreDoctor());
-    } else {
-        parametros.put("medico", "N/A");
-    }
-
-    return parametros;
-}
 
     private Collection<Map<String, ?>> crearDatosReporte(Integer idPrueba) throws NegocioException {
 
@@ -460,4 +518,5 @@ public class EmisionReporteFORM extends JFrame {
         controlNavegacion.mostrarMenuPrincipal();
         dispose();
     }
+
 }

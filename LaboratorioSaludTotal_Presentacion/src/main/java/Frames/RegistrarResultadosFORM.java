@@ -31,6 +31,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Andre
@@ -54,9 +55,9 @@ public class RegistrarResultadosFORM extends JFrame {
     private JTable tabla;
 
     public RegistrarResultadosFORM(ControlNavegacionForms controlNavegacion,
-                                   PruebaDTO prueba,
-                                   ClienteDTO cliente,
-                                   DoctorDTO doctor) {
+            PruebaDTO prueba,
+            ClienteDTO cliente,
+            DoctorDTO doctor) {
 
         this.controlNavegacion = controlNavegacion;
         this.prueba = prueba;
@@ -195,8 +196,11 @@ public class RegistrarResultadosFORM extends JFrame {
             return "N/A";
         }
     }
-    
+
     private void registrarResultados() {
+        if (!validarTablaResultados()) {
+            return;
+        }
         try {
             DefaultTableModel modelo = (DefaultTableModel) tabla.getModel();
 
@@ -262,5 +266,37 @@ public class RegistrarResultadosFORM extends JFrame {
         BusquedaPacienteFORM pantalla = new BusquedaPacienteFORM(controlNavegacion);
         pantalla.setVisible(true);
         dispose();
+    }
+
+    private boolean validarTablaResultados() {
+        DefaultTableModel modelo = (DefaultTableModel) tabla.getModel();
+
+        if (modelo.getRowCount() == 0) {
+            JOptionPane.showMessageDialog(this, "No hay parámetros para registrar.");
+            return false;
+        }
+
+        for (int i = 0; i < modelo.getRowCount(); i++) {
+            Object valorResultado = modelo.getValueAt(i, 3);
+
+            if (valorResultado == null || valorResultado.toString().trim().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Captura el resultado del parámetro: " + modelo.getValueAt(i, 0));
+                return false;
+            }
+
+            try {
+                double resultado = Double.parseDouble(valorResultado.toString().trim());
+
+                if (resultado < 0) {
+                    JOptionPane.showMessageDialog(this, "El resultado no puede ser negativo: " + modelo.getValueAt(i, 0));
+                    return false;
+                }
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(this, "El resultado debe ser numérico: " + modelo.getValueAt(i, 0));
+                return false;
+            }
+        }
+
+        return true;
     }
 }
