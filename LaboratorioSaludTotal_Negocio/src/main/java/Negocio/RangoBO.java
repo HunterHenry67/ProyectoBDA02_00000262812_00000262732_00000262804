@@ -15,86 +15,94 @@ import java.util.List;
  *
  * @author user
  */
-public class RangoBO implements IRangoBO{
+public class RangoBO implements IRangoBO {
 
     private IRangoDAO rangoDAO;
-    public RangoBO(){
+
+    public RangoBO() {
         this.rangoDAO = new RangoDAO();
     }
-    
+
     /**
-     * 
-     * @param rango
-     * @return
-     * @throws NegocioException 
+     * Valida y agrega un nuevo rango.
+     *
+     * @param rango rango que deseas agregar.
+     * @return rango agregado en formato DTO.
+     * @throws NegocioException si los datos no son validos o ocurre algun error
+     * al agregar.
      */
     @Override
     public RangoDTO agregarRango(Rango rango) throws NegocioException {
-        try{
-            if (rango == null){
+        try {
+            if (rango == null) {
                 throw new NegocioException("Error al afregar Rango en DAO");
             }
             Rango rangoDevolucion = rangoDAO.agregarRango(rango);
-            
-            
+
             return convertirADTO(rangoDevolucion);
-        }catch (Exception  e){
+        } catch (Exception e) {
             throw new NegocioException("Error al agregar rango en Negocio");
         }
     }
 
     /**
-     * 
-     * @param idRango
-     * @return
-     * @throws NegocioException 
+     * Valida y elimina el rango seleccionado.
+     *
+     * @param idRango identificador del rango que deseas eliminar.
+     * @return rango eliminado en formato DTO.
+     * @throws NegocioException si el identificador no es valido o ocurre algun
+     * error al eliminar.
      */
     @Override
     public RangoDTO eliminarRango(int idRango) throws NegocioException {
-        try{
-            if (idRango <= 0){
+        try {
+            if (idRango <= 0) {
                 throw new NegocioException("Error, ingrese id valido");
             }
             Rango rng = rangoDAO.eliminarRango(idRango);
-            
+
             return convertirADTO(rng);
-        } catch (Exception e){
-            throw new NegocioException ("Error al eliminar rango en Bo");
+        } catch (Exception e) {
+            throw new NegocioException("Error al eliminar rango en Bo");
         }
     }
 
     /**
-     * 
-     * @param idParametro
-     * @return
-     * @throws NegocioException 
+     * Busca los rangos que pertenecen a un parametro.
+     *
+     * @param idParametro identificador del parametro.
+     * @return lista de rangos encontrados.
+     * @throws NegocioException si el identificador no es valido o ocurre algun
+     * error al buscar.
      */
     @Override
     public List<RangoDTO> buscarRangosPorParametro(int idParametro) throws NegocioException {
-        try{
-            if (idParametro <= 0){
+        try {
+            if (idParametro <= 0) {
                 throw new NegocioException("Error, ingrese un id de parametro valido");
             }
             List<Rango> listaRng = rangoDAO.buscarRangosPorParametro(idParametro);
             List<RangoDTO> listaDTO = new ArrayList<>();
-            
-            for (Rango rg : listaRng){
+
+            for (Rango rg : listaRng) {
                 RangoDTO dto = convertirADTO(rg);
                 listaDTO.add(dto);
             }
             return listaDTO;
-        }catch(Exception e){
+        } catch (Exception e) {
             throw new NegocioException("Error en buscar rangos por parametro en BO");
         }
     }
 
     /**
-     * 
-     * @param idParametro
-     * @param sexo
-     * @param edad
-     * @return
-     * @throws NegocioException 
+     * Cuenta los rangos que pertenecen a un parametro.
+     *
+     * @param idParametro identificador del parametro.
+     * @param sexo sexo recibido para la busqueda.
+     * @param edad edad recibida para la busqueda.
+     * @return cantidad de rangos encontrados.
+     * @throws NegocioException si el identificador no es valido o ocurre algun
+     * error al contar.
      */
     @Override
     public long obtenerRangosPorParametro(int idParametro, String sexo, int edad) throws NegocioException {
@@ -111,26 +119,27 @@ public class RangoBO implements IRangoBO{
             throw new NegocioException("Error en Negocio al contar los rangos del parámetro");
         }
     }
-    
+
     /**
-     * 
-     * @param entidadRango
-     * @return 
+     * Convierte una entidad Rango a DTO.
+     *
+     * @param entidadRango rango que deseas convertir.
+     * @return rango convertido a DTO.
      */
     private RangoDTO convertirADTO(Rango entidadRango) {
         RangoDTO dto = new RangoDTO();
-        
+
         dto.setIdRango(entidadRango.getIdRango());
         dto.setEdadInicial(entidadRango.getEdadInicial());
         dto.setEdadFinal(entidadRango.getEdadFinal());
-        
-        dto.setRangoInicial(entidadRango.getRangoIncial()); 
+
+        dto.setRangoInicial(entidadRango.getRangoIncial());
         dto.setRangoFinal(entidadRango.getRangoFinal());
         if (entidadRango.getSexo() != null) {
             dto.setSexo(entidadRango.getSexo().toString());
         }
-        
+
         return dto;
     }
-    
+
 }
