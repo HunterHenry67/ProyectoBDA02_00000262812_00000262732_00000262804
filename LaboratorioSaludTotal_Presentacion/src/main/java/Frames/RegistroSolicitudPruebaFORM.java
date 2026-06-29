@@ -33,17 +33,23 @@ public class RegistroSolicitudPruebaFORM extends javax.swing.JFrame {
     public RegistroSolicitudPruebaFORM(ControlNavegacionForms controlNavegacion) {
         initComponents();
         this.controlNavegacion = controlNavegacion;
-        setExtendedState(MAXIMIZED_BOTH); 
-        
+        this.controlNavegacion.setPantallaSolicitudActual(this); 
+        setExtendedState(MAXIMIZED_BOTH);
+
         this.pruebaBO = new PruebaBO();
         this.analisisAgregados = new ArrayList<>();
-        
+
         txtFolio.setEditable(false);
         txtFechaHora.setEditable(false);
         txtCliente.setEditable(false);
         txtDoctor.setEditable(false);
         txtFolio.setText("Asignado al guardar...");
         txtFechaHora.setText(java.time.LocalDateTime.now().toString());
+
+        btnBuscarDoctor.addActionListener(evt -> {
+            this.controlNavegacion.mostrarCatalogoDoctores();
+        });
+        cargarTablaAnalisis();
     }
     
     public void setClienteSeleccionado(ClienteDTO cliente) {
@@ -209,7 +215,7 @@ public class RegistroSolicitudPruebaFORM extends javax.swing.JFrame {
 
         btnBuscarDoctor.setBackground(new java.awt.Color(0, 0, 0));
         btnBuscarDoctor.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        btnBuscarDoctor.setForeground(new java.awt.Color(204, 204, 204));
+        btnBuscarDoctor.setForeground(new java.awt.Color(255, 255, 255));
         btnBuscarDoctor.setText("Buscar Doctor");
         btnBuscarDoctor.addActionListener(this::btnBuscarDoctorActionPerformed);
 
@@ -264,7 +270,7 @@ public class RegistroSolicitudPruebaFORM extends javax.swing.JFrame {
                     .addComponent(lblDoctor)
                     .addComponent(txtDoctor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnBuscarDoctor))
-                .addContainerGap(39, Short.MAX_VALUE))
+                .addContainerGap(40, Short.MAX_VALUE))
         );
 
         comboBoxFiltro.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
@@ -380,33 +386,9 @@ public class RegistroSolicitudPruebaFORM extends javax.swing.JFrame {
         controlNavegacion.mostrarCatalogoClientes();
     }//GEN-LAST:event_btnBuscarClienteActionPerformed
 
-    private void btnBuscarDoctorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarDoctorActionPerformed
-        // TODO add your handling code here:
-        controlNavegacion.mostrarCatalogoDoctores();
-
-    }//GEN-LAST:event_btnBuscarDoctorActionPerformed
-
     private void btnAgregarAnalisisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarAnalisisActionPerformed
         // TODO add your handling code here:
-        int fila = tablaAnalisis.getSelectedRow(); 
-
-        if (fila != -1) {
-            try {
-                AnalisisDTO analisisElegido = new AnalisisDTO();
-                analisisElegido.setIdAnalisis((Integer) tablaAnalisis.getValueAt(fila, 0));
-                analisisElegido.setNombre(tablaAnalisis.getValueAt(fila, 1).toString());
-                analisisElegido.setTipoMuestra(tablaAnalisis.getValueAt(fila, 2).toString());
-
-                controlNavegacion.getPantallaSolicitudActual().agregarAnalisisTemporal(analisisElegido);
-
-                this.dispose();
-
-            } catch (Exception ex) {
-                javax.swing.JOptionPane.showMessageDialog(this, "Error al agregar análisis: " + ex.getMessage());
-            }
-        } else {
-             javax.swing.JOptionPane.showMessageDialog(this, "Por favor seleccione un análisis del catálogo.");
-        }
+        controlNavegacion.mostrarCatalogoAnalisisPrueba();
     }//GEN-LAST:event_btnAgregarAnalisisActionPerformed
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
@@ -442,6 +424,11 @@ public class RegistroSolicitudPruebaFORM extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_tablaAnalisisMouseClicked
+
+    private void btnBuscarDoctorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarDoctorActionPerformed
+        // TODO add your handling code here:
+        controlNavegacion.mostrarCatalogoDoctores();
+    }//GEN-LAST:event_btnBuscarDoctorActionPerformed
 
     /**
      * @param args the command line arguments

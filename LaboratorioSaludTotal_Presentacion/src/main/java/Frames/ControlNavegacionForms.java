@@ -64,4 +64,8 @@ public class ControlNavegacionForms {
     public RegistroSolicitudPruebaFORM getPantallaSolicitudActual() {
         return pantallaSolicitudActual;
     }
+    
+    public void setPantallaSolicitudActual(RegistroSolicitudPruebaFORM pantallaSolicitudActual) {
+        this.pantallaSolicitudActual = pantallaSolicitudActual;
+    }
 }

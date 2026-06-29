@@ -26,25 +26,14 @@ public class CatalogoDoctoresFORM extends javax.swing.JFrame {
         initComponents();
         this.controlNavegacion = controlNavegacion;
         this.doctorBO = new Negocio.DoctorBO();
-        
-        javax.swing.table.DefaultTableModel modelo = (javax.swing.table.DefaultTableModel) tablaDoctores.getModel();
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        // 2. Vaciamos cualquier cosa que tuviera antes
-        modelo.setRowCount(0);
-
-        // 3. Inyectamos los datos falsos exactamente como los tienes en tu script
-        modelo.addRow(new Object[]{1, "Roberto", "Aguilar", "Paredes", "MASCULINO"});
-        modelo.addRow(new Object[]{2, "Claudia", "Sánchez", "Mejía", "FEMENINO"});
-        modelo.addRow(new Object[]{3, "Fernando", "Ortega", "Campos", "MASCULINO"});
-        modelo.addRow(new Object[]{4, "Gabriela", "Núñez", "Silva", "FEMENINO"});
-        modelo.addRow(new Object[]{5, "Héctor", "Vargas", "Luna", "MASCULINO"});
-        
-//        try {
-//            cargarTabla();
-//        } catch (PresentacionException ex) {
-//            javax.swing.JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
-//        }
-    }
+        try {
+            cargarTabla();
+        } catch (PresentacionException ex) {
+            javax.swing.JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+        }
+}
     
     private void cargarTabla() throws PresentacionException {
         try {
@@ -209,31 +198,35 @@ public class CatalogoDoctoresFORM extends javax.swing.JFrame {
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         // TODO add your handling code here:
-        controlNavegacion.mostrarCatalogoAnalisisPrueba();
         this.dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnSeleccionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSeleccionarActionPerformed
         // TODO add your handling code here:
-        int fila = tablaDoctores.getSelectedRow();
+        int fila = tablaDoctores.getSelectedRow(); // Verifica que tu tabla en diseño sí se llame "tablaDoctores"
 
         if (fila != -1) {
             try {
-                int idDoctor = (int) tablaDoctores.getValueAt(fila, 0);
-                DoctorDTO docElegido = doctorBO.consultarPorID(idDoctor); 
-                controlNavegacion.getPantallaSolicitudActual().setDoctorSeleccionado(docElegido);
+                RegistroSolicitudPruebaFORM pantallaSolicitud = controlNavegacion.getPantallaSolicitudActual();
+
+                if (pantallaSolicitud == null) {
+                    javax.swing.JOptionPane.showMessageDialog(this, "Primero debes abrir una solicitud de prueba.");
+                    return;
+                }
+
+                int filaModelo = tablaDoctores.convertRowIndexToModel(fila);
+                int idDoctor = ((Number) tablaDoctores.getModel().getValueAt(filaModelo, 0)).intValue();
+
+                DoctorDTO docElegido = doctorBO.consultarPorID(idDoctor);
+                pantallaSolicitud.setDoctorSeleccionado(docElegido);
+
                 this.dispose();
 
             } catch (Exception ex) {
-                DoctorDTO docElegido = new DoctorDTO();
-                docElegido.setIdDoctor((Integer) tablaDoctores.getValueAt(fila, 0));
-                docElegido.setNombres(tablaDoctores.getValueAt(fila, 1).toString());
-
-                controlNavegacion.getPantallaSolicitudActual().setDoctorSeleccionado(docElegido);
-                this.dispose();
+                javax.swing.JOptionPane.showMessageDialog(this, "Error al seleccionar " + ex.getMessage());
             }
         } else {
-             javax.swing.JOptionPane.showMessageDialog(this, "Por favor seleccione un doctor de la tabla");
+            javax.swing.JOptionPane.showMessageDialog(this, "Por favor seleccione un doctor de la tabla");
         }
     }//GEN-LAST:event_btnSeleccionarActionPerformed
 
