@@ -28,6 +28,12 @@ public class ResultadoDAO implements IResultadoDAO{
         this.conexionBD = conexionBD;
     }
     
+    /**
+     * 
+     * @param resultado
+     * @return
+     * @throws PersistenciaException 
+     */
     @Override
     public Resultado registrarResultado(Resultado resultado) throws PersistenciaException {
         EntityManager entityManager = conexionBD.conexionBD();
@@ -45,6 +51,12 @@ public class ResultadoDAO implements IResultadoDAO{
         }
     }
 
+    /**
+     * 
+     * @param idResultado
+     * @return
+     * @throws PersistenciaException 
+     */
     @Override
     public Resultado consultarResultadoPorID(Integer idResultado) throws PersistenciaException {
         EntityManager entityManager = conexionBD.conexionBD();
@@ -62,6 +74,12 @@ public class ResultadoDAO implements IResultadoDAO{
         }
     }
 
+    /**
+     * 
+     * @param idPrueba
+     * @return
+     * @throws PersistenciaException 
+     */
     @Override
     public List<Resultado> consultarResultadoPorPrueba(Integer idPrueba) throws PersistenciaException {
         EntityManager entityManager = conexionBD.conexionBD();
@@ -81,6 +99,13 @@ public class ResultadoDAO implements IResultadoDAO{
         }
     }
 
+    /**
+     * 
+     * @param idPrueba
+     * @param idParametro
+     * @return
+     * @throws PersistenciaException 
+     */
     @Override
     public Resultado consultarResultadoPorPruebaParametro(Integer idPrueba, Integer idParametro) throws PersistenciaException {
         EntityManager entityManager = conexionBD.conexionBD();
@@ -104,6 +129,13 @@ public class ResultadoDAO implements IResultadoDAO{
         }
     }
 
+    /**
+     * 
+     * @param idPrueba
+     * @param idParametro
+     * @return
+     * @throws PersistenceException 
+     */
     @Override
     public boolean resultadoExiste(Integer idPrueba, Integer idParametro) throws PersistenceException {
         EntityManager entityManager = conexionBD.conexionBD();

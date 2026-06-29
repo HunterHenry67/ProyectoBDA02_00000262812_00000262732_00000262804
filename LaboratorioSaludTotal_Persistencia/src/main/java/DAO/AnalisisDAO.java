@@ -26,6 +26,12 @@ public class AnalisisDAO implements IAnalisisDAO {
         this.conexion = new ConexionBD();
     }
 
+    /**
+     * 
+     * @param analisis
+     * @return
+     * @throws PersistenciaException 
+     */
     @Override
     public Analisis guardar(Analisis analisis) throws PersistenciaException {
         EntityManager em = conexion.conexionBD();
@@ -47,6 +53,12 @@ public class AnalisisDAO implements IAnalisisDAO {
         }
     }
 
+    /**
+     * 
+     * @param analisis
+     * @return
+     * @throws PersistenciaException 
+     */
     @Override
     public Analisis actualizar(Analisis analisis) throws PersistenciaException {
 
@@ -67,6 +79,11 @@ public class AnalisisDAO implements IAnalisisDAO {
         }
     }
 
+    /**
+     * 
+     * @param idAnalisis
+     * @throws PersistenciaException 
+     */
     @Override
     public void eliminar(Integer idAnalisis) throws PersistenciaException {
         EntityManager em = conexion.conexionBD();
@@ -85,6 +102,12 @@ public class AnalisisDAO implements IAnalisisDAO {
         }
     }
 
+    /**
+     * 
+     * @param idAnalisis
+     * @return
+     * @throws PersistenciaException 
+     */
     @Override
     public Analisis consultarPorId(Integer idAnalisis) throws PersistenciaException {
         EntityManager em = conexion.conexionBD();
@@ -102,6 +125,11 @@ public class AnalisisDAO implements IAnalisisDAO {
         }
     }
 
+    /**
+     * 
+     * @return
+     * @throws PersistenciaException 
+     */
     @Override
     public List<Analisis> consultarTodos() throws PersistenciaException {
         EntityManager em = conexion.conexionBD();
@@ -118,6 +146,12 @@ public class AnalisisDAO implements IAnalisisDAO {
         }
     }
 
+    /**
+     * 
+     * @param nombre
+     * @return
+     * @throws PersistenciaException 
+     */
     @Override
     public List<Analisis> buscarPorNombre(String nombre) throws PersistenciaException {
         EntityManager em = conexion.conexionBD();
@@ -134,6 +168,12 @@ public class AnalisisDAO implements IAnalisisDAO {
         }
     }
 
+    /**
+     * 
+     * @param idAnalisis
+     * @return
+     * @throws PersistenciaException 
+     */
     @Override
     public Integer contarParametros(Integer idAnalisis) throws PersistenciaException {
         EntityManager entityManager = conexion.conexionBD();
@@ -152,6 +192,12 @@ public class AnalisisDAO implements IAnalisisDAO {
         }
     }
 
+    /**
+     * 
+     * @param tipoMuestra
+     * @return
+     * @throws PersistenciaException 
+     */
     @Override
     public List<Analisis> buscarPorTipoMuestra(String tipoMuestra) throws PersistenciaException {
         EntityManager entityManager = conexion.conexionBD();
@@ -170,6 +216,12 @@ public class AnalisisDAO implements IAnalisisDAO {
         }
     }
 
+    /**
+     * 
+     * @param cantidad
+     * @return
+     * @throws PersistenciaException 
+     */
     @Override
     public List<Analisis> buscarPorCantidadParametro(Integer cantidad) throws PersistenciaException {
         EntityManager entityManager = conexion.conexionBD();

@@ -26,12 +26,14 @@ public class CatalogoDoctoresFORM extends javax.swing.JFrame {
         initComponents();
         this.controlNavegacion = controlNavegacion;
         this.doctorBO = new Negocio.DoctorBO();
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+
         try {
             cargarTabla();
         } catch (PresentacionException ex) {
             javax.swing.JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
         }
-    }
+}
     
     private void cargarTabla() throws PresentacionException {
         try {
@@ -43,6 +45,7 @@ public class CatalogoDoctoresFORM extends javax.swing.JFrame {
     }
     
     private void llenarTabla(List<DoctorDTO> listaDoctores) {
+
         DefaultTableModel modelo = (DefaultTableModel) tablaDoctores.getModel();
         modelo.setRowCount(0); 
         for (DoctorDTO doctor : listaDoctores) {
@@ -200,18 +203,30 @@ public class CatalogoDoctoresFORM extends javax.swing.JFrame {
 
     private void btnSeleccionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSeleccionarActionPerformed
         // TODO add your handling code here:
-        int fila = tablaDoctores.getSelectedRow();
-    
+        int fila = tablaDoctores.getSelectedRow(); // Verifica que tu tabla en diseño sí se llame "tablaDoctores"
+
         if (fila != -1) {
             try {
-                DoctorDTO docElegido = doctorBO.consultarPorID((int)tablaDoctores.getValueAt(fila, 0) );
-                controlNavegacion.getPantallaSolicitudActual().setDoctorSeleccionado(docElegido);
-                
+                RegistroSolicitudPruebaFORM pantallaSolicitud = controlNavegacion.getPantallaSolicitudActual();
+
+                if (pantallaSolicitud == null) {
+                    javax.swing.JOptionPane.showMessageDialog(this, "Primero debes abrir una solicitud de prueba.");
+                    return;
+                }
+
+                int filaModelo = tablaDoctores.convertRowIndexToModel(fila);
+                int idDoctor = ((Number) tablaDoctores.getModel().getValueAt(filaModelo, 0)).intValue();
+
+                DoctorDTO docElegido = doctorBO.consultarPorID(idDoctor);
+                pantallaSolicitud.setDoctorSeleccionado(docElegido);
+
                 this.dispose();
-            } catch (NegocioException ex) {
+
+            } catch (Exception ex) {
                 javax.swing.JOptionPane.showMessageDialog(this, "Error al seleccionar " + ex.getMessage());
-                System.getLogger(CatalogoDoctoresFORM.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
             }
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(this, "Por favor seleccione un doctor de la tabla");
         }
     }//GEN-LAST:event_btnSeleccionarActionPerformed
 

@@ -15,68 +15,87 @@ import javax.persistence.criteria.Root;
  *
  * @author BALAMRUSH
  */
-public class RangoDAO implements IRangoDAO{
+public class RangoDAO implements IRangoDAO {
 
     private IConexionBD conexion;
-    
-    public RangoDAO (){
+
+    public RangoDAO() {
         this.conexion = new ConexionBD();
     }
+
+    /**
+     *
+     * @param rango
+     * @return
+     * @throws PersistenciaException
+     */
     @Override
     public Rango agregarRango(Rango rango) throws PersistenciaException {
         EntityManager em = conexion.conexionBD();
-        
-        try{
+
+        try {
             em.getTransaction().begin();
             em.persist(rango);
             em.getTransaction().commit();
             return rango;
 
-        }catch (Exception e){
+        } catch (Exception e) {
             if (em.getTransaction().isActive()) {
-            em.getTransaction().rollback();
+                em.getTransaction().rollback();
             }
             throw new PersistenciaException("Error en DAO al agregar rango");
-        }finally{
+        } finally {
             if (em != null) {
-            em.close();
+                em.close();
             }
         }
- }
+    }
 
+    /**
+     * 
+     * @param idRango
+     * @return
+     * @throws PersistenciaException 
+     */
     @Override
     public Rango eliminarRango(int idRango) throws PersistenciaException {
         EntityManager em = conexion.conexionBD();
-        
-        try{
+
+        try {
             em.getTransaction().begin();
             Rango rangoAEliminar = em.find(Rango.class, idRango);
             if (rangoAEliminar != null) {
-            em.remove(rangoAEliminar);
-            em.getTransaction().commit();
-            
-            return rangoAEliminar;
-        } else {
-            em.getTransaction().rollback();
-            return null; 
+                em.remove(rangoAEliminar);
+                em.getTransaction().commit();
+
+                return rangoAEliminar;
+            } else {
+                em.getTransaction().rollback();
+                return null;
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             if (em.getTransaction().isActive()) {
-            em.getTransaction().rollback();
+                em.getTransaction().rollback();
             }
             throw new PersistenciaException("Error en DAO al eliminar el rango ");
         } finally {
             if (em != null) {
                 em.close();
             }
-    
+
         }
     }
 
+    /**
+     * 
+     * @param idParametro
+     * @return
+     * @throws PersistenciaException 
+     */
     @Override
     public List<Rango> buscarRangosPorParametro(int idParametro) throws PersistenciaException {
         EntityManager em = conexion.conexionBD();
-    
+
         try {
             CriteriaBuilder cb = em.getCriteriaBuilder();
 
@@ -99,6 +118,14 @@ public class RangoDAO implements IRangoDAO{
         }
     }
 
+    /**
+     * 
+     * @param idParametro
+     * @param sexo
+     * @param edad
+     * @return
+     * @throws PersistenciaException 
+     */
     @Override
     public long obtenerRangosPorParametro(int idParametro, String sexo, int edad) throws PersistenciaException {
         EntityManager em = conexion.conexionBD();
@@ -116,7 +143,7 @@ public class RangoDAO implements IRangoDAO{
             if (em != null) {
                 em.close();
             }
-          }
         }
-    
+    }
+
 }

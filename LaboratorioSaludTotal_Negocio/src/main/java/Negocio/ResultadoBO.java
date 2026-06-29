@@ -33,6 +33,12 @@ public class ResultadoBO implements IResultadoBO {
         this.parametroDAO = parametroDAO;
     }
 
+    /**
+     * 
+     * @param dto
+     * @return
+     * @throws NegocioException 
+     */
     @Override
     public Resultado registrarResultado(RegistrarResultadoDTO dto) throws NegocioException {
         validarRegistroResultado(dto);
@@ -63,6 +69,12 @@ public class ResultadoBO implements IResultadoBO {
         }
     }
 
+    /**
+     * 
+     * @param idResultado
+     * @return
+     * @throws NegocioException 
+     */
     @Override
     public Resultado consultarResultadoPorID(Integer idResultado) throws NegocioException {
         if (idResultado == null || idResultado <= 0) {
@@ -83,6 +95,12 @@ public class ResultadoBO implements IResultadoBO {
         }
     }
 
+    /**
+     * 
+     * @param idPrueba
+     * @return
+     * @throws NegocioException 
+     */
     @Override
     public List<ResultadoDTO> consultarTablaPorPrueba(Integer idPrueba) throws NegocioException {
         if (idPrueba == null || idPrueba <= 0) {
@@ -105,6 +123,13 @@ public class ResultadoBO implements IResultadoBO {
         }
     }
 
+    /**
+     * 
+     * @param idPrueba
+     * @param idParametro
+     * @return
+     * @throws NegocioException 
+     */
     @Override
     public Resultado consultarResultadoPorPruebaParametro(Integer idPrueba, Integer idParametro) throws NegocioException {
         if (idPrueba == null || idPrueba <= 0) {
@@ -123,6 +148,13 @@ public class ResultadoBO implements IResultadoBO {
         }
     }
 
+    /**
+     * 
+     * @param idPrueba
+     * @param idParametro
+     * @return
+     * @throws NegocioException 
+     */
     @Override
     public boolean resultadoExiste(Integer idPrueba, Integer idParametro) throws NegocioException {
         if (idPrueba == null || idPrueba <= 0) {
@@ -141,6 +173,11 @@ public class ResultadoBO implements IResultadoBO {
         }
     }
 
+    /**
+     * 
+     * @param registro
+     * @throws NegocioException 
+     */
     private void validarRegistroResultado(RegistrarResultadoDTO registro) throws NegocioException {
         if (registro == null) {
             throw new NegocioException("Los datos de entrada no pueden ser nulos.");
@@ -163,6 +200,13 @@ public class ResultadoBO implements IResultadoBO {
         }
     }
 
+    /**
+     * 
+     * @param dto
+     * @param prueba
+     * @param parametro
+     * @return 
+     */
     private Resultado convertirAEntidad(RegistrarResultadoDTO dto, Prueba prueba, Parametro parametro) {
         Resultado entidad = new Resultado();
 
@@ -180,6 +224,11 @@ public class ResultadoBO implements IResultadoBO {
         return entidad;
     }
 
+    /**
+     * 
+     * @param entidad
+     * @return 
+     */
     private ResultadoDTO convertirADTO(Resultado entidad) {
         ResultadoDTO dto = new ResultadoDTO();
 
@@ -198,6 +247,11 @@ public class ResultadoBO implements IResultadoBO {
         return dto;
     }
 
+    /**
+     * 
+     * @param resultados
+     * @return 
+     */
     private List<ResultadoDTO> convertirListaADTO(List<Resultado> resultados) {
         List<ResultadoDTO> listaDTO = new ArrayList<>();
 

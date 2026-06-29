@@ -27,6 +27,12 @@ public class ParametroDAO implements IParametroDAO {
         this.conexionBD = new ConexionBD();
     }
 
+    /**
+     * 
+     * @param nuevoParametro
+     * @return
+     * @throws PersistenciaException 
+     */
     @Override
     public Parametro registarParametro(Parametro nuevoParametro) throws PersistenciaException {
         EntityManager entityManager = conexionBD.conexionBD();
@@ -44,6 +50,11 @@ public class ParametroDAO implements IParametroDAO {
         }
     }
 
+    /**
+     * 
+     * @return
+     * @throws PersistenciaException 
+     */
     @Override
     public List<Parametro> listarTodos() throws PersistenciaException {
         EntityManager entityManager = conexionBD.conexionBD();
@@ -61,6 +72,11 @@ public class ParametroDAO implements IParametroDAO {
         }
     }
 
+    /**
+     * 
+     * @param idParametro
+     * @throws PersistenciaException 
+     */
     @Override
     public void eliminarParametro(Integer idParametro) throws PersistenciaException {
         EntityManager entityManager = conexionBD.conexionBD();
@@ -81,6 +97,12 @@ public class ParametroDAO implements IParametroDAO {
         }
     }
 
+    /**
+     * 
+     * @param idParametro
+     * @return
+     * @throws PersistenciaException 
+     */
     @Override
     public Parametro consultarParametroPorID(Integer idParametro) throws PersistenciaException {
         EntityManager entityManager = conexionBD.conexionBD();
@@ -98,6 +120,12 @@ public class ParametroDAO implements IParametroDAO {
         }
     }
 
+    /**
+     * 
+     * @param nombre
+     * @return
+     * @throws PersistenciaException 
+     */
     @Override
     public List<Parametro> consultarParametroPorNombre(String nombre) throws PersistenciaException {
         EntityManager entityManager = conexionBD.conexionBD();
@@ -117,6 +145,12 @@ public class ParametroDAO implements IParametroDAO {
         }
     }
 
+    /**
+     * 
+     * @param orden
+     * @return
+     * @throws PersistenciaException 
+     */
     @Override
     public List<Parametro> consultarParametroPorOrden(Integer orden) throws PersistenciaException {
         EntityManager entityManager = conexionBD.conexionBD();
@@ -135,6 +169,12 @@ public class ParametroDAO implements IParametroDAO {
         }
     }
 
+    /**
+     * 
+     * @param unidadMedida
+     * @return
+     * @throws PersistenciaException 
+     */
     @Override
     public List<Parametro> consultarParametroPorUnidadMedidad(String unidadMedida) throws PersistenciaException {
         EntityManager entityManager = conexionBD.conexionBD();
@@ -153,6 +193,12 @@ public class ParametroDAO implements IParametroDAO {
         }
     }
 
+    /**
+     * 
+     * @param rangos
+     * @return
+     * @throws PersistenciaException 
+     */
     @Override
     public List<Parametro> consultarParametroPorCantidadRango(Integer rangos) throws PersistenciaException {
         EntityManager entityManager = conexionBD.conexionBD();
@@ -172,6 +218,12 @@ public class ParametroDAO implements IParametroDAO {
         }
     }
 
+    /**
+     * 
+     * @param idParametro
+     * @return
+     * @throws PersistenciaException 
+     */
     @Override
     public Integer contarRangos(Integer idParametro) throws PersistenciaException {
         EntityManager entityManager = conexionBD.conexionBD();

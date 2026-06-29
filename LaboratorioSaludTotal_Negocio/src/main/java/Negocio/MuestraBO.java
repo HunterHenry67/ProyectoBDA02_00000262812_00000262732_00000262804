@@ -24,6 +24,12 @@ public class MuestraBO implements IMuestraBO{
         this.muestraDAO = new MuestraDAO();
     }
 
+    /**
+     * 
+     * @param muestraNuevo
+     * @return
+     * @throws NegocioException 
+     */
     @Override
     public MuestraDTO agregarMuestra(MuestraDTO muestraNuevo) throws NegocioException {
         try {
@@ -36,6 +42,12 @@ public class MuestraBO implements IMuestraBO{
         }
     }
 
+    /**
+     * 
+     * @param idMuestra
+     * @return
+     * @throws NegocioException 
+     */
     @Override
     public MuestraDTO buscarMuestraPorId(int idMuestra) throws NegocioException {
         try {
@@ -51,6 +63,11 @@ public class MuestraBO implements IMuestraBO{
         }
     }
 
+    /**
+     * 
+     * @return
+     * @throws NegocioException 
+     */
     @Override
     public List<MuestraDTO> consultarTodasLasMuestras() throws NegocioException {
         try {
@@ -67,7 +84,11 @@ public class MuestraBO implements IMuestraBO{
         }
     }
 
-    
+    /**
+     * 
+     * @param entidad
+     * @return 
+     */
    private MuestraDTO convertirADTO(Muestra entidad) {
         MuestraDTO dto = new MuestraDTO();
         
@@ -76,6 +97,11 @@ public class MuestraBO implements IMuestraBO{
         return dto;
     }
 
+   /**
+    * 
+    * @param dto
+    * @return 
+    */
     private Muestra convertirAEntidad(MuestraDTO dto) {
         Muestra entidad = new Muestra();
         

@@ -26,6 +26,12 @@ public class PruebaBO implements IPruebaBO{
         this.pruebaDAO = new PruebaDAO();
     }
 
+    /**
+     * 
+     * @param dtoNuevo
+     * @return
+     * @throws NegocioException 
+     */
     @Override
     public PruebaDTO agregarPrueba(PruebaDTO dtoNuevo) throws NegocioException {
         try {
@@ -42,6 +48,12 @@ public class PruebaBO implements IPruebaBO{
         }
     }
 
+    /**
+     * 
+     * @param idPrueba
+     * @return
+     * @throws NegocioException 
+     */
     @Override
     public PruebaDTO eliminarPrueba(int idPrueba) throws NegocioException {
         try {
@@ -62,6 +74,12 @@ public class PruebaBO implements IPruebaBO{
         }
     }
 
+    /**
+     * 
+     * @param idPrueba
+     * @return
+     * @throws NegocioException 
+     */
     @Override
     public PruebaDTO buscarPruebaPorId(int idPrueba) throws NegocioException {
         try{
@@ -81,6 +99,11 @@ public class PruebaBO implements IPruebaBO{
         }
     }
 
+    /**
+     * 
+     * @return
+     * @throws NegocioException 
+     */
     @Override
     public List<PruebaDTO> consultarTodasLasPruebas() throws NegocioException {
         try {
@@ -98,7 +121,11 @@ public class PruebaBO implements IPruebaBO{
         }
     }
     
-    
+    /**
+     * 
+     * @param entidad
+     * @return 
+     */
     private PruebaDTO convertirADTO(Prueba entidad) {
         PruebaDTO dto = new PruebaDTO();
         dto.setIdPrueba(entidad.getIdPrueba());
@@ -117,6 +144,11 @@ public class PruebaBO implements IPruebaBO{
         return dto;
     }
 
+    /**
+     * 
+     * @param dto
+     * @return 
+     */
     private Prueba convertirAEntidad(PruebaDTO dto) {
         Prueba entidad = new Prueba();
         entidad.setIdPrueba(dto.getIdPrueba());

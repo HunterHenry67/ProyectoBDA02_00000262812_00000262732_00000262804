@@ -14,6 +14,10 @@ import javax.persistence.Persistence;
  */
 public class ConexionBD implements IConexionBD{
 
+    /**
+     * 
+     * @return 
+     */
     @Override
     public EntityManager conexionBD() {
         EntityManagerFactory managerFactory = Persistence.createEntityManagerFactory("LaboratorioSaludPU");

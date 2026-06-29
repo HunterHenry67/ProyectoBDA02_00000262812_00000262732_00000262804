@@ -26,28 +26,41 @@ public class DoctorBO implements IDoctorBO {
     private IDoctorDAO doctorDAO;
 
     public DoctorBO() {
-        this.doctorDAO = new DoctorDAO();
+        IConexionBD conexion = new ConexionBD();
+        this.doctorDAO = new DoctorDAO(conexion);
     }
 
+    /**
+     * 
+     * @param idDoctor
+     * @return
+     * @throws NegocioException 
+     */
     @Override
     public DoctorDTO consultarPorID(Integer idDoctor) throws NegocioException {
         try {
-            if (idDoctor <= 0) {
-                throw new NegocioException("Error en DoctorBO, ID invalido");
+            if (idDoctor == null || idDoctor <= 0) {
+                throw new NegocioException("Error en DoctorBO, ID inválido");
             }
 
             Doctor doctor = doctorDAO.consultarPorID(idDoctor);
+
             if (doctor == null) {
-                throw new NegocioException("Error en DoctorBO, el id no puede ser nulo");
+                throw new NegocioException("No se encontró el doctor con ese ID");
             }
 
             return convertirADTO(doctor);
 
         } catch (PersistenciaException ex) {
-            throw new NegocioException("Error al conectar negocio con dao");
+            throw new NegocioException("Error al consultar el doctor.", ex);
         }
     }
 
+    /**
+     * 
+     * @return
+     * @throws NegocioException 
+     */
     @Override
     public List<DoctorDTO> consultarTodos() throws NegocioException {
         try {
@@ -64,6 +77,12 @@ public class DoctorBO implements IDoctorBO {
         }
     }
 
+    /**
+     * 
+     * @param nombres
+     * @return
+     * @throws NegocioException 
+     */
     @Override
     public List<DoctorDTO> buscarPorNombres(String nombres) throws NegocioException {
         try {
@@ -77,6 +96,12 @@ public class DoctorBO implements IDoctorBO {
         }
     }
 
+    /**
+     * 
+     * @param sexo
+     * @return
+     * @throws NegocioException 
+     */
     @Override
     public List<DoctorDTO> buscarPorSexo(Sexo sexo) throws NegocioException {
         try {
@@ -90,6 +115,11 @@ public class DoctorBO implements IDoctorBO {
         }
     }
 
+    /**
+     * 
+     * @param doctor
+     * @return 
+     */
     private DoctorDTO convertirADTO(Doctor doctor) {
         DoctorDTO dto = new DoctorDTO();
         dto.setIdDoctor(doctor.getIdDoctor());
@@ -111,6 +141,11 @@ public class DoctorBO implements IDoctorBO {
         return dto;
     }
 
+    /**
+     * 
+     * @param doctores
+     * @return 
+     */
     private List<DoctorDTO> convertirListaADTO(List<Doctor> doctores) {
         List<DoctorDTO> dtos = new ArrayList<>();
         for (Doctor doctor : doctores) {

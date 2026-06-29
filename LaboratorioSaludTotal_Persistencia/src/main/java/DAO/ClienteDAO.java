@@ -26,6 +26,12 @@ public class ClienteDAO implements IClienteDAO{
         this.conexion = new ConexionBD();
     }
 
+    /**
+     * 
+     * @param id
+     * @return
+     * @throws PersistenciaException 
+     */
     @Override
     public Cliente buscarClienteId(int id) throws PersistenciaException{
         EntityManager em = conexion.conexionBD();
@@ -46,6 +52,12 @@ public class ClienteDAO implements IClienteDAO{
         
     }
 
+    /**
+     * 
+     * @param nombre
+     * @return
+     * @throws PersistenciaException 
+     */
     @Override
     public List<Cliente> buscarClienteNombre(String nombre) throws PersistenciaException {
         EntityManager em = conexion.conexionBD();
@@ -74,6 +86,12 @@ public class ClienteDAO implements IClienteDAO{
         }
     }
 
+    /**
+     * 
+     * @param fecha
+     * @return
+     * @throws PersistenciaException 
+     */
     @Override
     public List<Cliente> buscarClienteFechaNacimiento(LocalDateTime fecha) throws PersistenciaException {
         EntityManager em = conexion.conexionBD();
@@ -98,6 +116,12 @@ public class ClienteDAO implements IClienteDAO{
         }
     }
 
+    /**
+     * 
+     * @param tipoSangre
+     * @return
+     * @throws PersistenciaException 
+     */
     @Override
     public List<Cliente> buscarClienteTipoSangre(String tipoSangre) throws PersistenciaException {
         EntityManager em = conexion.conexionBD();
@@ -120,6 +144,12 @@ public class ClienteDAO implements IClienteDAO{
         }
     }
 
+    /**
+     * 
+     * @param sexo
+     * @return
+     * @throws PersistenciaException 
+     */
     @Override
     public List<Cliente> buscarClienteSexo(Sexo sexo) throws PersistenciaException {
         EntityManager em = conexion.conexionBD();
@@ -141,6 +171,11 @@ public class ClienteDAO implements IClienteDAO{
         }
     }
 
+    /**
+     * 
+     * @return
+     * @throws PersistenciaException 
+     */
     @Override
     public List<Cliente> obtenerClientes() throws PersistenciaException {
         EntityManager em = conexion.conexionBD();
@@ -162,6 +197,5 @@ public class ClienteDAO implements IClienteDAO{
                 em.close();
             }
         }
-    }
-    
+    }   
 }

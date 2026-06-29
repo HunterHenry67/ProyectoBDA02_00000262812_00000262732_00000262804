@@ -27,6 +27,9 @@ public class RegistroAltaAnalisisFORM extends javax.swing.JFrame {
     private IMuestraBO muestraBO;
     private IAnalisisBO analisisBO;
     private List<RegistrarParametroDTO> parametros;
+    private List<RegistrarParametroDTO> parametrosMostradosTabla;
+    private int paginaActual = 1;
+    private int tamanoPagina = 5;
 
     public RegistroAltaAnalisisFORM(ControlNavegacionForms controlNavegacion) {
         initComponents();
@@ -35,6 +38,8 @@ public class RegistroAltaAnalisisFORM extends javax.swing.JFrame {
         this.muestraBO = new MuestraBO();
         this.analisisBO = new AnalisisBO();
         this.parametros = new ArrayList<>();
+        this.parametrosMostradosTabla = new ArrayList<>();
+        cargarTablaParametros();
         try {
             this.cargarMuestra();
         } catch (PresentacionException ex) {
@@ -42,6 +47,10 @@ public class RegistroAltaAnalisisFORM extends javax.swing.JFrame {
         }
     }
 
+    /**
+     * 
+     * @throws PresentacionException 
+     */
     private void cargarMuestra() throws PresentacionException {
         try {
             comboBoxTipoMuestra.removeAllItems();
@@ -54,6 +63,11 @@ public class RegistroAltaAnalisisFORM extends javax.swing.JFrame {
         }
     }
 
+    /**
+     * 
+     * @param parametroDTO
+     * @throws PresentacionException 
+     */
     public void agregarParametroAlAnalisis(RegistrarParametroDTO parametroDTO) throws PresentacionException {
         if (parametroDTO == null) {
             throw new PresentacionException("Debe existir al menos un parámetro.");
@@ -71,6 +85,10 @@ public class RegistroAltaAnalisisFORM extends javax.swing.JFrame {
         cargarTablaParametros();
     }
 
+    /**
+     * 
+     * @throws PresentacionException 
+     */
     private void registrarAnalisis() throws PresentacionException {
         try {
             if (txtFieldNombreAnalisis.getText().trim().isEmpty()) {
@@ -100,10 +118,18 @@ public class RegistroAltaAnalisisFORM extends javax.swing.JFrame {
         }
     }
 
+    /**
+     * 
+     */
     private void cargarTablaParametros() {
         llenadoTablaParametros(parametros);
     }
 
+    /**
+     * 
+     * @param parametroDTO
+     * @throws PresentacionException 
+     */
     public void parametrosTemporales(RegistrarParametroDTO parametroDTO) throws PresentacionException {
         if (parametroDTO == null) {
             throw new PresentacionException("Debe de existir al menos un parámetro.");
@@ -116,10 +142,23 @@ public class RegistroAltaAnalisisFORM extends javax.swing.JFrame {
         cargarTablaParametros();
     }
 
+    /**
+     * 
+     * @param listaParametros 
+     */
     private void llenadoTablaParametros(List<RegistrarParametroDTO> listaParametros) {
+        parametrosMostradosTabla = new ArrayList<>(listaParametros);
         DefaultTableModel modelo = (DefaultTableModel) jTable1.getModel();
         modelo.setRowCount(0);
-        for (RegistrarParametroDTO parametro : listaParametros) {
+        int inicio = (paginaActual - 1) * tamanoPagina;
+        int fin = Math.min(inicio + tamanoPagina, listaParametros.size());
+        if (inicio >= listaParametros.size()) {
+            paginaActual = 1;
+            inicio = 0;
+            fin = Math.min(tamanoPagina, listaParametros.size());
+        }
+        for (int i = inicio; i < fin; i++) {
+            RegistrarParametroDTO parametro = listaParametros.get(i);
             int cantidadRangos = 0;
             if (parametro.getRangos() != null) {
                 cantidadRangos = parametro.getRangos().size();
@@ -133,11 +172,17 @@ public class RegistroAltaAnalisisFORM extends javax.swing.JFrame {
                 "Eliminar"
             });
         }
+        actualizarTextoPaginaParametros(listaParametros.size());
     }
 
+    /**
+     * 
+     * @throws PresentacionException 
+     */
     private void buscarParametro() throws PresentacionException {
         String entrada = txtFieldBuscar.getText();
         if (entrada.isEmpty()) {
+            paginaActual = 1;
             cargarTablaParametros();
             return;
         }
@@ -187,15 +232,36 @@ public class RegistroAltaAnalisisFORM extends javax.swing.JFrame {
                     break;
             }
         }
+        paginaActual = 1;
         llenadoTablaParametros(resultados);
     }
 
+    /**
+     * 
+     * @param mensaje 
+     */
     private void saltoErrores(String mensaje) {
         JOptionPane.showMessageDialog(this, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
     }
 
+    /**
+     * 
+     * @param mensaje 
+     */
     private void saltoAdvertencia(String mensaje) {
         JOptionPane.showMessageDialog(this, mensaje, "Advertencia", JOptionPane.WARNING_MESSAGE);
+    }
+
+    /**
+     * 
+     * @param totalRegistros 
+     */
+    private void actualizarTextoPaginaParametros(int totalRegistros) {
+        int totalPaginas = (int) Math.ceil((double) totalRegistros / tamanoPagina);
+        if (totalPaginas == 0) {
+            totalPaginas = 1;
+        }
+        lblPaginacion.setText("Página " + paginaActual + " de " + totalPaginas);
     }
 
     @SuppressWarnings("unchecked")
@@ -220,6 +286,9 @@ public class RegistroAltaAnalisisFORM extends javax.swing.JFrame {
         btnCancelar = new javax.swing.JButton();
         btnRegistrarAnalisis = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
+        lblPaginacion = new javax.swing.JLabel();
+        btnSiguiente = new javax.swing.JButton();
+        btnAnterior = new javax.swing.JButton();
 
         btnBuscar.setBackground(new java.awt.Color(0, 0, 0));
         btnBuscar.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
@@ -262,7 +331,7 @@ public class RegistroAltaAnalisisFORM extends javax.swing.JFrame {
             }
         });
 
-        comboBoxFiltros.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Nombre", "Unidad de Medida", "Orden" }));
+        comboBoxFiltros.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Nombre", "Unidad de Medida", "Orden", "Cantidad de Rangos" }));
 
         btnAgregarNuevoParametro.setBackground(new java.awt.Color(0, 204, 0));
         btnAgregarNuevoParametro.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
@@ -325,6 +394,28 @@ public class RegistroAltaAnalisisFORM extends javax.swing.JFrame {
 
         jLabel6.setText("Filtro Búsqueda");
 
+        lblPaginacion.setText("jLabel7");
+
+        btnSiguiente.setBackground(new java.awt.Color(0, 153, 255));
+        btnSiguiente.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        btnSiguiente.setForeground(new java.awt.Color(0, 0, 0));
+        btnSiguiente.setText("Siguiente");
+        btnSiguiente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSiguienteActionPerformed(evt);
+            }
+        });
+
+        btnAnterior.setBackground(new java.awt.Color(0, 153, 255));
+        btnAnterior.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        btnAnterior.setForeground(new java.awt.Color(0, 0, 0));
+        btnAnterior.setText("Anterior");
+        btnAnterior.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAnteriorActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -355,7 +446,14 @@ public class RegistroAltaAnalisisFORM extends javax.swing.JFrame {
                         .addGap(241, 241, 241)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1412, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1412, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(btnAnterior)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(lblPaginacion, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(370, 370, 370)
+                                        .addComponent(btnSiguiente)))
                                 .addGap(31, 31, 31)
                                 .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 0, Short.MAX_VALUE))
@@ -412,11 +510,16 @@ public class RegistroAltaAnalisisFORM extends javax.swing.JFrame {
                             .addComponent(txtFieldBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(comboBoxFiltros, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(btnBuscar1, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 26, Short.MAX_VALUE)
+                .addGap(26, 26, 26)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 311, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(51, Short.MAX_VALUE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblPaginacion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnSiguiente)
+                            .addComponent(btnAnterior))
+                        .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -477,19 +580,44 @@ public class RegistroAltaAnalisisFORM extends javax.swing.JFrame {
                     JOptionPane.YES_NO_OPTION
             );
             if (confirmacion == JOptionPane.YES_OPTION) {
-                parametros.remove(fila);
-                cargarTablaParametros();
+                int indiceReal = ((paginaActual - 1) * tamanoPagina) + fila;
+                if (indiceReal >= 0 && indiceReal < parametrosMostradosTabla.size()) {
+                    RegistrarParametroDTO parametroEliminar = parametrosMostradosTabla.get(indiceReal);
+                    parametros.remove(parametroEliminar);
+                    parametrosMostradosTabla.remove(parametroEliminar);
+                    cargarTablaParametros();
+                }
             }
         }
     }//GEN-LAST:event_jTable1MouseClicked
 
+    private void btnAnteriorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnteriorActionPerformed
+        if (paginaActual > 1) {
+            paginaActual--;
+            llenadoTablaParametros(parametrosMostradosTabla);
+        }
+    }//GEN-LAST:event_btnAnteriorActionPerformed
+
+    private void btnSiguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSiguienteActionPerformed
+        int totalPaginas = (int) Math.ceil((double) parametrosMostradosTabla.size() / tamanoPagina);
+        if (totalPaginas == 0) {
+            totalPaginas = 1;
+        }
+        if (paginaActual < totalPaginas) {
+            paginaActual++;
+            llenadoTablaParametros(parametrosMostradosTabla);
+        }
+    }//GEN-LAST:event_btnSiguienteActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregarNuevoParametro;
+    private javax.swing.JButton btnAnterior;
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnBuscar1;
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnRegistrarAnalisis;
+    private javax.swing.JButton btnSiguiente;
     private javax.swing.JComboBox<String> comboBoxFiltros;
     private javax.swing.JComboBox<Object> comboBoxTipoMuestra;
     private javax.swing.JLabel jLabel1;
@@ -500,6 +628,7 @@ public class RegistroAltaAnalisisFORM extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
+    private javax.swing.JLabel lblPaginacion;
     private javax.swing.JTextField txtFieldBuscar;
     private javax.swing.JTextField txtFieldDescripcion;
     private javax.swing.JTextField txtFieldNombreAnalisis;
