@@ -18,7 +18,6 @@ public class RegistroRangoFORM extends javax.swing.JFrame {
     public RegistroRangoFORM(RegistroParametroFORM registroParametroFORM) {
         initComponents();
         this.registroParametroFORM = registroParametroFORM;
-        setExtendedState(MAXIMIZED_BOTH);
     }
 
     private void guardarRango() throws PresentacionException {

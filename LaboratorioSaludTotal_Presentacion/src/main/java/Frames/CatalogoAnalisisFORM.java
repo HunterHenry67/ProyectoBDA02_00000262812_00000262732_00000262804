@@ -32,8 +32,6 @@ public class CatalogoAnalisisFORM extends javax.swing.JFrame {
         this.analisisBO = new AnalisisBO();
         this.analisis = new ArrayList<>();
         this.analisisMostradosTabla = new ArrayList<>();
-        setExtendedState(MAXIMIZED_BOTH);
-
         try {
             cargarTabla();
         } catch (PresentacionException ex) {

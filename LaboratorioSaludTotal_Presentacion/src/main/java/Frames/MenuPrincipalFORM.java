@@ -15,7 +15,6 @@ public class MenuPrincipalFORM extends javax.swing.JFrame {
     public MenuPrincipalFORM(ControlNavegacionForms controlNavegacion) {
         initComponents();
         this.controlNavegacion = controlNavegacion;
-//        setExtendedState(MAXIMIZED_BOTH);
     }
 
     
