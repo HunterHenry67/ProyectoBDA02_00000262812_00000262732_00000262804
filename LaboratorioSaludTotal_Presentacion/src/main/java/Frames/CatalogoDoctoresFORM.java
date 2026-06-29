@@ -15,7 +15,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 
 /**
- *
+ * Pantalla para visualizar, filtrar y seleccionar doctores
  * @author user
  */
 public class CatalogoDoctoresFORM extends javax.swing.JFrame {
@@ -40,8 +40,11 @@ public class CatalogoDoctoresFORM extends javax.swing.JFrame {
         } catch (PresentacionException ex) {
             javax.swing.JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
         }
-}
+    }
     
+    /**
+     * Define cómo funcionan los filtros para buscar doctores
+     */
     private void configurarFiltrosDoctores() {
         comboBoxFiltro.setModel(new DefaultComboBoxModel<>(
                 new String[]{"Todos", "ID", "Nombre", "Sexo"}
@@ -59,6 +62,9 @@ public class CatalogoDoctoresFORM extends javax.swing.JFrame {
         comboBoxFiltro.addActionListener(e -> filtrarDoctores());
     }
     
+    /**
+     * Actualiza la tabla según lo que el usuario escribió en el buscador
+     */
     private void filtrarDoctores() {
         DefaultTableModel modelo = (DefaultTableModel) tablaDoctores.getModel();
         modelo.setRowCount(0);
@@ -91,6 +97,10 @@ public class CatalogoDoctoresFORM extends javax.swing.JFrame {
         }
     }
     
+    /**
+     * Obtiene todos los doctores de la base de datos y los manda a llenar la tabla
+     * @throws PresentacionException Si hubo error al consultar los doctores
+     */
     private void cargarTabla() throws PresentacionException {
         try {
             List<DoctorDTO> listaDoctores = doctorBO.consultarTodos(); 
@@ -100,6 +110,10 @@ public class CatalogoDoctoresFORM extends javax.swing.JFrame {
         }
     }
     
+    /**
+     * Vacía y vuelve a poner los datos de los doctores en la tabla visual
+     * @param listaDoctores La lista de doctores a mostrar
+     */
     private void llenarTabla(List<DoctorDTO> listaDoctores) {
 
         this.doctores = listaDoctores; 

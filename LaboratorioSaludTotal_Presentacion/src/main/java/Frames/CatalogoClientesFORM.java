@@ -15,7 +15,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 
 /**
- *
+ * Pantalla que permite buscar, filtrar y seleccionar a los clientes del sistema
  * @author user
  */
 public class CatalogoClientesFORM extends javax.swing.JFrame {
@@ -25,7 +25,8 @@ public class CatalogoClientesFORM extends javax.swing.JFrame {
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(CatalogoClientesFORM.class.getName());
 
     /**
-     * Creates new form CatalogoClientesFORM
+     * Prepara la pantalla, inicia la lógica de negocio y carga la lista de clientes
+     * @param controlNavegacion Objeto para navegar entre pantallas
      */
     public CatalogoClientesFORM(ControlNavegacionForms controlNavegacion) {
         initComponents();
@@ -43,6 +44,10 @@ public class CatalogoClientesFORM extends javax.swing.JFrame {
         }
     }
     
+    /**
+     * Consulta a la base de datos todos los clientes y los pone en la tabla
+     * @throws PresentacionException Si falla la comunicación con el negocio
+     */
     private void cargarTabla() throws PresentacionException {
         try {
             clientes = clienteBO.ObtenerClientes(); // Guardamos en la lista global
@@ -52,6 +57,10 @@ public class CatalogoClientesFORM extends javax.swing.JFrame {
         }
     }
     
+    /**
+     * Vacía la tabla y pone la lista de clientes recibida
+     * @param listaClientes La lista de clientes a mostrar
+     */
     private void llenarTabla(List<ClienteDTO> listaClientes) {
         DefaultTableModel modelo = (DefaultTableModel) tablaClientes.getModel();
         modelo.setRowCount(0);
@@ -66,6 +75,9 @@ public class CatalogoClientesFORM extends javax.swing.JFrame {
         }
     }
     
+    /**
+     * Configura las opciones de filtro y el buscador para encontrar clientes fácilmente
+     */
     private void configurarFiltrosClientes() {
         comboBoxFiltro.setModel(new DefaultComboBoxModel<>(
                 new String[]{"Todos", "ID", "Nombre", "Fecha Nacimiento", "Tipo Sangre", "Sexo"}
@@ -80,6 +92,9 @@ public class CatalogoClientesFORM extends javax.swing.JFrame {
         comboBoxFiltro.addActionListener(e -> filtrarClientes());
     }
 
+    /**
+     * Actualiza la tabla mostrando solo los clientes que coinciden con el buscador
+     */
     private void filtrarClientes() {
         DefaultTableModel modelo = (DefaultTableModel) tablaClientes.getModel();
         modelo.setRowCount(0);

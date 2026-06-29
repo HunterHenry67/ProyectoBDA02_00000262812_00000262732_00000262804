@@ -5,7 +5,7 @@
 package Frames;
 
 /**
- *
+ * Ventana principal que muestra todas las opciones del sistema para que el usuario elija qué hacer
  * @author BALAMRUSH
  */
 public class MenuPrincipalFORM extends javax.swing.JFrame {

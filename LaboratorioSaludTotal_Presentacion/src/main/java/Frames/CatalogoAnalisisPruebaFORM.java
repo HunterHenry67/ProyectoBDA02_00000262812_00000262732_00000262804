@@ -15,7 +15,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 
 /**
- *
+ * Pantalla que permite buscar, filtrar y seleccionar tipos de análisis para una prueba
  * @author user
  */
 public class CatalogoAnalisisPruebaFORM extends javax.swing.JFrame {
@@ -25,7 +25,8 @@ public class CatalogoAnalisisPruebaFORM extends javax.swing.JFrame {
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(CatalogoAnalisisPruebaFORM.class.getName());
 
     /**
-     * Creates new form CatalogoAnalisisPruebaFORM
+     * Prepara la pantalla, inicia la lógica de negocio y carga los análisis disponibles
+     * @param controlNavegacion Objeto para navegar entre pantallas
      */
     public CatalogoAnalisisPruebaFORM(ControlNavegacionForms controlNavegacion) {
         initComponents();
@@ -42,6 +43,9 @@ public class CatalogoAnalisisPruebaFORM extends javax.swing.JFrame {
         }
     }
     
+    /**
+     * Define cómo funcionan los filtros para buscar análisis
+     */
     private void configurarFiltrosAnalisis() {
         comboBoxFiltro.setModel(new DefaultComboBoxModel<>(
                 new String[]{"Todos", "ID", "Análisis", "Tipo de Muestra", "Parámetros"}
@@ -56,6 +60,9 @@ public class CatalogoAnalisisPruebaFORM extends javax.swing.JFrame {
         comboBoxFiltro.addActionListener(e -> filtrarAnalisis());
     }
     
+    /**
+     * Actualiza la tabla basándose en lo que el usuario escribe en el buscador y el filtro seleccionado
+     */
     private void filtrarAnalisis() {
         DefaultTableModel modelo = (DefaultTableModel) tablaAnalisis.getModel();
         modelo.setRowCount(0);
@@ -92,6 +99,11 @@ public class CatalogoAnalisisPruebaFORM extends javax.swing.JFrame {
         }
     }
     
+    /**
+     * Convierte un objeto a cadena de texto de forma segura evitando nulos
+     * @param valor El objeto a convertir
+     * @return El objeto como cadena o "N/A" si es nulo
+     */
     private String convertirTexto(Object valor) {
         if (valor == null) {
             return "N/A";
@@ -99,6 +111,10 @@ public class CatalogoAnalisisPruebaFORM extends javax.swing.JFrame {
         return valor.toString();
     }
     
+    /**
+     * Consulta todos los análisis en el negocio y llena la tabla visual
+     * @throws PresentacionException Si no se pudieron cargar los datos
+     */
     private void cargarTabla() throws PresentacionException {
         try {
             analisis = analisisBO.consultarTodos(); 
@@ -108,6 +124,10 @@ public class CatalogoAnalisisPruebaFORM extends javax.swing.JFrame {
         }
     }
     
+    /**
+     * Limpia la tabla y agrega los datos de la lista de análisis
+     * @param listaAnalisis La lista de análisis a mostrar
+     */
     private void llenarTabla(List<AnalisisDTO> listaAnalisis) {
         DefaultTableModel modelo = (DefaultTableModel) tablaAnalisis.getModel();
         modelo.setRowCount(0);

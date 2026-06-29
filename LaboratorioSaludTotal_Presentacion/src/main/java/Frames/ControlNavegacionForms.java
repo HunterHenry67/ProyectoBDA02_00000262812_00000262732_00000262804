@@ -5,7 +5,7 @@
 package Frames;
 
 /**
- *
+ * Clase encargada de manejar el cambio entre las diferentes ventanas de la aplicación
  * @author BALAMRUSH
  */
 public class ControlNavegacionForms {
@@ -15,7 +15,7 @@ public class ControlNavegacionForms {
     }
     
     /**
-     * 
+     * Abre la ventana del menú principal
      */
     public void mostrarMenuPrincipal(){
         MenuPrincipalFORM pantallaMenuPrincipalFORM = new MenuPrincipalFORM(this);
