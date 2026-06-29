@@ -110,10 +110,7 @@ public class CatalogoDoctoresFORM extends javax.swing.JFrame {
         }
     }
     
-    /**
-     * Vacía y vuelve a poner los datos de los doctores en la tabla visual
-     * @param listaDoctores La lista de doctores a mostrar
-     */
+    
     private void llenarTabla(List<DoctorDTO> listaDoctores) {
 
         this.doctores = listaDoctores; 
@@ -299,9 +296,7 @@ public class CatalogoDoctoresFORM extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnSeleccionarActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
+    
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -125,7 +125,6 @@ public class RegistroRangoFORM extends javax.swing.JFrame {
     
     /**
      * Muestra una ventana emergente con un mensaje de advertencia
-     * @param mensaje El texto que se mostrará al usuario
      */
     private void saltoAdvertencia(String mensaje){
         JOptionPane.showMessageDialog(this, mensaje, "Advertencia", JOptionPane.WARNING_MESSAGE);

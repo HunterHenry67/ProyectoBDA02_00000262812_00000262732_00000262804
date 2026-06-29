@@ -24,10 +24,7 @@ public class CatalogoClientesFORM extends javax.swing.JFrame {
     private List<ClienteDTO> clientes;
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(CatalogoClientesFORM.class.getName());
 
-    /**
-     * Prepara la pantalla, inicia la lógica de negocio y carga la lista de clientes
-     * @param controlNavegacion Objeto para navegar entre pantallas
-     */
+    
     public CatalogoClientesFORM(ControlNavegacionForms controlNavegacion) {
         initComponents();
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -57,10 +54,7 @@ public class CatalogoClientesFORM extends javax.swing.JFrame {
         }
     }
     
-    /**
-     * Vacía la tabla y pone la lista de clientes recibida
-     * @param listaClientes La lista de clientes a mostrar
-     */
+    
     private void llenarTabla(List<ClienteDTO> listaClientes) {
         DefaultTableModel modelo = (DefaultTableModel) tablaClientes.getModel();
         modelo.setRowCount(0);
@@ -303,10 +297,6 @@ public class CatalogoClientesFORM extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnSeleccionarActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;

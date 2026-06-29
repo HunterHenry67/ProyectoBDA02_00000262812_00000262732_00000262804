@@ -63,11 +63,7 @@ public class RegistroAltaAnalisisFORM extends javax.swing.JFrame {
         }
     }
 
-    /**
-     * Valida que el parámetro sea correcto y lo añade a la lista de esta solicitud
-     * @param parametroDTO El parámetro que quieres agregar
-     * @throws PresentacionException Si el parámetro está vacío o tiene errores
-     */
+    
     public void agregarParametroAlAnalisis(RegistrarParametroDTO parametroDTO) throws PresentacionException {
         if (parametroDTO == null) {
             throw new PresentacionException("Debe existir al menos un parámetro.");
@@ -125,11 +121,7 @@ public class RegistroAltaAnalisisFORM extends javax.swing.JFrame {
         llenadoTablaParametros(parametros);
     }
 
-    /**
-     * Recibe un parámetro nuevo y lo guarda en la lista temporal de la pantalla
-     * @param parametroDTO El parámetro que quieres añadir
-     * @throws PresentacionException Si el parámetro no es válido
-     */
+    
     public void parametrosTemporales(RegistrarParametroDTO parametroDTO) throws PresentacionException {
         if (parametroDTO == null) {
             throw new PresentacionException("Debe de existir al menos un parámetro.");
@@ -144,7 +136,6 @@ public class RegistroAltaAnalisisFORM extends javax.swing.JFrame {
 
     /**
      * Dibuja los datos en la tabla usando paginación para no saturar la vista
-     * @param listaParametros La lista completa de parámetros a mostrar
      */
     private void llenadoTablaParametros(List<RegistrarParametroDTO> listaParametros) {
         parametrosMostradosTabla = new ArrayList<>(listaParametros);
@@ -238,7 +229,6 @@ public class RegistroAltaAnalisisFORM extends javax.swing.JFrame {
 
     /**
      * Muestra un mensaje de error al usuario
-     * @param mensaje Texto del error
      */
     private void saltoErrores(String mensaje) {
         JOptionPane.showMessageDialog(this, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
@@ -246,7 +236,6 @@ public class RegistroAltaAnalisisFORM extends javax.swing.JFrame {
 
     /**
      * Muestra un mensaje de aviso al usuario
-     * @param mensaje Texto del aviso
      */
     private void saltoAdvertencia(String mensaje) {
         JOptionPane.showMessageDialog(this, mensaje, "Advertencia", JOptionPane.WARNING_MESSAGE);
@@ -254,7 +243,6 @@ public class RegistroAltaAnalisisFORM extends javax.swing.JFrame {
 
     /**
      * Cambia el texto que indica en qué página de la tabla estás
-     * @param totalRegistros Cantidad total de registros encontrados
      */
     private void actualizarTextoPaginaParametros(int totalRegistros) {
         int totalPaginas = (int) Math.ceil((double) totalRegistros / tamanoPagina);

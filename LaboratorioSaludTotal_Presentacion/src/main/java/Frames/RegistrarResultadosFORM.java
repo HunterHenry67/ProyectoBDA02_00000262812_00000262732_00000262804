@@ -192,11 +192,7 @@ public class RegistrarResultadosFORM extends JFrame {
         }
     }
 
-    /**
-     * Busca y formatea el rango normal para un parámetro específico
-     * @param idParametro ID del parámetro
-     * @return El rango como texto o "N/A" si no hay
-     */
+    
     private String obtenerRangoNormal(Integer idParametro) {
         try {
             List<RangoDTO> rangos = rangoBO.buscarRangosPorParametro(idParametro);
@@ -266,11 +262,7 @@ public class RegistrarResultadosFORM extends JFrame {
     }
 }
 
-    /**
-     * Junta los nombres del cliente para mostrarlos en el campo de texto
-     * @param cliente El cliente
-     * @return El nombre completo como String
-     */
+    
     private String nombreCompletoCliente(ClienteDTO cliente) {
         String nombre = "";
 
@@ -298,10 +290,7 @@ public class RegistrarResultadosFORM extends JFrame {
         dispose();
     }
 
-    /**
-     * Revisa que todos los resultados sean números válidos antes de guardar
-     * @return true si todo está bien, false si hay errores
-     */
+    
     private boolean validarTablaResultados() {
         DefaultTableModel modelo = (DefaultTableModel) tabla.getModel();
 

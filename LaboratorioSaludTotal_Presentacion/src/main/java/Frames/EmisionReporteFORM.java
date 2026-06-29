@@ -262,10 +262,7 @@ public class EmisionReporteFORM extends JFrame {
         llenarTabla(pruebasMostradas);
     }
 
-    /**
-     * Muestra las pruebas en la tabla manejando la paginación
-     * @param lista La lista de pruebas a mostrar
-     */
+    
     private void llenarTabla(List<PruebaDTO> lista) {
         DefaultTableModel modelo = (DefaultTableModel) tabla.getModel();
         modelo.setRowCount(0);
@@ -294,11 +291,7 @@ public class EmisionReporteFORM extends JFrame {
         btnSiguiente.setEnabled(paginaActual < totalPaginas);
     }
 
-    /**
-     * Calcula cuántas páginas tendrá la tabla
-     * @param totalRegistros Cantidad de registros a paginar
-     * @return El número total de páginas
-     */
+    
     private int obtenerTotalPaginas(int totalRegistros) {
         if (totalRegistros == 0) {
             return 1;
@@ -307,11 +300,7 @@ public class EmisionReporteFORM extends JFrame {
         return (int) Math.ceil((double) totalRegistros / registrosPorPagina);
     }
 
-    /**
-     * Obtiene el nombre del análisis relacionado a una prueba para mostrarlo en la tabla
-     * @param idPrueba ID de la prueba
-     * @return Nombre del análisis o "N/A"
-     */
+    
     private String obtenerAnalisisTabla(Integer idPrueba) {
         try {
             return analisisBO.obtenerNombreAnalisisPorPrueba(idPrueba);
@@ -340,11 +329,7 @@ public class EmisionReporteFORM extends JFrame {
         }
     }
 
-    /**
-     * Calcula la edad de un cliente a partir de su fecha de nacimiento
-     * @param fechaNacimiento Fecha de nacimiento
-     * @return La edad en años
-     */
+    
     private int calcularEdad(LocalDateTime fechaNacimiento) {
         return java.time.Period.between(
                 fechaNacimiento.toLocalDate(),
@@ -453,11 +438,7 @@ public class EmisionReporteFORM extends JFrame {
         return parametros;
     }*/
     
-    /**
-     * Crea los campos generales para la cabecera del reporte
-     * @param prueba La prueba cuyos datos se pondrán en el reporte
-     * @return Un mapa con los valores del reporte
-     */
+    
     private Map<String, Object> crearParametrosReporte(PruebaDTO prueba) {
         Map<String, Object> parametros = new HashMap<>();
 
@@ -511,12 +492,7 @@ public class EmisionReporteFORM extends JFrame {
         return parametros;
     }
 
-    /**
-     * Busca los resultados de los parámetros y los organiza para el reporte
-     * @param idPrueba ID de la prueba
-     * @return Una colección de mapas con los resultados
-     * @throws NegocioException Si hay error al consultar
-     */
+    
     private Collection<Map<String, ?>> crearDatosReporte(Integer idPrueba) throws NegocioException {
 
         List<Map<String, ?>> datos = new ArrayList<>();
@@ -543,11 +519,7 @@ public class EmisionReporteFORM extends JFrame {
         return datos;
     }
 
-    /**
-     * Busca el rango normal de un parámetro para ponerlo en el reporte
-     * @param idParametro ID del parámetro
-     * @return El texto del rango o "N/A"
-     */
+    
     private String obtenerRangoNormal(Integer idParametro) {
         try {
             List rangos = rangoBO.buscarRangosPorParametro(idParametro);
