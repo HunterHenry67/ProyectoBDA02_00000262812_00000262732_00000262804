@@ -16,7 +16,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
 /**
- *
+ *Proporciona los métodos necesarios para realizar operaciones CRUD sobre la tabla cliente de laa bd
  * @author BALAMRUSH
  */
 public class ClienteDAO implements IClienteDAO{
@@ -27,10 +27,10 @@ public class ClienteDAO implements IClienteDAO{
     }
 
     /**
-     * 
+     * Busca un cleinte en especifico identificado por su id unico
      * @param id
-     * @return
-     * @throws PersistenciaException 
+     * @return el objeto Cliente correspondiente al id
+     * @throws PersistenciaException si ocurre un error al realizar la busqueda en la bd
      */
     @Override
     public Cliente buscarClienteId(int id) throws PersistenciaException{
@@ -53,10 +53,10 @@ public class ClienteDAO implements IClienteDAO{
     }
 
     /**
-     * 
+     * Busca clientes que coincidan con el nombre mandado en el parametro
      * @param nombre
-     * @return
-     * @throws PersistenciaException 
+     * @return una lista de coincidencias con el nombre mandado en el parametro
+     * @throws PersistenciaException si ocurre algun error al buscar en la bd
      */
     @Override
     public List<Cliente> buscarClienteNombre(String nombre) throws PersistenciaException {
@@ -87,10 +87,10 @@ public class ClienteDAO implements IClienteDAO{
     }
 
     /**
-     * 
-     * @param fecha
-     * @return
-     * @throws PersistenciaException 
+     * Busca clientes que coincidan con la fecha de nacimiento mandada en el parametro
+     * @param fecha fecha de ncimiento del cliente
+     * @return una lista con los clientes que coincidan con la fecha de nacimiento mandada
+     * @throws PersistenciaException si ocurre algun error en la busqueda de información en la bd
      */
     @Override
     public List<Cliente> buscarClienteFechaNacimiento(LocalDateTime fecha) throws PersistenciaException {
@@ -117,10 +117,10 @@ public class ClienteDAO implements IClienteDAO{
     }
 
     /**
-     * 
-     * @param tipoSangre
-     * @return
-     * @throws PersistenciaException 
+     * Busca clientes que coincidan con el tipo de sangre mandado en el parametro
+     * @param tipoSangre tipo de snagre del cliente
+     * @return una lista de los clientes que coincidan con el tipo de sangre requerido
+     * @throws PersistenciaException si ocurre algun error al consultar información en la bd
      */
     @Override
     public List<Cliente> buscarClienteTipoSangre(String tipoSangre) throws PersistenciaException {
@@ -145,10 +145,10 @@ public class ClienteDAO implements IClienteDAO{
     }
 
     /**
-     * 
-     * @param sexo
-     * @return
-     * @throws PersistenciaException 
+     * Busca clientes que coincidan con el sexo mandado en el parametro
+     * @param sexo sexo al que pertence el cliente
+     * @return una lista de objetos cliente que coincidan con el sexo buscado
+     * @throws PersistenciaException si ocurre algun error al buscar la información en la bd
      */
     @Override
     public List<Cliente> buscarClienteSexo(Sexo sexo) throws PersistenciaException {
@@ -172,9 +172,9 @@ public class ClienteDAO implements IClienteDAO{
     }
 
     /**
-     * 
-     * @return
-     * @throws PersistenciaException 
+     * Busca todos los clientes en general registrados en la bd
+     * @return todos los objetos de tipo cliente registrados
+     * @throws PersistenciaException si ocurre algun error al buscar la información en la bd
      */
     @Override
     public List<Cliente> obtenerClientes() throws PersistenciaException {

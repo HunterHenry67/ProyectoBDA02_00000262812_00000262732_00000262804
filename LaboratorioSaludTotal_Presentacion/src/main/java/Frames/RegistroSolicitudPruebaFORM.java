@@ -12,7 +12,9 @@ import Negocio.IPruebaBO;
 import Negocio.PruebaBO;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JButton;
@@ -77,7 +79,13 @@ public class RegistroSolicitudPruebaFORM extends JFrame {
         txtDoctor.setEditable(false);
 
         txtFolio.setText("Asignado al guardar...");
-        txtFechaHora.setText(LocalDateTime.now().toString());
+        txtFechaHora.setText(LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+        btnBuscarDoctor.addActionListener(evt -> {
+            this.controlNavegacion.mostrarCatalogoDoctores();
+        });
+        
+        configurarFiltrosAnalisis();
+        cargarTablaAnalisis();
     }
 
     public void setClienteSeleccionado(ClienteDTO cliente) {
