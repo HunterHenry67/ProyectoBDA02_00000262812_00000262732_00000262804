@@ -41,6 +41,10 @@ public class CatalogoAnalisisFORM extends javax.swing.JFrame {
         }
     }
 
+    /**
+     * 
+     * @throws PresentacionException 
+     */
     private void cargarTabla() throws PresentacionException {
         try {
             analisis = analisisBO.consultarTodos();
@@ -51,6 +55,10 @@ public class CatalogoAnalisisFORM extends javax.swing.JFrame {
         }
     }
 
+    /**
+     * 
+     * @param listaAnalisis 
+     */
     private void llenarTabla(List<AnalisisDTO> listaAnalisis) {
         analisisMostradosTabla = new ArrayList<>(listaAnalisis);
         DefaultTableModel modelo = (DefaultTableModel) tablaAnalisis.getModel();
@@ -74,6 +82,10 @@ public class CatalogoAnalisisFORM extends javax.swing.JFrame {
         actualizarTextoPaginaAnalisis(listaAnalisis.size());
     }
 
+    /**
+     * 
+     * @throws PresentacionException 
+     */
     private void buscarAnalisis() throws PresentacionException {
         try {
             String entrada = txtFieldBuscar.getText().trim();
@@ -105,14 +117,28 @@ public class CatalogoAnalisisFORM extends javax.swing.JFrame {
         }
     }
 
+    /**
+     * 
+     * @param mensaje 
+     */
     private void saltoErrores(String mensaje) {
         JOptionPane.showMessageDialog(this, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
     }
 
+    /**
+     * 
+     * @param mensaje 
+     */
     private void saltoAdvertencia(String mensaje) {
         JOptionPane.showMessageDialog(this, mensaje, "Advertencia", JOptionPane.WARNING_MESSAGE);
     }
 
+    /**
+     * 
+     * @param texto
+     * @return
+     * @throws PresentacionException 
+     */
     private Integer conversionNumero(String texto) throws PresentacionException {
         try {
             return Integer.valueOf(texto);
@@ -122,6 +148,10 @@ public class CatalogoAnalisisFORM extends javax.swing.JFrame {
         }
     }
 
+    /**
+     * 
+     * @param totalRegistros 
+     */
     private void actualizarTextoPaginaAnalisis(int totalRegistros) {
         int totalPaginas = (int) Math.ceil((double) totalRegistros / tamanoPagina);
         if (totalPaginas == 0) {

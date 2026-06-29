@@ -22,6 +22,12 @@ public class PruebaDAO implements IPruebaDAO{
         this.conexion = new ConexionBD();
     }
 
+    /**
+     * 
+     * @param prueba
+     * @return
+     * @throws PersistenciaException 
+     */
     @Override
     public Prueba agregarPrueba(Prueba prueba) throws PersistenciaException {
         EntityManager em = conexion.conexionBD();
@@ -41,6 +47,12 @@ public class PruebaDAO implements IPruebaDAO{
         }
     }
 
+    /**
+     * 
+     * @param idPrueba
+     * @return
+     * @throws PersistenciaException 
+     */
     @Override
     public Prueba eliminarPrueba(int idPrueba) throws PersistenciaException {
         EntityManager em = conexion.conexionBD();
@@ -61,6 +73,12 @@ public class PruebaDAO implements IPruebaDAO{
         }
     }
 
+    /**
+     * 
+     * @param idPrueba
+     * @return
+     * @throws PersistenciaException 
+     */
     @Override
     public Prueba buscarPruebaPorId(int idPrueba) throws PersistenciaException {
         EntityManager em = conexion.conexionBD();
@@ -81,6 +99,11 @@ public class PruebaDAO implements IPruebaDAO{
         }
     }
 
+    /**
+     * 
+     * @return
+     * @throws PersistenciaException 
+     */
     @Override
     public List<Prueba> consultarTodasLasPruebas() throws PersistenciaException {
         EntityManager em = conexion.conexionBD();

@@ -29,6 +29,12 @@ public class DoctorBO implements IDoctorBO {
         this.doctorDAO = new DoctorDAO();
     }
 
+    /**
+     * 
+     * @param idDoctor
+     * @return
+     * @throws NegocioException 
+     */
     @Override
     public DoctorDTO consultarPorID(Integer idDoctor) throws NegocioException {
         try {
@@ -48,6 +54,11 @@ public class DoctorBO implements IDoctorBO {
         }
     }
 
+    /**
+     * 
+     * @return
+     * @throws NegocioException 
+     */
     @Override
     public List<DoctorDTO> consultarTodos() throws NegocioException {
         try {
@@ -64,6 +75,12 @@ public class DoctorBO implements IDoctorBO {
         }
     }
 
+    /**
+     * 
+     * @param nombres
+     * @return
+     * @throws NegocioException 
+     */
     @Override
     public List<DoctorDTO> buscarPorNombres(String nombres) throws NegocioException {
         try {
@@ -77,6 +94,12 @@ public class DoctorBO implements IDoctorBO {
         }
     }
 
+    /**
+     * 
+     * @param sexo
+     * @return
+     * @throws NegocioException 
+     */
     @Override
     public List<DoctorDTO> buscarPorSexo(Sexo sexo) throws NegocioException {
         try {
@@ -90,6 +113,11 @@ public class DoctorBO implements IDoctorBO {
         }
     }
 
+    /**
+     * 
+     * @param doctor
+     * @return 
+     */
     private DoctorDTO convertirADTO(Doctor doctor) {
         DoctorDTO dto = new DoctorDTO();
         dto.setIdDoctor(doctor.getIdDoctor());
@@ -111,6 +139,11 @@ public class DoctorBO implements IDoctorBO {
         return dto;
     }
 
+    /**
+     * 
+     * @param doctores
+     * @return 
+     */
     private List<DoctorDTO> convertirListaADTO(List<Doctor> doctores) {
         List<DoctorDTO> dtos = new ArrayList<>();
         for (Doctor doctor : doctores) {

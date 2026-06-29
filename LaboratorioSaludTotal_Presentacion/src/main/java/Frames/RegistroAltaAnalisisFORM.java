@@ -47,6 +47,10 @@ public class RegistroAltaAnalisisFORM extends javax.swing.JFrame {
         }
     }
 
+    /**
+     * 
+     * @throws PresentacionException 
+     */
     private void cargarMuestra() throws PresentacionException {
         try {
             comboBoxTipoMuestra.removeAllItems();
@@ -59,6 +63,11 @@ public class RegistroAltaAnalisisFORM extends javax.swing.JFrame {
         }
     }
 
+    /**
+     * 
+     * @param parametroDTO
+     * @throws PresentacionException 
+     */
     public void agregarParametroAlAnalisis(RegistrarParametroDTO parametroDTO) throws PresentacionException {
         if (parametroDTO == null) {
             throw new PresentacionException("Debe existir al menos un parámetro.");
@@ -76,6 +85,10 @@ public class RegistroAltaAnalisisFORM extends javax.swing.JFrame {
         cargarTablaParametros();
     }
 
+    /**
+     * 
+     * @throws PresentacionException 
+     */
     private void registrarAnalisis() throws PresentacionException {
         try {
             if (txtFieldNombreAnalisis.getText().trim().isEmpty()) {
@@ -105,10 +118,18 @@ public class RegistroAltaAnalisisFORM extends javax.swing.JFrame {
         }
     }
 
+    /**
+     * 
+     */
     private void cargarTablaParametros() {
         llenadoTablaParametros(parametros);
     }
 
+    /**
+     * 
+     * @param parametroDTO
+     * @throws PresentacionException 
+     */
     public void parametrosTemporales(RegistrarParametroDTO parametroDTO) throws PresentacionException {
         if (parametroDTO == null) {
             throw new PresentacionException("Debe de existir al menos un parámetro.");
@@ -121,6 +142,10 @@ public class RegistroAltaAnalisisFORM extends javax.swing.JFrame {
         cargarTablaParametros();
     }
 
+    /**
+     * 
+     * @param listaParametros 
+     */
     private void llenadoTablaParametros(List<RegistrarParametroDTO> listaParametros) {
         parametrosMostradosTabla = new ArrayList<>(listaParametros);
         DefaultTableModel modelo = (DefaultTableModel) jTable1.getModel();
@@ -150,6 +175,10 @@ public class RegistroAltaAnalisisFORM extends javax.swing.JFrame {
         actualizarTextoPaginaParametros(listaParametros.size());
     }
 
+    /**
+     * 
+     * @throws PresentacionException 
+     */
     private void buscarParametro() throws PresentacionException {
         String entrada = txtFieldBuscar.getText();
         if (entrada.isEmpty()) {
@@ -207,14 +236,26 @@ public class RegistroAltaAnalisisFORM extends javax.swing.JFrame {
         llenadoTablaParametros(resultados);
     }
 
+    /**
+     * 
+     * @param mensaje 
+     */
     private void saltoErrores(String mensaje) {
         JOptionPane.showMessageDialog(this, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
     }
 
+    /**
+     * 
+     * @param mensaje 
+     */
     private void saltoAdvertencia(String mensaje) {
         JOptionPane.showMessageDialog(this, mensaje, "Advertencia", JOptionPane.WARNING_MESSAGE);
     }
 
+    /**
+     * 
+     * @param totalRegistros 
+     */
     private void actualizarTextoPaginaParametros(int totalRegistros) {
         int totalPaginas = (int) Math.ceil((double) totalRegistros / tamanoPagina);
         if (totalPaginas == 0) {
