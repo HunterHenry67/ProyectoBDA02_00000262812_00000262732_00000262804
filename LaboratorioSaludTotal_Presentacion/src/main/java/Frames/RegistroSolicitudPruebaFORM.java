@@ -28,8 +28,6 @@ public class RegistroSolicitudPruebaFORM extends javax.swing.JFrame {
     private DoctorDTO doctorSeleccionado;
     private List<AnalisisDTO> analisisAgregados;
     
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(RegistroSolicitudPruebaFORM.class.getName());
-
     /**
      * Creates new form RegistroSolicitudPruebaFORM
      */
@@ -38,11 +36,10 @@ public class RegistroSolicitudPruebaFORM extends javax.swing.JFrame {
         this.controlNavegacion = controlNavegacion;
         this.controlNavegacion.setPantallaSolicitudActual(this); 
         setExtendedState(MAXIMIZED_BOTH);
-
         this.pruebaBO = new PruebaBO();
         this.analisisAgregados = new ArrayList<>();
 
-        configurarFiltrosAnalisis();
+        
         txtFolio.setEditable(false);
         txtFechaHora.setEditable(false);
         txtCliente.setEditable(false);
@@ -54,13 +51,12 @@ public class RegistroSolicitudPruebaFORM extends javax.swing.JFrame {
             this.controlNavegacion.mostrarCatalogoDoctores();
         });
         
+        configurarFiltrosAnalisis();
         cargarTablaAnalisis();
     }
     
     private void configurarFiltrosAnalisis() {
-        comboBoxFiltro.setModel(new DefaultComboBoxModel<>(
-                new String[]{"Todos", "Análisis", "Tipo Muestra"}
-        ));
+        comboBoxFiltro.setModel(new DefaultComboBoxModel<>(new String[]{"Todos", "Análisis", "Tipo Muestra"}));
 
         txtBuscador.getDocument().addDocumentListener(new DocumentListener() {
             @Override
@@ -169,13 +165,13 @@ public class RegistroSolicitudPruebaFORM extends javax.swing.JFrame {
             PruebaDTO pruebaGuardada = pruebaBO.agregarPrueba(nuevaPrueba);
             
             txtFolio.setText(String.valueOf(pruebaGuardada.getIdPrueba()));
-            javax.swing.JOptionPane.showMessageDialog(this, "Registro Exitoso", "La solicitud fue registrada correctamente.", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+            javax.swing.JOptionPane.showMessageDialog(this, "Registro exitoso", "La solicitud fue registrada correctamente", javax.swing.JOptionPane.INFORMATION_MESSAGE);
             
             controlNavegacion.mostrarMenuPrincipal();
             this.dispose();
 
         } catch (Exception ex) {
-            throw new PresentacionException("Error al registrar la solicitud: " + ex.getMessage());
+            throw new PresentacionException("Error al registrar la solicitud " + ex.getMessage());
         }
     }
 
@@ -330,10 +326,11 @@ public class RegistroSolicitudPruebaFORM extends javax.swing.JFrame {
                         .addComponent(txtCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(btnBuscarCliente)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblDoctor)
-                    .addComponent(txtDoctor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnBuscarDoctor))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnBuscarDoctor)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(lblDoctor)
+                        .addComponent(txtDoctor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(40, Short.MAX_VALUE))
         );
 
