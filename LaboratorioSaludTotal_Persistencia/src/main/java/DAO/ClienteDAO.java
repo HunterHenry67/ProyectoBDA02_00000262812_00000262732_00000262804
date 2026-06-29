@@ -1,0 +1,201 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package DAO;
+
+import Entidades.Cliente;
+import Entidades.Sexo;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.List;
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+
+/**
+ *Proporciona los métodos necesarios para realizar operaciones CRUD sobre la tabla cliente de laa bd
+ * @author BALAMRUSH
+ */
+public class ClienteDAO implements IClienteDAO{
+    private IConexionBD conexion;
+    
+    public ClienteDAO (){
+        this.conexion = new ConexionBD();
+    }
+
+    /**
+     * Busca un cleinte en especifico identificado por su id unico
+     * @param id
+     * @return el objeto Cliente correspondiente al id
+     * @throws PersistenciaException si ocurre un error al realizar la busqueda en la bd
+     */
+    @Override
+    public Cliente buscarClienteId(int id) throws PersistenciaException{
+        EntityManager em = conexion.conexionBD();
+        
+        try {
+            
+            Cliente cliente = em.find(Cliente.class, id);
+            return cliente;
+            
+        } catch (Exception e) {
+            throw new PersistenciaException ("Error al buscar cliente por ID en DAO ");
+        }finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+        
+        
+    }
+
+    /**
+     * Busca clientes que coincidan con el nombre mandado en el parametro
+     * @param nombre
+     * @return una lista de coincidencias con el nombre mandado en el parametro
+     * @throws PersistenciaException si ocurre algun error al buscar en la bd
+     */
+    @Override
+    public List<Cliente> buscarClienteNombre(String nombre) throws PersistenciaException {
+        EntityManager em = conexion.conexionBD();
+    
+        try {
+            CriteriaBuilder cb = em.getCriteriaBuilder();
+            CriteriaQuery<Cliente> cq = cb.createQuery(Cliente.class);
+            Root<Cliente> root = cq.from(Cliente.class);
+
+            String textoBuscado = "%" + nombre + "%";
+
+            javax.persistence.criteria.Predicate p1 = cb.like(root.get("nombre"), textoBuscado);
+            javax.persistence.criteria.Predicate p2 = cb.like(root.get("apellidoPaterno"), textoBuscado);
+            javax.persistence.criteria.Predicate p3 = cb.like(root.get("apellidoMaterno"), textoBuscado);
+
+            cq.select(root).where(cb.or(p1, p2, p3));
+
+            return em.createQuery(cq).getResultList();
+
+        } catch (Exception e) {
+            throw new PersistenciaException("Error al buscar cliente por nombre en DAO");
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+    }
+
+    /**
+     * Busca clientes que coincidan con la fecha de nacimiento mandada en el parametro
+     * @param fecha fecha de ncimiento del cliente
+     * @return una lista con los clientes que coincidan con la fecha de nacimiento mandada
+     * @throws PersistenciaException si ocurre algun error en la busqueda de información en la bd
+     */
+    @Override
+    public List<Cliente> buscarClienteFechaNacimiento(LocalDateTime fecha) throws PersistenciaException {
+        EntityManager em = conexion.conexionBD();
+    
+        try {
+            LocalDateTime inicioDia = fecha.with(LocalTime.MIN); 
+            LocalDateTime finDia = fecha.with(LocalTime.MAX);
+
+            CriteriaBuilder cb = em.getCriteriaBuilder();
+            CriteriaQuery<Cliente> cq = cb.createQuery(Cliente.class);
+            Root<Cliente> root = cq.from(Cliente.class);
+
+            cq.select(root).where(cb.between(root.get("fechaNacimiento"), inicioDia, finDia));
+
+            return em.createQuery(cq).getResultList();
+        } catch (Exception e) {
+            throw new PersistenciaException("Error al buscar clientes por fecha de nacimiento en DAO");
+        } finally {
+            if (em != null) {
+                em.close();
+            }            
+        }
+    }
+
+    /**
+     * Busca clientes que coincidan con el tipo de sangre mandado en el parametro
+     * @param tipoSangre tipo de snagre del cliente
+     * @return una lista de los clientes que coincidan con el tipo de sangre requerido
+     * @throws PersistenciaException si ocurre algun error al consultar información en la bd
+     */
+    @Override
+    public List<Cliente> buscarClienteTipoSangre(String tipoSangre) throws PersistenciaException {
+        EntityManager em = conexion.conexionBD();
+    
+        try {
+            CriteriaBuilder cb = em.getCriteriaBuilder();
+            CriteriaQuery<Cliente> cq = cb.createQuery(Cliente.class);
+            Root<Cliente> root = cq.from(Cliente.class);
+            
+            String tipoBuscado = "%" + tipoSangre + "%";
+            cq.select(root).where(cb.like(root.get("tipoSangre"),tipoBuscado));
+                   
+            return em.createQuery(cq).getResultList();
+        } catch (Exception e) {
+            throw new PersistenciaException("Error al buscar cliente por tipoSangre en DAO");
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+    }
+
+    /**
+     * Busca clientes que coincidan con el sexo mandado en el parametro
+     * @param sexo sexo al que pertence el cliente
+     * @return una lista de objetos cliente que coincidan con el sexo buscado
+     * @throws PersistenciaException si ocurre algun error al buscar la información en la bd
+     */
+    @Override
+    public List<Cliente> buscarClienteSexo(Sexo sexo) throws PersistenciaException {
+        EntityManager em = conexion.conexionBD();
+        
+        try{
+            CriteriaBuilder cb = em.getCriteriaBuilder();
+            CriteriaQuery<Cliente> cq = cb.createQuery(Cliente.class);
+            Root<Cliente> root = cq.from(Cliente.class);
+
+            cq.select(root).where(cb.equal(root.get("sexo"), sexo));
+
+            return em.createQuery(cq).getResultList();
+        }catch (Exception e){
+            throw new PersistenciaException ("Eror al obtener cliente por categoria sexo en DAO");
+        }finally{
+            if (em != null) {
+                em.close();
+            }
+        }
+    }
+
+    /**
+     * Busca todos los clientes en general registrados en la bd
+     * @return todos los objetos de tipo cliente registrados
+     * @throws PersistenciaException si ocurre algun error al buscar la información en la bd
+     */
+    @Override
+    public List<Cliente> obtenerClientes() throws PersistenciaException {
+        EntityManager em = conexion.conexionBD();
+        
+        try{
+            CriteriaBuilder cb = em.getCriteriaBuilder();
+        
+            CriteriaQuery<Cliente> cq = cb.createQuery(Cliente.class);
+
+            Root<Cliente> root = cq.from(Cliente.class);
+
+            cq.select(root);
+
+            return em.createQuery(cq).getResultList();
+        }catch (Exception e){
+            throw new PersistenciaException ("Eror al obtener cliente por categoria sexo en DAO");
+        }finally{
+            if (em != null) {
+                em.close();
+            }
+        }
+    }   
+}
