@@ -5,42 +5,39 @@
 package Negocio;
 
 import DAO.IPruebaDAO;
-import DAO.PruebaDAO;
 import DAO.PersistenciaException;
+import DAO.PruebaDAO;
+import DTO.AnalisisDTO;
 import DTO.PruebaDTO;
+import Entidades.Analisis;
 import Entidades.Cliente;
 import Entidades.Doctor;
 import Entidades.Prueba;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author user
- */
-public class PruebaBO implements IPruebaBO{
-    
+public class PruebaBO implements IPruebaBO {
+
     private IPruebaDAO pruebaDAO;
-    
+
     public PruebaBO() {
         this.pruebaDAO = new PruebaDAO();
     }
 
-    /**
-     * 
-     * @param dtoNuevo
-     * @return
-     * @throws NegocioException 
-     */
     @Override
     public PruebaDTO agregarPrueba(PruebaDTO dtoNuevo) throws NegocioException {
         try {
             if (dtoNuevo.getIdCliente() == null || dtoNuevo.getIdDoctor() == null) {
-                throw new NegocioException("Error La prueba debe tener un cliente y un doctor");
+                throw new NegocioException("Error: la prueba debe tener un cliente y un doctor.");
+            }
+
+            if (dtoNuevo.getAnalisisAgregados() == null || dtoNuevo.getAnalisisAgregados().isEmpty()) {
+                throw new NegocioException("Error: la prueba debe tener al menos un análisis.");
             }
 
             Prueba entidadNueva = convertirAEntidad(dtoNuevo);
             Prueba entidadGuardada = pruebaDAO.agregarPrueba(entidadNueva);
+
             return convertirADTO(entidadGuardada);
 
         } catch (PersistenciaException e) {
@@ -48,109 +45,103 @@ public class PruebaBO implements IPruebaBO{
         }
     }
 
-    /**
-     * 
-     * @param idPrueba
-     * @return
-     * @throws NegocioException 
-     */
     @Override
     public PruebaDTO eliminarPrueba(int idPrueba) throws NegocioException {
         try {
-            if (idPrueba<= 0) {
-                throw new NegocioException("Error el id de prueba inválido");
+            if (idPrueba <= 0) {
+                throw new NegocioException("Error: id de prueba inválido.");
             }
 
             Prueba pruebaEliminar = pruebaDAO.eliminarPrueba(idPrueba);
-            if(pruebaEliminar == null){
-                throw new NegocioException("Error, no se encontro la preuba a eliminar");
+
+            if (pruebaEliminar == null) {
+                throw new NegocioException("Error: no se encontró la prueba a eliminar.");
             }
-            
-            PruebaDTO dto = convertirADTO(pruebaEliminar);
-            return dto;
+
+            return convertirADTO(pruebaEliminar);
 
         } catch (PersistenciaException e) {
-            throw new NegocioException("Error al actualizar la prueba médica.", e);
+            throw new NegocioException("Error al eliminar la prueba médica.", e);
         }
     }
 
-    /**
-     * 
-     * @param idPrueba
-     * @return
-     * @throws NegocioException 
-     */
     @Override
     public PruebaDTO buscarPruebaPorId(int idPrueba) throws NegocioException {
-        try{
-            if(idPrueba<=0){
-                throw new NegocioException("Error, id invalido");
+        try {
+            if (idPrueba <= 0) {
+                throw new NegocioException("Error: id inválido.");
             }
-            
+
             Prueba pruebaBuscada = pruebaDAO.buscarPruebaPorId(idPrueba);
-            if(pruebaBuscada == null){
-                throw new NegocioException("Error, no se encontro ninguna prueba con ese id");
+
+            if (pruebaBuscada == null) {
+                throw new NegocioException("Error: no se encontró ninguna prueba con ese id.");
             }
-            
-            PruebaDTO dto = convertirADTO(pruebaBuscada);
-            return dto;
-        }catch(Exception e){
-            throw new NegocioException("Error al buscar prueba por id");
+
+            return convertirADTO(pruebaBuscada);
+
+        } catch (PersistenciaException e) {
+            throw new NegocioException("Error al buscar prueba por id.", e);
         }
     }
 
-    /**
-     * 
-     * @return
-     * @throws NegocioException 
-     */
     @Override
     public List<PruebaDTO> consultarTodasLasPruebas() throws NegocioException {
         try {
             List<Prueba> listaEntidades = pruebaDAO.consultarTodasLasPruebas();
-            
             List<PruebaDTO> listaDTOs = new ArrayList<>();
+
             for (Prueba entidad : listaEntidades) {
-                PruebaDTO dto = convertirADTO(entidad);
-                listaDTOs.add(dto);
+                listaDTOs.add(convertirADTO(entidad));
             }
+
             return listaDTOs;
 
         } catch (PersistenciaException e) {
             throw new NegocioException("Error al consultar las pruebas.", e);
         }
     }
-    
-    /**
-     * 
-     * @param entidad
-     * @return 
-     */
+
     private PruebaDTO convertirADTO(Prueba entidad) {
         PruebaDTO dto = new PruebaDTO();
+
         dto.setIdPrueba(entidad.getIdPrueba());
         dto.setFechaHora(entidad.getFechaHora());
 
         if (entidad.getCliente() != null) {
             dto.setIdCliente(entidad.getCliente().getIdCliente());
-            dto.setNombreCliente(entidad.getCliente().getNombres()); 
+            dto.setNombreCliente(entidad.getCliente().getNombres());
         }
-        
+
         if (entidad.getDoctor() != null) {
             dto.setIdDoctor(entidad.getDoctor().getIdDoctor());
-            dto.setNombreDoctor(entidad.getDoctor().getNombres()); 
+            dto.setNombreDoctor(entidad.getDoctor().getNombres());
+        }
+
+        if (entidad.getAnalisis() != null) {
+            List<AnalisisDTO> listaAnalisisDTO = new ArrayList<>();
+
+            for (Analisis analisis : entidad.getAnalisis()) {
+                AnalisisDTO analisisDTO = new AnalisisDTO();
+                analisisDTO.setIdAnalisis(analisis.getIdAnalisis());
+                analisisDTO.setNombre(analisis.getNombre());
+
+                if (analisis.getMuestra() != null) {
+                    analisisDTO.setTipoMuestra(analisis.getMuestra().getNombre());
+                }
+
+                listaAnalisisDTO.add(analisisDTO);
+            }
+
+            dto.setAnalisisAgregados(listaAnalisisDTO);
         }
 
         return dto;
     }
 
-    /**
-     * 
-     * @param dto
-     * @return 
-     */
     private Prueba convertirAEntidad(PruebaDTO dto) {
         Prueba entidad = new Prueba();
+
         entidad.setIdPrueba(dto.getIdPrueba());
         entidad.setFechaHora(dto.getFechaHora());
 
@@ -164,6 +155,18 @@ public class PruebaBO implements IPruebaBO{
             Doctor doctorRelacionado = new Doctor();
             doctorRelacionado.setIdDoctor(dto.getIdDoctor());
             entidad.setDoctor(doctorRelacionado);
+        }
+
+        if (dto.getAnalisisAgregados() != null && !dto.getAnalisisAgregados().isEmpty()) {
+            List<Analisis> listaAnalisis = new ArrayList<>();
+
+            for (AnalisisDTO analisisDTO : dto.getAnalisisAgregados()) {
+                Analisis analisis = new Analisis();
+                analisis.setIdAnalisis(analisisDTO.getIdAnalisis());
+                listaAnalisis.add(analisis);
+            }
+
+            entidad.setAnalisis(listaAnalisis);
         }
 
         return entidad;

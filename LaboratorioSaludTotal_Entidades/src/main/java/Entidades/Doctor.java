@@ -37,7 +37,7 @@ public class Doctor implements Serializable {
     @Column(name = "apellidoPaterno", nullable = false, length = 50)
     private String apellidoPaterno;
     
-    @Column(name = "apellidoMeterno")
+    @Column(name = "apellidoMaterno")
     private String apellidoMaterno;
     
     @Enumerated(EnumType.STRING)
