@@ -10,6 +10,8 @@ import DTO.DoctorDTO;
 import DTO.PruebaDTO;
 import Negocio.IPruebaBO;
 import Negocio.PruebaBO;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
@@ -45,8 +47,7 @@ public class RegistroSolicitudPruebaFORM extends javax.swing.JFrame {
         txtCliente.setEditable(false);
         txtDoctor.setEditable(false);
         txtFolio.setText("Asignado al guardar...");
-        txtFechaHora.setText(java.time.LocalDateTime.now().toString());
-
+        txtFechaHora.setText(LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
         btnBuscarDoctor.addActionListener(evt -> {
             this.controlNavegacion.mostrarCatalogoDoctores();
         });
