@@ -290,7 +290,7 @@ public class RegistroAltaAnalisisFORM extends javax.swing.JFrame {
             }
         });
 
-        comboBoxFiltros.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Nombre", "Unidad de Medida", "Orden" }));
+        comboBoxFiltros.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Nombre", "Unidad de Medida", "Orden", "Cantidad de Rangos" }));
 
         btnAgregarNuevoParametro.setBackground(new java.awt.Color(0, 204, 0));
         btnAgregarNuevoParametro.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
