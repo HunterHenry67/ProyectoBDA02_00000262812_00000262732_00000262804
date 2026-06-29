@@ -15,6 +15,12 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
+/**
+ * Clase de acceso a datos para la entidad {@link Prueba}.
+ * Gestiona el registro, eliminación y consulta de pruebas clínicas, asegurando la 
+ * integridad de las relaciones con las entidades {@link Cliente}, {@link Doctor} y {@link Analisis}.
+ * * @author user
+ */
 public class PruebaDAO implements IPruebaDAO {
 
     private IConexionBD conexion;
@@ -23,6 +29,14 @@ public class PruebaDAO implements IPruebaDAO {
         this.conexion = new ConexionBD();
     }
 
+    /**
+     * Persiste una nueva prueba en la base de datos
+     * Antes de guardar, verifica la existencia de las entidades relacionadas (Cliente, Doctor, Analisis)
+     * en el sistema para evitar errores de persistencia
+     * * @param prueba El objeto {@link Prueba} a guardar
+     * @return El objeto {@link Prueba} persistido con su ID generado
+     * @throws PersistenciaException Si alguna entidad relacionada no existe o ocurre un error en la transacción
+     */
     @Override
     public Prueba agregarPrueba(Prueba prueba) throws PersistenciaException {
         EntityManager em = conexion.conexionBD();
@@ -85,6 +99,12 @@ public class PruebaDAO implements IPruebaDAO {
         }
     }
 
+    /**
+     * Elimina una prueba existente mediante su id
+     * * @param idPrueba El ID de la prueba a eliminar
+     * @return La prueba eliminada
+     * @throws PersistenciaException Si la prueba no existe o hay error en la transacción
+     */
     @Override
     public Prueba eliminarPrueba(int idPrueba) throws PersistenciaException {
         EntityManager em = conexion.conexionBD();
@@ -117,6 +137,12 @@ public class PruebaDAO implements IPruebaDAO {
         }
     }
 
+    /**
+     * Busca una prueba específica por su ID
+     * * @param idPrueba El identificador de la prueba
+     * @return La prueba encontrada
+     * @throws PersistenciaException Si la prueba no se encuentra o hay error en la consulta
+     */
     @Override
     public Prueba buscarPruebaPorId(int idPrueba) throws PersistenciaException {
         EntityManager em = conexion.conexionBD();
@@ -142,6 +168,11 @@ public class PruebaDAO implements IPruebaDAO {
         }
     }
 
+    /**
+     * Consulta todas las pruebas registradas en el sistema
+     * * @return Lista de objetos {@link Prueba}
+     * @throws PersistenciaException Si ocurre un error al ejecutar la consulta
+     */
     @Override
     public List<Prueba> consultarTodasLasPruebas() throws PersistenciaException {
         EntityManager em = conexion.conexionBD();
