@@ -32,6 +32,10 @@ public class RegistroParametroFORM extends javax.swing.JFrame {
         cargarTablaRangos();
     }
 
+    /**
+     * 
+     * @throws PresentacionException 
+     */
     private void guardarParametro() throws PresentacionException {
         if (txtFieldNombre.getText().trim().isEmpty()) {
             throw new PresentacionException("Favor de ingresar el nombre del parámetro.");
@@ -66,6 +70,11 @@ public class RegistroParametroFORM extends javax.swing.JFrame {
         this.dispose();
     }
 
+    /**
+     * 
+     * @param rangoDTO
+     * @throws PresentacionException 
+     */
     public void agregarRangoAlParametro(RangoDTO rangoDTO) throws PresentacionException {
         if (rangoDTO == null) {
             throw new PresentacionException("El rango no puede estar vacío.");
@@ -75,10 +84,17 @@ public class RegistroParametroFORM extends javax.swing.JFrame {
         cargarTablaRangos();
     }
 
+    /**
+     * 
+     */
     private void cargarTablaRangos() {
         llenadoTablaRangos(rangos);
     }
 
+    /**
+     * 
+     * @param listaRangos 
+     */
     private void llenadoTablaRangos(List<RangoDTO> listaRangos) {
 
         rangosTabla = new ArrayList<>(listaRangos);
@@ -105,6 +121,11 @@ public class RegistroParametroFORM extends javax.swing.JFrame {
         actualizarTextoPaginaRangos(listaRangos.size());
     }
 
+    /**
+     * 
+     * @return
+     * @throws PresentacionException 
+     */
     private Integer convertirOrdenReporte() throws PresentacionException {
         try {
             return Integer.valueOf(txtFieldOrdenReporte.getText().trim());
@@ -113,14 +134,26 @@ public class RegistroParametroFORM extends javax.swing.JFrame {
         }
     }
 
+    /**
+     * 
+     * @param mensaje 
+     */
     private void saltoErrores(String mensaje) {
         JOptionPane.showMessageDialog(this, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
     }
 
+    /**
+     * 
+     * @param mensaje 
+     */
     private void saltoAdvertencia(String mensaje) {
         JOptionPane.showMessageDialog(this, mensaje, "Advertencia", JOptionPane.WARNING_MESSAGE);
     }
 
+    /**
+     * 
+     * @throws PresentacionException 
+     */
     private void buscarRango() throws PresentacionException {
         if (comboFiltro.getSelectedItem() == null) {
             throw new PresentacionException("Favor de seleccionar un filtro.");
@@ -187,6 +220,10 @@ public class RegistroParametroFORM extends javax.swing.JFrame {
         llenadoTablaRangos(resultados);
     }
 
+    /**
+     * 
+     * @param totalRegistros 
+     */
     private void actualizarTextoPaginaRangos(int totalRegistros) {
         int totalPaginas = (int) Math.ceil((double) totalRegistros / tamanoPaginaRango);
         if (totalPaginas == 0) {

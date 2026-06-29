@@ -31,6 +31,12 @@ public class ParametroBO implements IParametroBO {
         this.analisisDAO = analisisDAO;
     }
 
+    /**
+     * 
+     * @param registrarParametro
+     * @return
+     * @throws NegocioException 
+     */
     @Override
     public Parametro registarParametro(RegistrarParametroDTO registrarParametro) throws NegocioException {
         try{
@@ -52,6 +58,11 @@ public class ParametroBO implements IParametroBO {
         }
     }
 
+    /**
+     * 
+     * @return
+     * @throws NegocioException 
+     */
     @Override
     public List<ParametroDTO> listarTodos() throws NegocioException {
         try{
@@ -62,7 +73,11 @@ public class ParametroBO implements IParametroBO {
             throw new NegocioException("Error al lista todos los parámetros: "+ex.getMessage());
         }
     }
-
+    /**
+     * 
+     * @param idParametro
+     * @throws NegocioException 
+     */
     @Override
     public void eliminarParametro(Integer idParametro) throws NegocioException {
         try{
@@ -76,6 +91,12 @@ public class ParametroBO implements IParametroBO {
         }
     }
 
+    /**
+     * 
+     * @param idParametro
+     * @return
+     * @throws NegocioException 
+     */
     @Override
     public Parametro consultarParametroPorID(Integer idParametro) throws NegocioException {
         try{
@@ -89,6 +110,12 @@ public class ParametroBO implements IParametroBO {
         }
     }
 
+    /**
+     * 
+     * @param nombre
+     * @return
+     * @throws NegocioException 
+     */
     @Override
     public List<ParametroDTO> consultarParametroPorNombre(String nombre) throws NegocioException {
         try{
@@ -103,6 +130,12 @@ public class ParametroBO implements IParametroBO {
         }
     }
 
+    /**
+     * 
+     * @param orden
+     * @return
+     * @throws NegocioException 
+     */
     @Override
     public List<ParametroDTO> consultarParametroPorOrden(Integer orden) throws NegocioException {
         try{
@@ -117,6 +150,12 @@ public class ParametroBO implements IParametroBO {
         }
     }
 
+    /**
+     * 
+     * @param unidadMedida
+     * @return
+     * @throws NegocioException 
+     */
     @Override
     public List<ParametroDTO> consultarParametroPorUnidadMedidad(String unidadMedida) throws NegocioException {
         try{
@@ -131,6 +170,12 @@ public class ParametroBO implements IParametroBO {
         }
     }
 
+    /**
+     * 
+     * @param rangos
+     * @return
+     * @throws NegocioException 
+     */
     @Override
     public List<ParametroDTO> consultarParametroPorCantidadRango(Integer rangos) throws NegocioException {
         try{
@@ -145,6 +190,12 @@ public class ParametroBO implements IParametroBO {
         }
     }
 
+    /**
+     * 
+     * @param idParametro
+     * @return
+     * @throws NegocioException 
+     */
     @Override
     public Integer contarRangos(Integer idParametro) throws NegocioException {
         try{
@@ -158,6 +209,11 @@ public class ParametroBO implements IParametroBO {
         }
     }
 
+    /**
+     * 
+     * @param registro
+     * @throws NegocioException 
+     */
     private void validarGuardado(RegistrarParametroDTO registro) throws NegocioException {
         if (registro == null) {
             throw new NegocioException("Favor de ingresar datos válidos.");
@@ -179,6 +235,12 @@ public class ParametroBO implements IParametroBO {
         }
     }
 
+    /**
+     * 
+     * @param parametros
+     * @return
+     * @throws NegocioException 
+     */
     private List<ParametroDTO> conversionADTO(List<Parametro> parametros) throws NegocioException {
         try {
             List<ParametroDTO> listaParametrosDTO = new ArrayList<>();

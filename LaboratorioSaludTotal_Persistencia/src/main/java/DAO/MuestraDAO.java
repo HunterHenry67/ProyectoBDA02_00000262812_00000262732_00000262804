@@ -23,6 +23,12 @@ public class MuestraDAO implements IMuestraDAO{
         this.conexion = new ConexionBD();
     }
 
+    /**
+     * 
+     * @param muestra
+     * @return
+     * @throws PersistenciaException 
+     */
     @Override
     public Muestra agregarMuestra(Muestra muestra) throws PersistenciaException {
         EntityManager em = conexion.conexionBD();
@@ -40,6 +46,12 @@ public class MuestraDAO implements IMuestraDAO{
         }
     }
 
+    /**
+     * 
+     * @param idMuestra
+     * @return
+     * @throws PersistenciaException 
+     */
     @Override
     public Muestra buscarMuestraPorId(int idMuestra) throws PersistenciaException {
         EntityManager em = conexion.conexionBD();
@@ -58,6 +70,11 @@ public class MuestraDAO implements IMuestraDAO{
         }
     }
 
+    /**
+     * 
+     * @return
+     * @throws PersistenciaException 
+     */
     @Override
     public List<Muestra> consultarTodasLasMuestras() throws PersistenciaException {
         EntityManager em = conexion.conexionBD();
@@ -78,6 +95,12 @@ public class MuestraDAO implements IMuestraDAO{
         }
     }
 
+    /**
+     * 
+     * @param idPrueba
+     * @return
+     * @throws PersistenciaException 
+     */
     @Override
     public List<Muestra> buscarMuestrasPorPrueba(int idPrueba) throws PersistenciaException {
         EntityManager em = conexion.conexionBD();

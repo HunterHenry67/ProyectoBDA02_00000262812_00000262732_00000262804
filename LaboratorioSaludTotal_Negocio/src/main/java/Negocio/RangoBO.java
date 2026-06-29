@@ -22,6 +22,12 @@ public class RangoBO implements IRangoBO{
         this.rangoDAO = new RangoDAO();
     }
     
+    /**
+     * 
+     * @param rango
+     * @return
+     * @throws NegocioException 
+     */
     @Override
     public RangoDTO agregarRango(Rango rango) throws NegocioException {
         try{
@@ -37,6 +43,12 @@ public class RangoBO implements IRangoBO{
         }
     }
 
+    /**
+     * 
+     * @param idRango
+     * @return
+     * @throws NegocioException 
+     */
     @Override
     public RangoDTO eliminarRango(int idRango) throws NegocioException {
         try{
@@ -51,6 +63,12 @@ public class RangoBO implements IRangoBO{
         }
     }
 
+    /**
+     * 
+     * @param idParametro
+     * @return
+     * @throws NegocioException 
+     */
     @Override
     public List<RangoDTO> buscarRangosPorParametro(int idParametro) throws NegocioException {
         try{
@@ -70,6 +88,14 @@ public class RangoBO implements IRangoBO{
         }
     }
 
+    /**
+     * 
+     * @param idParametro
+     * @param sexo
+     * @param edad
+     * @return
+     * @throws NegocioException 
+     */
     @Override
     public long obtenerRangosPorParametro(int idParametro, String sexo, int edad) throws NegocioException {
         try {
@@ -86,6 +112,11 @@ public class RangoBO implements IRangoBO{
         }
     }
     
+    /**
+     * 
+     * @param entidadRango
+     * @return 
+     */
     private RangoDTO convertirADTO(Rango entidadRango) {
         RangoDTO dto = new RangoDTO();
         

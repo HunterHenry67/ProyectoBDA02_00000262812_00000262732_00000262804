@@ -43,6 +43,12 @@ public class AnalisisBO implements IAnalisisBO {
         this.rangoDAO = new RangoDAO();
     }
 
+    /**
+     * 
+     * @param guardarAnalisis
+     * @return
+     * @throws NegocioException 
+     */
     @Override
     public Analisis guardarAnalisis(GuardarAnalisisDTO guardarAnalisis) throws NegocioException {
         try {
@@ -79,6 +85,12 @@ public class AnalisisBO implements IAnalisisBO {
         }
     }
 
+    /**
+     * 
+     * @param actualizarAnalisis
+     * @return
+     * @throws NegocioException 
+     */
     @Override
     public Analisis actualizarAnalisis(ActualizarAnalisisDTO actualizarAnalisis) throws NegocioException {
         try {
@@ -105,6 +117,11 @@ public class AnalisisBO implements IAnalisisBO {
         }
     }
 
+    /**
+     * 
+     * @param eliminarAnalisis
+     * @throws NegocioException 
+     */
     @Override
     public void eliminarAnalisis(EliminarAnalisisDTO eliminarAnalisis) throws NegocioException {
         try {
@@ -123,6 +140,12 @@ public class AnalisisBO implements IAnalisisBO {
         }
     }
 
+    /**
+     * 
+     * @param idAnalisis
+     * @return
+     * @throws NegocioException 
+     */
     @Override
     public Analisis consultarPorId(Integer idAnalisis) throws NegocioException {
         try {
@@ -143,6 +166,11 @@ public class AnalisisBO implements IAnalisisBO {
         }
     }
 
+    /**
+     * 
+     * @return
+     * @throws NegocioException 
+     */
     @Override
     public List<AnalisisDTO> consultarTodos() throws NegocioException {
         try {
@@ -154,6 +182,12 @@ public class AnalisisBO implements IAnalisisBO {
         }
     }
 
+    /**
+     * 
+     * @param nombre
+     * @return
+     * @throws NegocioException 
+     */
     @Override
     public List<AnalisisDTO> buscarPorNombre(String nombre) throws NegocioException {
         try {
@@ -168,6 +202,11 @@ public class AnalisisBO implements IAnalisisBO {
         }
     }
 
+    /**
+     * 
+     * @param guardarAnalisis
+     * @throws NegocioException 
+     */
     private void validarGuardar(GuardarAnalisisDTO guardarAnalisis) throws NegocioException {
         if (guardarAnalisis == null) {
             throw new NegocioException("Favor de ingresar datos válidos.");
@@ -193,6 +232,11 @@ public class AnalisisBO implements IAnalisisBO {
         }
     }
 
+    /**
+     * 
+     * @param actualizarAnalisis
+     * @throws NegocioException 
+     */
     private void validarActualizar(ActualizarAnalisisDTO actualizarAnalisis) throws NegocioException {
         if (actualizarAnalisis == null) {
             throw new NegocioException("Favor de ingresar datos válidos.");
@@ -215,6 +259,11 @@ public class AnalisisBO implements IAnalisisBO {
         }
     }
 
+    /**
+     * 
+     * @param eliminarAnalisis
+     * @throws NegocioException 
+     */
     private void validarEliminar(EliminarAnalisisDTO eliminarAnalisis) throws NegocioException {
         if (eliminarAnalisis == null) {
             throw new NegocioException("Favor de ingresar datos válidos.");
@@ -225,6 +274,12 @@ public class AnalisisBO implements IAnalisisBO {
         }
     }
 
+    /**
+     * 
+     * @param idAnalisis
+     * @return
+     * @throws NegocioException 
+     */
     @Override
     public Integer contarParametro(Integer idAnalisis) throws NegocioException {
         try {
@@ -239,6 +294,12 @@ public class AnalisisBO implements IAnalisisBO {
         }
     }
 
+    /**
+     * 
+     * @param listaAnalisis
+     * @return
+     * @throws NegocioException 
+     */
     private List<AnalisisDTO> convertirATablaDTO(List<Analisis> listaAnalisis) throws NegocioException {
         try {
             List<AnalisisDTO> listaDTO = new ArrayList<>();
@@ -261,6 +322,12 @@ public class AnalisisBO implements IAnalisisBO {
         }
     }
 
+    /**
+     * 
+     * @param tipoMuestra
+     * @return
+     * @throws NegocioException 
+     */
     @Override
     public List<AnalisisDTO> buscarPorTipoMuestra(String tipoMuestra) throws NegocioException {
         try {
@@ -274,6 +341,12 @@ public class AnalisisBO implements IAnalisisBO {
         }
     }
 
+    /**
+     * 
+     * @param cantidad
+     * @return
+     * @throws NegocioException 
+     */
     @Override
     public List<AnalisisDTO> buscarPorCantidadParametro(Integer cantidad) throws NegocioException {
         try {
@@ -287,6 +360,12 @@ public class AnalisisBO implements IAnalisisBO {
         }
     }
 
+    /**
+     * 
+     * @param sexo
+     * @return
+     * @throws NegocioException 
+     */
     private Sexo convertirSexo(String sexo) throws NegocioException {
         if (sexo == null || sexo.trim().isEmpty()) {
             throw new NegocioException("El sexo del rango no es válido.");

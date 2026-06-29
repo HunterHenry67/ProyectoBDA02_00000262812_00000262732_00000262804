@@ -33,6 +33,12 @@ public class DoctorDAO implements IDoctorDAO{
     }
 
     
+    /**
+     * 
+     * @param idDoctor
+     * @return
+     * @throws PersistenciaException 
+     */
     @Override
     public Doctor consultarPorID(Integer idDoctor) throws PersistenciaException {
         EntityManager em = conexionBD.conexionBD();
@@ -49,6 +55,11 @@ public class DoctorDAO implements IDoctorDAO{
         }
     }
 
+    /**
+     * 
+     * @return
+     * @throws PersistenciaException 
+     */
     @Override
     public List<Doctor> consultarTodos() throws PersistenciaException {
         EntityManager em = conexionBD.conexionBD();
@@ -65,6 +76,12 @@ public class DoctorDAO implements IDoctorDAO{
         }
     }
 
+    /**
+     * 
+     * @param nombres
+     * @return
+     * @throws PersistenciaException 
+     */
     @Override
     public List<Doctor> buscarPorNombres(String nombres) throws PersistenciaException {
         EntityManager em = conexionBD.conexionBD();
@@ -81,6 +98,12 @@ public class DoctorDAO implements IDoctorDAO{
         }
     }
 
+    /**
+     * 
+     * @param sexo
+     * @return
+     * @throws PersistenciaException 
+     */
     @Override
     public List<Doctor> buscarPorSexo(Sexo sexo) throws PersistenciaException {
         EntityManager em = conexionBD.conexionBD();

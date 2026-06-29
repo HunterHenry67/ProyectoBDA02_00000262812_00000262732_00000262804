@@ -26,6 +26,12 @@ public class ClienteBO implements IClienteBO{
         this.clienteDAO = new ClienteDAO();
     }
     
+    /**
+     * 
+     * @param id
+     * @return
+     * @throws NegocioException 
+     */
     @Override
     public ClienteDTO buscarClienteId(int id) throws NegocioException {
         
@@ -50,6 +56,12 @@ public class ClienteBO implements IClienteBO{
         
     }
 
+    /**
+     * 
+     * @param nombre
+     * @return
+     * @throws NegocioException 
+     */
     @Override
     public List<ClienteDTO> buscarClienteNombre(String nombre) throws NegocioException {
         try {
@@ -77,6 +89,12 @@ public class ClienteBO implements IClienteBO{
         }
     }
 
+    /**
+     * 
+     * @param fecha
+     * @return
+     * @throws NegocioException 
+     */
     @Override
     public List<ClienteDTO> buscarClienteFechaNacimiento(LocalDateTime fecha) throws NegocioException {
         try {
@@ -104,6 +122,12 @@ public class ClienteBO implements IClienteBO{
         }
     }
 
+    /**
+     * 
+     * @param tipoSangre
+     * @return
+     * @throws NegocioException 
+     */
     @Override
     public List<ClienteDTO> buscarClienteTipoSangre(String tipoSangre) throws NegocioException {
         try {
@@ -131,6 +155,12 @@ public class ClienteBO implements IClienteBO{
         }
     }
 
+    /**
+     * 
+     * @param sexo
+     * @return
+     * @throws NegocioException 
+     */
     @Override
     public List<ClienteDTO> buscarClienteSexo(Sexo sexo) throws NegocioException {
         try {
@@ -158,6 +188,11 @@ public class ClienteBO implements IClienteBO{
         }
     }
 
+    /**
+     * 
+     * @return
+     * @throws NegocioException 
+     */
     @Override
     public List<ClienteDTO> ObtenerClientes() throws NegocioException {
         try {
@@ -177,6 +212,11 @@ public class ClienteBO implements IClienteBO{
         }
     }
     
+    /**
+     * 
+     * @param entidadCliente
+     * @return 
+     */
     private ClienteDTO convertirADTO(Cliente entidadCliente) {
         ClienteDTO dto = new ClienteDTO();
 
