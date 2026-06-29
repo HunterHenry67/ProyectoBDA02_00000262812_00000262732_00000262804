@@ -17,7 +17,8 @@ import java.util.List;
  *
  * @author user
  */
-public class MuestraBO implements IMuestraBO{
+public class MuestraBO implements IMuestraBO {
+
     private IMuestraDAO muestraDAO;
 
     public MuestraBO() {
@@ -25,17 +26,18 @@ public class MuestraBO implements IMuestraBO{
     }
 
     /**
-     * 
-     * @param muestraNuevo
-     * @return
-     * @throws NegocioException 
+     * Valida y agrega una nueva muestra.
+     *
+     * @param muestraNuevo datos de la muestra que deseas agregar.
+     * @return muestra agregada en formato DTO.
+     * @throws NegocioException si ocurre algun error al registrar la muestra.
      */
     @Override
     public MuestraDTO agregarMuestra(MuestraDTO muestraNuevo) throws NegocioException {
         try {
             Muestra entidadNueva = convertirAEntidad(muestraNuevo);
             Muestra entidadGuardada = muestraDAO.agregarMuestra(entidadNueva);
-            
+
             return convertirADTO(entidadGuardada);
         } catch (PersistenciaException e) {
             throw new NegocioException("Error al registrar la muestra en el sistema");
@@ -43,10 +45,12 @@ public class MuestraBO implements IMuestraBO{
     }
 
     /**
-     * 
-     * @param idMuestra
-     * @return
-     * @throws NegocioException 
+     * Busca una muestra mediante su identificador.
+     *
+     * @param idMuestra identificador de la muestra que deseas buscar.
+     * @return muestra encontrada en formato DTO.
+     * @throws NegocioException si el identificador no es valido o ocurre algun
+     * error al buscar.
      */
     @Override
     public MuestraDTO buscarMuestraPorId(int idMuestra) throws NegocioException {
@@ -54,7 +58,7 @@ public class MuestraBO implements IMuestraBO{
             if (idMuestra <= 0) {
                 throw new NegocioException("Error, id de muestra inválido");
             }
-            
+
             Muestra muestraEncontrada = muestraDAO.buscarMuestraPorId(idMuestra);
             MuestraDTO dto = convertirADTO(muestraEncontrada);
             return dto;
@@ -64,53 +68,56 @@ public class MuestraBO implements IMuestraBO{
     }
 
     /**
-     * 
-     * @return
-     * @throws NegocioException 
+     * Consulta todas las muestras registradas.
+     *
+     * @return lista de muestras encontradas en formato DTO.
+     * @throws NegocioException si ocurre algun error al consultar las muestras.
      */
     @Override
     public List<MuestraDTO> consultarTodasLasMuestras() throws NegocioException {
         try {
             List<Muestra> listaEntidades = muestraDAO.consultarTodasLasMuestras();
             List<MuestraDTO> listaDTOs = new ArrayList<>();
-            
+
             for (Muestra entidad : listaEntidades) {
                 listaDTOs.add(convertirADTO(entidad));
             }
             return listaDTOs;
-            
+
         } catch (PersistenciaException e) {
             throw new NegocioException("Error al obtener el catálogo de muestras");
         }
     }
 
     /**
-     * 
-     * @param entidad
-     * @return 
+     * Convierte una entidad Muestra a DTO.
+     *
+     * @param entidad muestra que deseas convertir.
+     * @return muestra convertida a DTO.
      */
-   private MuestraDTO convertirADTO(Muestra entidad) {
+    private MuestraDTO convertirADTO(Muestra entidad) {
         MuestraDTO dto = new MuestraDTO();
-        
+
         dto.setIdMuestra(entidad.getIdMuestra());
         dto.setNombre(entidad.getNombre());
         return dto;
     }
 
-   /**
-    * 
-    * @param dto
-    * @return 
-    */
+    /**
+     * Convierte un DTO de muestra a entidad.
+     *
+     * @param dto muestra que deseas convertir.
+     * @return entidad muestra creada desde el DTO.
+     */
     private Muestra convertirAEntidad(MuestraDTO dto) {
         Muestra entidad = new Muestra();
-        
+
         if (dto.getIdMuestra() != null) {
             entidad.setIdMuestra(dto.getIdMuestra());
         }
-        
+
         entidad.setNombre(dto.getNombre());
         return entidad;
     }
-    
+
 }

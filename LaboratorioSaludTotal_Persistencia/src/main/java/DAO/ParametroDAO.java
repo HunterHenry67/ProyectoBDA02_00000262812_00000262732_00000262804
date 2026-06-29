@@ -244,48 +244,31 @@ public class ParametroDAO implements IParametroDAO {
         }
     }
 
-    /**
-     * Obtiene los parámetros asociados a una prueba específica.
-     *
-     * @param idPrueba Identificador de la prueba.
-     * @return Lista de parámetros asociados a la prueba.
-     * @throws PersistenciaException Si ocurre un error durante la consulta.
-     */
     @Override
-    public List<Parametro> listarPorPrueba(Integer idPrueba) throws PersistenciaException {
-        EntityManager em = null;
+public List<Parametro> listarPorPrueba(Integer idPrueba) throws PersistenciaException {
+    EntityManager em = null;
 
-        try {
-            em = conexionBD.conexionBD();
+    try {
+        em = conexionBD.conexionBD();
 
-            CriteriaBuilder cb = em.getCriteriaBuilder();
-            CriteriaQuery<Parametro> cq = cb.createQuery(Parametro.class);
+        return em.createQuery(
+                "SELECT DISTINCT p "
+                + "FROM Parametro p, Prueba pr "
+                + "JOIN pr.analisis a "
+                + "WHERE pr.idPrueba = :idPrueba "
+                + "AND p.analisis.idAnalisis = a.idAnalisis "
+                + "ORDER BY p.ordenReporte",
+                Parametro.class
+        )
+        .setParameter("idPrueba", idPrueba)
+        .getResultList();
 
-            Root<Resultado> resultado = cq.from(Resultado.class);
-            Join<Resultado, Parametro> parametro = resultado.join("parametro");
-
-            cq.select(parametro).distinct(true);
-
-            cq.where(
-                    cb.equal(
-                            resultado.get("prueba").get("idPrueba"),
-                            idPrueba
-                    )
-            );
-
-            cq.orderBy(cb.asc(parametro.get("ordenReporte")));
-
-            return em.createQuery(cq).getResultList();
-
-        } catch (Exception e) {
-            throw new PersistenciaException(
-                    "Error al obtener los parámetros de la prueba: " + e.getMessage()
-            );
-        } finally {
-            if (em != null) {
-                em.close();
-            }
+    } catch (Exception e) {
+        throw new PersistenciaException("Error al obtener los parámetros de la prueba: " + e.getMessage());
+    } finally {
+        if (em != null) {
+            em.close();
         }
     }
-
+}
 }

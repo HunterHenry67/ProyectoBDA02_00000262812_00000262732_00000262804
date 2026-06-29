@@ -34,10 +34,12 @@ public class ResultadoBO implements IResultadoBO {
     }
 
     /**
-     * 
-     * @param dto
-     * @return
-     * @throws NegocioException 
+     * Valida y registra un nuevo resultado.
+     *
+     * @param dto datos del resultado que deseas registrar.
+     * @return resultado registrado.
+     * @throws NegocioException si los datos no son validos o ocurre algun error
+     * al registrar.
      */
     @Override
     public Resultado registrarResultado(RegistrarResultadoDTO dto) throws NegocioException {
@@ -70,10 +72,12 @@ public class ResultadoBO implements IResultadoBO {
     }
 
     /**
-     * 
-     * @param idResultado
-     * @return
-     * @throws NegocioException 
+     * Consulta un resultado mediante su identificador.
+     *
+     * @param idResultado identificador del resultado que deseas consultar.
+     * @return resultado encontrado.
+     * @throws NegocioException si el ID no es valido o ocurre algun error al
+     * consultar.
      */
     @Override
     public Resultado consultarResultadoPorID(Integer idResultado) throws NegocioException {
@@ -96,10 +100,12 @@ public class ResultadoBO implements IResultadoBO {
     }
 
     /**
-     * 
-     * @param idPrueba
-     * @return
-     * @throws NegocioException 
+     * Consulta los resultados de una prueba para mostrarlos en tabla.
+     *
+     * @param idPrueba identificador de la prueba.
+     * @return lista de resultados encontrados en formato DTO.
+     * @throws NegocioException si el ID no es valido o ocurre algun error al
+     * consultar.
      */
     @Override
     public List<ResultadoDTO> consultarTablaPorPrueba(Integer idPrueba) throws NegocioException {
@@ -124,11 +130,13 @@ public class ResultadoBO implements IResultadoBO {
     }
 
     /**
-     * 
-     * @param idPrueba
-     * @param idParametro
-     * @return
-     * @throws NegocioException 
+     * Consulta un resultado mediante la prueba y el parametro.
+     *
+     * @param idPrueba identificador de la prueba.
+     * @param idParametro identificador del parametro.
+     * @return resultado encontrado.
+     * @throws NegocioException si algun identificador no es valido o ocurre
+     * algun error al buscar.
      */
     @Override
     public Resultado consultarResultadoPorPruebaParametro(Integer idPrueba, Integer idParametro) throws NegocioException {
@@ -149,11 +157,13 @@ public class ResultadoBO implements IResultadoBO {
     }
 
     /**
-     * 
-     * @param idPrueba
-     * @param idParametro
-     * @return
-     * @throws NegocioException 
+     * Verifica si ya existe un resultado para una prueba y un parametro.
+     *
+     * @param idPrueba identificador de la prueba.
+     * @param idParametro identificador del parametro.
+     * @return true si el resultado ya existe, false en caso contrario.
+     * @throws NegocioException si algun identificador no es valido o ocurre
+     * algun error al verificar.
      */
     @Override
     public boolean resultadoExiste(Integer idPrueba, Integer idParametro) throws NegocioException {
@@ -174,9 +184,10 @@ public class ResultadoBO implements IResultadoBO {
     }
 
     /**
-     * 
-     * @param registro
-     * @throws NegocioException 
+     * Valida los datos necesarios para registrar un resultado.
+     *
+     * @param registro datos del resultado que deseas validar.
+     * @throws NegocioException si algun dato obligatorio no es valido.
      */
     private void validarRegistroResultado(RegistrarResultadoDTO registro) throws NegocioException {
         if (registro == null) {
@@ -201,11 +212,12 @@ public class ResultadoBO implements IResultadoBO {
     }
 
     /**
-     * 
-     * @param dto
-     * @param prueba
-     * @param parametro
-     * @return 
+     * Convierte un DTO de registro a entidad Resultado.
+     *
+     * @param dto datos del resultado que deseas convertir.
+     * @param prueba prueba relacionada con el resultado.
+     * @param parametro parametro relacionado con el resultado.
+     * @return resultado convertido a entidad.
      */
     private Resultado convertirAEntidad(RegistrarResultadoDTO dto, Prueba prueba, Parametro parametro) {
         Resultado entidad = new Resultado();
@@ -225,9 +237,10 @@ public class ResultadoBO implements IResultadoBO {
     }
 
     /**
-     * 
-     * @param entidad
-     * @return 
+     * Convierte una entidad Resultado a ResultadoDTO.
+     *
+     * @param entidad resultado que deseas convertir.
+     * @return resultado convertido a DTO.
      */
     private ResultadoDTO convertirADTO(Resultado entidad) {
         ResultadoDTO dto = new ResultadoDTO();
@@ -248,9 +261,10 @@ public class ResultadoBO implements IResultadoBO {
     }
 
     /**
-     * 
-     * @param resultados
-     * @return 
+     * Convierte una lista de resultados a una lista de DTO.
+     *
+     * @param resultados lista de resultados que deseas convertir.
+     * @return lista de resultados convertidos a DTO.
      */
     private List<ResultadoDTO> convertirListaADTO(List<Resultado> resultados) {
         List<ResultadoDTO> listaDTO = new ArrayList<>();

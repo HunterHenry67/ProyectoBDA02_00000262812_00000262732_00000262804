@@ -44,10 +44,12 @@ public class AnalisisBO implements IAnalisisBO {
     }
 
     /**
-     * 
-     * @param guardarAnalisis
-     * @return
-     * @throws NegocioException 
+     * Valida y guarda un nuevo analisis.
+     *
+     * @param guardarAnalisis datos del analisis que deseas guardar.
+     * @return analisis guardado.
+     * @throws NegocioException si los datos no son validos o ocurre algun error
+     * al guardar.
      */
     @Override
     public Analisis guardarAnalisis(GuardarAnalisisDTO guardarAnalisis) throws NegocioException {
@@ -86,10 +88,12 @@ public class AnalisisBO implements IAnalisisBO {
     }
 
     /**
-     * 
-     * @param actualizarAnalisis
-     * @return
-     * @throws NegocioException 
+     * Valida y actualiza el analisis seleccionado.
+     *
+     * @param actualizarAnalisis datos del analisis que deseas actualizar.
+     * @return analisis actualizado.
+     * @throws NegocioException si los datos no son validos o ocurre algun error
+     * al actualizar.
      */
     @Override
     public Analisis actualizarAnalisis(ActualizarAnalisisDTO actualizarAnalisis) throws NegocioException {
@@ -118,9 +122,11 @@ public class AnalisisBO implements IAnalisisBO {
     }
 
     /**
-     * 
-     * @param eliminarAnalisis
-     * @throws NegocioException 
+     * Valida y elimina el analisis seleccionado.
+     *
+     * @param eliminarAnalisis datos del analisis que deseas eliminar.
+     * @throws NegocioException si los datos no son validos o ocurre algun error
+     * al eliminar.
      */
     @Override
     public void eliminarAnalisis(EliminarAnalisisDTO eliminarAnalisis) throws NegocioException {
@@ -141,10 +147,12 @@ public class AnalisisBO implements IAnalisisBO {
     }
 
     /**
-     * 
-     * @param idAnalisis
-     * @return
-     * @throws NegocioException 
+     * Consulta un analisis mediante su identificador.
+     *
+     * @param idAnalisis identificador del analisis que deseas consultar.
+     * @return analisis encontrado.
+     * @throws NegocioException si el identificador no es valido o ocurre algun
+     * error al consultar.
      */
     @Override
     public Analisis consultarPorId(Integer idAnalisis) throws NegocioException {
@@ -167,9 +175,10 @@ public class AnalisisBO implements IAnalisisBO {
     }
 
     /**
-     * 
-     * @return
-     * @throws NegocioException 
+     * Consulta todos los analisis registrados.
+     *
+     * @return lista de analisis encontrados.
+     * @throws NegocioException si ocurre algun error al consultar los analisis.
      */
     @Override
     public List<AnalisisDTO> consultarTodos() throws NegocioException {
@@ -183,10 +192,11 @@ public class AnalisisBO implements IAnalisisBO {
     }
 
     /**
-     * 
-     * @param nombre
-     * @return
-     * @throws NegocioException 
+     * Busca los analisis por medio del nombre.
+     *
+     * @param nombre nombre del analisis que deseas buscar.
+     * @return lista de analisis encontrados.
+     * @throws NegocioException si ocurre algun error al buscar por nombre.
      */
     @Override
     public List<AnalisisDTO> buscarPorNombre(String nombre) throws NegocioException {
@@ -203,9 +213,10 @@ public class AnalisisBO implements IAnalisisBO {
     }
 
     /**
-     * 
-     * @param guardarAnalisis
-     * @throws NegocioException 
+     * Valida los datos necesarios para guardar un analisis.
+     *
+     * @param guardarAnalisis datos del analisis que deseas validar.
+     * @throws NegocioException si algun dato obligatorio no es valido.
      */
     private void validarGuardar(GuardarAnalisisDTO guardarAnalisis) throws NegocioException {
         if (guardarAnalisis == null) {
@@ -226,16 +237,17 @@ public class AnalisisBO implements IAnalisisBO {
         List<Integer> ordenesUsados = new ArrayList<>();
         for (RegistrarParametroDTO parametro : guardarAnalisis.getParametros()) {
             if (ordenesUsados.contains(parametro.getOrdenReporte())) {
-                throw new NegocioException( "No puedes repetir el orden de reporte.");
+                throw new NegocioException("No puedes repetir el orden de reporte.");
             }
             ordenesUsados.add(parametro.getOrdenReporte());
         }
     }
 
     /**
-     * 
-     * @param actualizarAnalisis
-     * @throws NegocioException 
+     * Valida los datos necesarios para actualizar un analisis.
+     *
+     * @param actualizarAnalisis datos del analisis que deseas validar.
+     * @throws NegocioException si algun dato obligatorio no es valido.
      */
     private void validarActualizar(ActualizarAnalisisDTO actualizarAnalisis) throws NegocioException {
         if (actualizarAnalisis == null) {
@@ -260,9 +272,10 @@ public class AnalisisBO implements IAnalisisBO {
     }
 
     /**
-     * 
-     * @param eliminarAnalisis
-     * @throws NegocioException 
+     * Valida los datos necesarios para eliminar un analisis.
+     *
+     * @param eliminarAnalisis datos del analisis que deseas validar.
+     * @throws NegocioException si el identificador no es valido.
      */
     private void validarEliminar(EliminarAnalisisDTO eliminarAnalisis) throws NegocioException {
         if (eliminarAnalisis == null) {
@@ -275,10 +288,12 @@ public class AnalisisBO implements IAnalisisBO {
     }
 
     /**
-     * 
-     * @param idAnalisis
-     * @return
-     * @throws NegocioException 
+     * Cuenta los parametros que pertenecen a un analisis.
+     *
+     * @param idAnalisis identificador del analisis.
+     * @return cantidad de parametros encontrados.
+     * @throws NegocioException si el identificador no es valido o ocurre algun
+     * error al contar.
      */
     @Override
     public Integer contarParametro(Integer idAnalisis) throws NegocioException {
@@ -295,10 +310,11 @@ public class AnalisisBO implements IAnalisisBO {
     }
 
     /**
-     * 
-     * @param listaAnalisis
-     * @return
-     * @throws NegocioException 
+     * Convierte una lista de analisis a una lista de DTO para mostrar en tabla.
+     *
+     * @param listaAnalisis lista de analisis que deseas convertir.
+     * @return lista de analisis en formato DTO.
+     * @throws NegocioException si ocurre algun error al convertir los datos.
      */
     private List<AnalisisDTO> convertirATablaDTO(List<Analisis> listaAnalisis) throws NegocioException {
         try {
@@ -323,10 +339,12 @@ public class AnalisisBO implements IAnalisisBO {
     }
 
     /**
-     * 
-     * @param tipoMuestra
-     * @return
-     * @throws NegocioException 
+     * Busca los analisis por medio del tipo de muestra.
+     *
+     * @param tipoMuestra tipo de muestra que deseas buscar.
+     * @return lista de analisis encontrados.
+     * @throws NegocioException si ocurre algun error al buscar por tipo de
+     * muestra.
      */
     @Override
     public List<AnalisisDTO> buscarPorTipoMuestra(String tipoMuestra) throws NegocioException {
@@ -342,10 +360,12 @@ public class AnalisisBO implements IAnalisisBO {
     }
 
     /**
-     * 
-     * @param cantidad
-     * @return
-     * @throws NegocioException 
+     * Busca los analisis por medio de la cantidad de parametros.
+     *
+     * @param cantidad cantidad de parametros que deseas buscar.
+     * @return lista de analisis encontrados.
+     * @throws NegocioException si la cantidad no es valida o ocurre algun error
+     * al buscar.
      */
     @Override
     public List<AnalisisDTO> buscarPorCantidadParametro(Integer cantidad) throws NegocioException {
@@ -361,10 +381,12 @@ public class AnalisisBO implements IAnalisisBO {
     }
 
     /**
-     * 
-     * @param sexo
-     * @return
-     * @throws NegocioException 
+     * Convierte un objeto sexo en un string.
+     *
+     * @param sexo objeto que recibe
+     * @return el objeto transformado
+     * @throws NegocioException si existe algun error al convertir sexo en un
+     * string
      */
     private Sexo convertirSexo(String sexo) throws NegocioException {
         if (sexo == null || sexo.trim().isEmpty()) {
@@ -382,17 +404,24 @@ public class AnalisisBO implements IAnalisisBO {
         }
     }
 
+    /**
+     * Valida y obtiene el analisis por la prueba
+     *
+     * @param idPrueba identificador de prueba
+     * @return analisis filtrado.
+     * @throws NegocioException si existe algun error al obtener el nombre del
+     * analisis por prueba.
+     */
     @Override
     public String obtenerNombreAnalisisPorPrueba(Integer idPrueba) throws NegocioException {
         try {
-        if (idPrueba == null) {
-            throw new NegocioException("El id de la prueba no puede estar vacío");
+            if (idPrueba == null) {
+                throw new NegocioException("El id de la prueba no puede estar vacío");
+            }
+            return analisisDAO.obtenerNombreAnalisisPorPrueba(idPrueba);
+
+        } catch (PersistenciaException e) {
+            throw new NegocioException(e.getMessage(), e);
         }
-
-        return analisisDAO.obtenerNombreAnalisisPorPrueba(idPrueba);
-
-    } catch (PersistenciaException e) {
-        throw new NegocioException(e.getMessage(), e);
-    }
     }
 }
