@@ -381,4 +381,18 @@ public class AnalisisBO implements IAnalisisBO {
                 throw new NegocioException("Sexo no válido: " + sexo);
         }
     }
+
+    @Override
+    public String obtenerNombreAnalisisPorPrueba(Integer idPrueba) throws NegocioException {
+        try {
+        if (idPrueba == null) {
+            throw new NegocioException("El id de la prueba no puede estar vacío");
+        }
+
+        return analisisDAO.obtenerNombreAnalisisPorPrueba(idPrueba);
+
+    } catch (PersistenciaException e) {
+        throw new NegocioException(e.getMessage(), e);
+    }
+    }
 }

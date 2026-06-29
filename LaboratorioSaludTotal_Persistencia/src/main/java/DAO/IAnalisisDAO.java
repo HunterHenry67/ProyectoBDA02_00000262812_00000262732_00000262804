@@ -30,4 +30,6 @@ public interface IAnalisisDAO {
     List<Analisis> buscarPorCantidadParametro(Integer cantidad) throws PersistenciaException;
     
     Integer contarParametros(Integer idAnalisis) throws PersistenciaException;
+    
+    String obtenerNombreAnalisisPorPrueba(Integer idPrueba) throws PersistenciaException;
 }

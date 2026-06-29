@@ -16,10 +16,10 @@ import javax.persistence.criteria.Root;
  *
  * @author BALAMRUSH
  */
-public class DoctorDAO implements IDoctorDAO{
+public class DoctorDAO implements IDoctorDAO {
 
     private IConexionBD conexionBD;
-
+    
     public DoctorDAO() {
         this.conexionBD = new ConexionBD();
     }
@@ -32,53 +32,49 @@ public class DoctorDAO implements IDoctorDAO{
         }
     }
 
-    
     /**
-     * 
-     * @param idDoctor
+     * * @param idDoctor
      * @return
      * @throws PersistenciaException 
      */
     @Override
     public Doctor consultarPorID(Integer idDoctor) throws PersistenciaException {
         EntityManager em = conexionBD.conexionBD();
-        try{
+        try {
             CriteriaBuilder cb = em.getCriteriaBuilder();
             CriteriaQuery<Doctor> cq = cb.createQuery(Doctor.class);
             Root<Doctor> root = cq.from(Doctor.class);
             cq.select(root).where(cb.equal(root.get("idDoctor"), idDoctor));
             return em.createQuery(cq).getSingleResult();
-        }catch(Exception e){
-            throw new PersistenciaException("Error al consultar al análisis: " + e.getMessage());
-        }finally{
+        } catch (Exception e) {
+            throw new PersistenciaException("Error al consultar al doctor: " + e.getMessage());
+        } finally {
             em.close();
         }
     }
 
     /**
-     * 
-     * @return
+     * * @return
      * @throws PersistenciaException 
      */
     @Override
     public List<Doctor> consultarTodos() throws PersistenciaException {
         EntityManager em = conexionBD.conexionBD();
-        try{
+        try {
             CriteriaBuilder cb = em.getCriteriaBuilder();
             CriteriaQuery<Doctor> cq = cb.createQuery(Doctor.class);
             Root<Doctor> root = cq.from(Doctor.class);
             cq.select(root);
             return em.createQuery(cq).getResultList();
-        }catch(Exception e){
-            throw new PersistenciaException("Error al consultar los análisis: " + e.getMessage());
-        }finally{
+        } catch (Exception e) {
+            throw new PersistenciaException("Error al consultar los doctores: " + e.getMessage());
+        } finally {
             em.close();
         }
     }
 
     /**
-     * 
-     * @param nombres
+     * * @param nombres
      * @return
      * @throws PersistenciaException 
      */
@@ -99,8 +95,7 @@ public class DoctorDAO implements IDoctorDAO{
     }
 
     /**
-     * 
-     * @param sexo
+     * * @param sexo
      * @return
      * @throws PersistenciaException 
      */

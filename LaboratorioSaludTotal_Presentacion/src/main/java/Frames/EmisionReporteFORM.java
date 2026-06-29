@@ -10,10 +10,14 @@ import DAO.IConexionBD;
 import DAO.ParametroDAO;
 import DAO.PruebaDAO;
 import DAO.ResultadoDAO;
+import DTO.ClienteDTO;
 import DTO.PruebaDTO;
 import DTO.RangoDTO;
 import DTO.ResultadoDTO;
+import Entidades.Cliente;
 import Entidades.Parametro;
+import Negocio.AnalisisBO;
+import Negocio.ClienteBO;
 import Negocio.NegocioException;
 import Negocio.ParametroBO;
 import Negocio.PruebaBO;
@@ -23,6 +27,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.io.InputStream;
 import java.sql.Connection;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -48,7 +54,13 @@ public class EmisionReporteFORM extends JFrame {
     private ResultadoBO resultadoBO;
     private ParametroBO parametroBO;
     private RangoBO rangoBO;
-
+    private AnalisisBO analisisBO;
+    private ClienteBO clienteBO;
+    private int paginaActual = 1;
+    private final int registrosPorPagina = 5;
+    private JButton btnAnterior;
+    private JButton btnSiguiente;
+    private JLabel lblPagina;
     private List<PruebaDTO> pruebas = new ArrayList<>();
     private List<PruebaDTO> pruebasMostradas = new ArrayList<>();
 
@@ -82,6 +94,8 @@ public class EmisionReporteFORM extends JFrame {
         );
 
         rangoBO = new RangoBO();
+        analisisBO = new AnalisisBO();
+        clienteBO = new ClienteBO();
     }
 
     private void initComponents() {
@@ -148,6 +162,30 @@ public class EmisionReporteFORM extends JFrame {
         JScrollPane scroll = new JScrollPane(tabla);
         scroll.setBounds(170, 360, 830, 220);
         add(scroll);
+        btnAnterior = new JButton("Anterior");
+        btnAnterior.setBounds(170, 590, 120, 35);
+        btnAnterior.addActionListener(e -> {
+            if (paginaActual > 1) {
+                paginaActual--;
+                llenarTabla(pruebasMostradas);
+            }
+        });
+        add(btnAnterior);
+
+        lblPagina = new JLabel("Página 1/1");
+        lblPagina.setBounds(310, 590, 120, 35);
+        add(lblPagina);
+
+        btnSiguiente = new JButton("Siguiente");
+        btnSiguiente.setBounds(430, 590, 120, 35);
+        btnSiguiente.addActionListener(e -> {
+            int totalPaginas = obtenerTotalPaginas(pruebasMostradas.size());
+            if (paginaActual < totalPaginas) {
+                paginaActual++;
+                llenarTabla(pruebasMostradas);
+            }
+        });
+        add(btnSiguiente);
     }
 
     private void cargarPruebas() {
@@ -210,7 +248,8 @@ public class EmisionReporteFORM extends JFrame {
                 pruebasMostradas.add(prueba);
             }
         }
-
+        paginaActual = 1;
+        llenarTabla(pruebasMostradas);
         llenarTabla(pruebasMostradas);
     }
 
@@ -218,97 +257,137 @@ public class EmisionReporteFORM extends JFrame {
         DefaultTableModel modelo = (DefaultTableModel) tabla.getModel();
         modelo.setRowCount(0);
 
-        for (PruebaDTO prueba : lista) {
+        int totalPaginas = obtenerTotalPaginas(lista.size());
+
+        if (paginaActual > totalPaginas) {
+            paginaActual = totalPaginas;
+        }
+
+        int inicio = (paginaActual - 1) * registrosPorPagina;
+        int fin = Math.min(inicio + registrosPorPagina, lista.size());
+
+        for (int i = inicio; i < fin; i++) {
+            PruebaDTO prueba = lista.get(i);
+
             modelo.addRow(new Object[]{
                 prueba.getIdPrueba(),
                 prueba.getNombreCliente(),
-                "N/A"
+                obtenerAnalisisTabla(prueba.getIdPrueba())
             });
         }
-    }
-    private void cargarReporte() {
-    try {
-        InputStream reporte = getClass().getResourceAsStream("/reportes.jasper");
 
-        if (reporte == null) {
-            JOptionPane.showMessageDialog(this, "No se encontró el reporte en:\n/reportes.jasper");
-            return;
+        lblPagina.setText("Página " + paginaActual + "/" + totalPaginas);
+        btnAnterior.setEnabled(paginaActual > 1);
+        btnSiguiente.setEnabled(paginaActual < totalPaginas);
+    }
+
+    private int obtenerTotalPaginas(int totalRegistros) {
+        if (totalRegistros == 0) {
+            return 1;
         }
 
-        reporteCompilado = (JasperReport) JRLoader.loadObject(reporte);
-
-    } catch (Exception e) {
-        e.printStackTrace();
-        JOptionPane.showMessageDialog(this, "Error al cargar el reporte:\n" + e.getMessage());
+        return (int) Math.ceil((double) totalRegistros / registrosPorPagina);
     }
-}
+
+    private String obtenerAnalisisTabla(Integer idPrueba) {
+        try {
+            return analisisBO.obtenerNombreAnalisisPorPrueba(idPrueba);
+        } catch (Exception e) {
+            return "N/A";
+        }
+    }
+
+    private void cargarReporte() {
+        try {
+            InputStream reporte = getClass().getResourceAsStream("/reportes.jasper");
+
+            if (reporte == null) {
+                JOptionPane.showMessageDialog(this, "No se encontró el reporte en:\n/reportes.jasper");
+                return;
+            }
+
+            reporteCompilado = (JasperReport) JRLoader.loadObject(reporte);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error al cargar el reporte:\n" + e.getMessage());
+        }
+    }
+
+    private int calcularEdad(LocalDateTime fechaNacimiento) {
+        return java.time.Period.between(
+                fechaNacimiento.toLocalDate(),
+                java.time.LocalDate.now()
+        ).getYears();
+    }
 
     private void imprimirReporte() {
-    try {
-        if (reporteCompilado == null) {
-            JOptionPane.showMessageDialog(this, "El reporte no está cargado correctamente.");
-            return;
-        }
-
-        int filaVista = tabla.getSelectedRow();
-
-        if (filaVista == -1) {
-            JOptionPane.showMessageDialog(this, "Selecciona una prueba primero");
-            return;
-        }
-
-        int filaModelo = tabla.convertRowIndexToModel(filaVista);
-
-        Integer idPrueba = Integer.parseInt(
-                tabla.getModel().getValueAt(filaModelo, 0).toString()
-        );
-
-        PruebaDTO pruebaSeleccionada = null;
-
-        for (PruebaDTO prueba : pruebasMostradas) {
-            if (prueba.getIdPrueba().equals(idPrueba)) {
-                pruebaSeleccionada = prueba;
-                break;
+        try {
+            if (reporteCompilado == null) {
+                JOptionPane.showMessageDialog(this, "El reporte no está cargado correctamente.");
+                return;
             }
+
+            int filaVista = tabla.getSelectedRow();
+
+            if (filaVista == -1) {
+                JOptionPane.showMessageDialog(this, "Selecciona una prueba primero");
+                return;
+            }
+
+            int filaModelo = tabla.convertRowIndexToModel(filaVista);
+
+            Integer idPrueba = Integer.parseInt(
+                    tabla.getModel().getValueAt(filaModelo, 0).toString()
+            );
+
+            PruebaDTO pruebaSeleccionada = null;
+
+            for (PruebaDTO prueba : pruebasMostradas) {
+                if (prueba.getIdPrueba().equals(idPrueba)) {
+                    pruebaSeleccionada = prueba;
+                    break;
+                }
+            }
+
+            if (pruebaSeleccionada == null) {
+                JOptionPane.showMessageDialog(this, "No se encontró la prueba seleccionada");
+                return;
+            }
+
+            Map<String, Object> parametros = crearParametrosReporte(pruebaSeleccionada);
+
+            Collection<Map<String, ?>> datos = crearDatosReporte(idPrueba);
+
+            if (datos == null || datos.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "La prueba seleccionada no tiene resultados registrados");
+                return;
+            }
+
+            JRMapCollectionDataSource dataSource = new JRMapCollectionDataSource(datos);
+
+            JasperPrint print = JasperFillManager.fillReport(
+                    reporteCompilado,
+                    parametros,
+                    dataSource
+            );
+
+            JasperViewer.viewReport(print, false);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            Throwable causa = e;
+
+            while (causa.getCause() != null) {
+                causa = causa.getCause();
+            }
+
+            JOptionPane.showMessageDialog(this, causa.toString());
         }
-
-        if (pruebaSeleccionada == null) {
-            JOptionPane.showMessageDialog(this, "No se encontró la prueba seleccionada");
-            return;
-        }
-
-        Map<String, Object> parametros = crearParametrosReporte(pruebaSeleccionada);
-
-        Collection<Map<String, ?>> datos = crearDatosReporte(idPrueba);
-
-        if (datos == null || datos.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "La prueba seleccionada no tiene resultados registrados");
-            return;
-        }
-
-        JRMapCollectionDataSource dataSource = new JRMapCollectionDataSource(datos);
-
-        JasperPrint print = JasperFillManager.fillReport(
-                reporteCompilado,
-                parametros,
-                dataSource
-        );
-
-        JasperViewer.viewReport(print, false);
-
-    } catch (Exception e) {
-        e.printStackTrace();
-
-        Throwable causa = e;
-
-        while (causa.getCause() != null) {
-            causa = causa.getCause();
-        }
-
-        JOptionPane.showMessageDialog(this, causa.toString());
     }
-}
 
+    /*
     private Map<String, Object> crearParametrosReporte(PruebaDTO prueba) {
         Map<String, Object> parametros = new HashMap<>();
 
@@ -336,6 +415,58 @@ public class EmisionReporteFORM extends JFrame {
         } else {
             parametros.put("medico", "N/A");
         }
+        
+        return parametros;
+    }*/
+    private Map<String, Object> crearParametrosReporte(PruebaDTO prueba) {
+        Map<String, Object> parametros = new HashMap<>();
+
+        parametros.put("folio", prueba.getIdPrueba());
+        parametros.put("nombre", prueba.getNombreCliente() != null ? prueba.getNombreCliente() : "N/A");
+
+        try {
+            if (prueba.getIdCliente() != null) {
+                ClienteDTO cliente = clienteBO.buscarClienteId(prueba.getIdCliente());
+
+                if (cliente != null) {
+                    if (cliente.getFechaNacimiento() != null) {
+                        parametros.put("edad", calcularEdad(cliente.getFechaNacimiento()) + " años");
+                    } else {
+                        parametros.put("edad", "N/A");
+                    }
+
+                    if (cliente.getSexo() != null) {
+                        parametros.put("sexo", cliente.getSexo().toString());
+                    } else {
+                        parametros.put("sexo", "N/A");
+                    }
+                } else {
+                    parametros.put("edad", "N/A");
+                    parametros.put("sexo", "N/A");
+                }
+            } else {
+                parametros.put("edad", "N/A");
+                parametros.put("sexo", "N/A");
+            }
+        } catch (Exception e) {
+            parametros.put("edad", "N/A");
+            parametros.put("sexo", "N/A");
+        }
+
+        if (prueba.getFechaHora() != null) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+            parametros.put("fecha", prueba.getFechaHora().format(formatter));
+        } else {
+            parametros.put("fecha", "N/A");
+        }
+
+        try {
+            parametros.put("analisis", analisisBO.obtenerNombreAnalisisPorPrueba(prueba.getIdPrueba()));
+        } catch (Exception e) {
+            parametros.put("analisis", "N/A");
+        }
+
+        parametros.put("medico", prueba.getNombreDoctor() != null ? prueba.getNombreDoctor() : "N/A");
 
         return parametros;
     }
@@ -387,4 +518,5 @@ public class EmisionReporteFORM extends JFrame {
         controlNavegacion.mostrarMenuPrincipal();
         dispose();
     }
+
 }
