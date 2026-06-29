@@ -20,6 +20,8 @@ public class RegistroParametroFORM extends javax.swing.JFrame {
     private RegistroAltaAnalisisFORM registroAltaAnalisisFORM;
     private List<RangoDTO> rangosTabla;
     private List<RangoDTO> rangos;
+    private int paginaActualRango = 1;
+    private int tamanoPaginaRango = 5;
 
     public RegistroParametroFORM(RegistroAltaAnalisisFORM registroAltaAnalisisFORM) {
         initComponents();
@@ -69,6 +71,7 @@ public class RegistroParametroFORM extends javax.swing.JFrame {
             throw new PresentacionException("El rango no puede estar vacío.");
         }
         rangos.add(rangoDTO);
+        paginaActualRango = 1;
         cargarTablaRangos();
     }
 
@@ -77,10 +80,19 @@ public class RegistroParametroFORM extends javax.swing.JFrame {
     }
 
     private void llenadoTablaRangos(List<RangoDTO> listaRangos) {
+
         rangosTabla = new ArrayList<>(listaRangos);
         DefaultTableModel modelo = (DefaultTableModel) jTable1.getModel();
         modelo.setRowCount(0);
-        for (RangoDTO rango : listaRangos) {
+        int inicio = (paginaActualRango - 1) * tamanoPaginaRango;
+        int fin = Math.min(inicio + tamanoPaginaRango, listaRangos.size());
+        if (inicio >= listaRangos.size()) {
+            paginaActualRango = 1;
+            inicio = 0;
+            fin = Math.min(tamanoPaginaRango, listaRangos.size());
+        }
+        for (int i = inicio; i < fin; i++) {
+            RangoDTO rango = listaRangos.get(i);
             modelo.addRow(new Object[]{
                 rango.getSexo(),
                 rango.getEdadInicial(),
@@ -90,6 +102,7 @@ public class RegistroParametroFORM extends javax.swing.JFrame {
                 "Eliminar"
             });
         }
+        actualizarTextoPaginaRangos(listaRangos.size());
     }
 
     private Integer convertirOrdenReporte() throws PresentacionException {
@@ -114,6 +127,7 @@ public class RegistroParametroFORM extends javax.swing.JFrame {
         }
         String entrada = txtFieldBuscar.getText().trim();
         if (entrada.isEmpty()) {
+            paginaActualRango = 1;
             cargarTablaRangos();
             return;
         }
@@ -169,7 +183,16 @@ public class RegistroParametroFORM extends javax.swing.JFrame {
                     break;
             }
         }
+        paginaActualRango = 1;
         llenadoTablaRangos(resultados);
+    }
+
+    private void actualizarTextoPaginaRangos(int totalRegistros) {
+        int totalPaginas = (int) Math.ceil((double) totalRegistros / tamanoPaginaRango);
+        if (totalPaginas == 0) {
+            totalPaginas = 1;
+        }
+        lblPaginacion.setText("Página " + paginaActualRango + " de " + totalPaginas);
     }
 
     @SuppressWarnings("unchecked")
@@ -195,6 +218,9 @@ public class RegistroParametroFORM extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         btnCancelar = new javax.swing.JButton();
         btnRegistrarParamtero = new javax.swing.JButton();
+        btnAnterior = new javax.swing.JButton();
+        btnSiguiente = new javax.swing.JButton();
+        lblPaginacion = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Registro de Parámetro");
@@ -293,6 +319,28 @@ public class RegistroParametroFORM extends javax.swing.JFrame {
             }
         });
 
+        btnAnterior.setBackground(new java.awt.Color(0, 153, 255));
+        btnAnterior.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        btnAnterior.setForeground(new java.awt.Color(0, 0, 0));
+        btnAnterior.setText("Anterior");
+        btnAnterior.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAnteriorActionPerformed(evt);
+            }
+        });
+
+        btnSiguiente.setBackground(new java.awt.Color(0, 153, 255));
+        btnSiguiente.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        btnSiguiente.setForeground(new java.awt.Color(0, 0, 0));
+        btnSiguiente.setText("Siguiente");
+        btnSiguiente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSiguienteActionPerformed(evt);
+            }
+        });
+
+        lblPaginacion.setText("jLabel8");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -325,6 +373,12 @@ public class RegistroParametroFORM extends javax.swing.JFrame {
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(btnAnterior)
+                                .addGap(496, 496, 496)
+                                .addComponent(lblPaginacion, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnSiguiente))
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                 .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -390,7 +444,12 @@ public class RegistroParametroFORM extends javax.swing.JFrame {
                             .addComponent(btnCancelar, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
                             .addComponent(btnRegistrarParamtero, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(15, 15, 15)))
-                .addContainerGap(58, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnAnterior)
+                    .addComponent(btnSiguiente)
+                    .addComponent(lblPaginacion, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(14, 14, 14))
         );
 
         pack();
@@ -417,13 +476,21 @@ public class RegistroParametroFORM extends javax.swing.JFrame {
             return;
         }
         int columnaEliminar = 5;
-
         if (columna == columnaEliminar) {
-            int confirmacion = JOptionPane.showConfirmDialog(this, "¿Quieres eliminar este rango?", "Confirmar eliminación", JOptionPane.YES_NO_OPTION);
+            int confirmacion = JOptionPane.showConfirmDialog(
+                    this,
+                    "¿Quieres eliminar este rango?",
+                    "Confirmar eliminación",
+                    JOptionPane.YES_NO_OPTION
+            );
             if (confirmacion == JOptionPane.YES_OPTION) {
-                RangoDTO rangoEliminar = rangosTabla.get(fila);
-                rangos.remove(rangoEliminar);
-                cargarTablaRangos();
+                int indiceReal = ((paginaActualRango - 1) * tamanoPaginaRango) + fila;
+                if (indiceReal >= 0 && indiceReal < rangosTabla.size()) {
+                    RangoDTO rangoEliminar = rangosTabla.get(indiceReal);
+                    rangos.remove(rangoEliminar);
+                    rangosTabla.remove(rangoEliminar);
+                    llenadoTablaRangos(rangosTabla);
+                }
             }
         }
     }//GEN-LAST:event_jTable1MouseClicked
@@ -444,12 +511,32 @@ public class RegistroParametroFORM extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnRegistrarParamteroActionPerformed
 
+    private void btnAnteriorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnteriorActionPerformed
+        if (paginaActualRango > 1) {
+            paginaActualRango--;
+            llenadoTablaRangos(rangosTabla);
+        }
+    }//GEN-LAST:event_btnAnteriorActionPerformed
+
+    private void btnSiguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSiguienteActionPerformed
+        int totalPaginas = (int) Math.ceil((double) rangosTabla.size() / tamanoPaginaRango);
+        if (totalPaginas == 0) {
+            totalPaginas = 1;
+        }
+        if (paginaActualRango < totalPaginas) {
+            paginaActualRango++;
+            llenadoTablaRangos(rangosTabla);
+        }
+    }//GEN-LAST:event_btnSiguienteActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregarRango;
+    private javax.swing.JButton btnAnterior;
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnRegistrarParamtero;
+    private javax.swing.JButton btnSiguiente;
     private javax.swing.JComboBox<String> comboFiltro;
     private javax.swing.JComboBox<String> comboUnidadMedida;
     private javax.swing.JLabel jLabel1;
@@ -461,6 +548,7 @@ public class RegistroParametroFORM extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
+    private javax.swing.JLabel lblPaginacion;
     private javax.swing.JTextField txtFieldBuscar;
     private javax.swing.JTextField txtFieldNombre;
     private javax.swing.JTextField txtFieldNota;
