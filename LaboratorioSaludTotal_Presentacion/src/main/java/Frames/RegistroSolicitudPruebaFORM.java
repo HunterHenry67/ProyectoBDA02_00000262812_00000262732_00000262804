@@ -42,7 +42,7 @@ public class RegistroSolicitudPruebaFORM extends javax.swing.JFrame {
         txtFechaHora.setEditable(false);
         txtCliente.setEditable(false);
         txtDoctor.setEditable(false);
-        
+        txtFolio.setText("Asignado al guardar...");
         txtFechaHora.setText(java.time.LocalDateTime.now().toString());
     }
     
@@ -76,7 +76,7 @@ public class RegistroSolicitudPruebaFORM extends javax.swing.JFrame {
     
     
     private void cargarTablaAnalisis() {
-        DefaultTableModel modelo = (DefaultTableModel) tablaSolicitudPrueba.getModel();
+        DefaultTableModel modelo = (DefaultTableModel) tablaAnalisis.getModel();
         modelo.setRowCount(0);
         
         for (AnalisisDTO analisis : analisisAgregados) {
@@ -150,7 +150,7 @@ public class RegistroSolicitudPruebaFORM extends javax.swing.JFrame {
         txtBuscador = new javax.swing.JTextField();
         btnAgregarAnalisis = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tablaSolicitudPrueba = new javax.swing.JTable();
+        tablaAnalisis = new javax.swing.JTable();
         btnCancelar = new javax.swing.JButton();
         btnRegistrar = new javax.swing.JButton();
 
@@ -299,7 +299,7 @@ public class RegistroSolicitudPruebaFORM extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        tablaSolicitudPrueba.setModel(new javax.swing.table.DefaultTableModel(
+        tablaAnalisis.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -310,12 +310,12 @@ public class RegistroSolicitudPruebaFORM extends javax.swing.JFrame {
                 "ID", "Análisis", "Tipo Muestra", "Eliminar"
             }
         ));
-        tablaSolicitudPrueba.addMouseListener(new java.awt.event.MouseAdapter() {
+        tablaAnalisis.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tablaSolicitudPruebaMouseClicked(evt);
+                tablaAnalisisMouseClicked(evt);
             }
         });
-        jScrollPane1.setViewportView(tablaSolicitudPrueba);
+        jScrollPane1.setViewportView(tablaAnalisis);
 
         btnCancelar.setBackground(new java.awt.Color(255, 204, 204));
         btnCancelar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -383,11 +383,30 @@ public class RegistroSolicitudPruebaFORM extends javax.swing.JFrame {
     private void btnBuscarDoctorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarDoctorActionPerformed
         // TODO add your handling code here:
         controlNavegacion.mostrarCatalogoDoctores();
+
     }//GEN-LAST:event_btnBuscarDoctorActionPerformed
 
     private void btnAgregarAnalisisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarAnalisisActionPerformed
         // TODO add your handling code here:
-        controlNavegacion.mostrarCatalogoAnalisisPrueba();
+        int fila = tablaAnalisis.getSelectedRow(); 
+
+        if (fila != -1) {
+            try {
+                AnalisisDTO analisisElegido = new AnalisisDTO();
+                analisisElegido.setIdAnalisis((Integer) tablaAnalisis.getValueAt(fila, 0));
+                analisisElegido.setNombre(tablaAnalisis.getValueAt(fila, 1).toString());
+                analisisElegido.setTipoMuestra(tablaAnalisis.getValueAt(fila, 2).toString());
+
+                controlNavegacion.getPantallaSolicitudActual().agregarAnalisisTemporal(analisisElegido);
+
+                this.dispose();
+
+            } catch (Exception ex) {
+                javax.swing.JOptionPane.showMessageDialog(this, "Error al agregar análisis: " + ex.getMessage());
+            }
+        } else {
+             javax.swing.JOptionPane.showMessageDialog(this, "Por favor seleccione un análisis del catálogo.");
+        }
     }//GEN-LAST:event_btnAgregarAnalisisActionPerformed
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
@@ -405,10 +424,10 @@ public class RegistroSolicitudPruebaFORM extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
-    private void tablaSolicitudPruebaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaSolicitudPruebaMouseClicked
+    private void tablaAnalisisMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaAnalisisMouseClicked
         // TODO add your handling code here:
-        int fila = tablaSolicitudPrueba.getSelectedRow();
-        int columna = tablaSolicitudPrueba.getSelectedColumn();
+        int fila = tablaAnalisis.getSelectedRow();
+        int columna = tablaAnalisis.getSelectedColumn();
         
         if (fila == -1) {
             return;
@@ -422,7 +441,7 @@ public class RegistroSolicitudPruebaFORM extends javax.swing.JFrame {
                 cargarTablaAnalisis(); 
             }
         }
-    }//GEN-LAST:event_tablaSolicitudPruebaMouseClicked
+    }//GEN-LAST:event_tablaAnalisisMouseClicked
 
     /**
      * @param args the command line arguments
@@ -446,7 +465,7 @@ public class RegistroSolicitudPruebaFORM extends javax.swing.JFrame {
     private javax.swing.JLabel lblDoctor;
     private javax.swing.JLabel lblFechaHora;
     private javax.swing.JLabel lblFolio;
-    private javax.swing.JTable tablaSolicitudPrueba;
+    private javax.swing.JTable tablaAnalisis;
     private javax.swing.JTextField txtBuscador;
     private javax.swing.JTextField txtCliente;
     private javax.swing.JTextField txtDoctor;

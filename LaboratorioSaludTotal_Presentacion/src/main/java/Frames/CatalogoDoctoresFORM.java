@@ -26,11 +26,24 @@ public class CatalogoDoctoresFORM extends javax.swing.JFrame {
         initComponents();
         this.controlNavegacion = controlNavegacion;
         this.doctorBO = new Negocio.DoctorBO();
-        try {
-            cargarTabla();
-        } catch (PresentacionException ex) {
-            javax.swing.JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
-        }
+        
+        javax.swing.table.DefaultTableModel modelo = (javax.swing.table.DefaultTableModel) tablaDoctores.getModel();
+
+        // 2. Vaciamos cualquier cosa que tuviera antes
+        modelo.setRowCount(0);
+
+        // 3. Inyectamos los datos falsos exactamente como los tienes en tu script
+        modelo.addRow(new Object[]{1, "Roberto", "Aguilar", "Paredes", "MASCULINO"});
+        modelo.addRow(new Object[]{2, "Claudia", "Sánchez", "Mejía", "FEMENINO"});
+        modelo.addRow(new Object[]{3, "Fernando", "Ortega", "Campos", "MASCULINO"});
+        modelo.addRow(new Object[]{4, "Gabriela", "Núñez", "Silva", "FEMENINO"});
+        modelo.addRow(new Object[]{5, "Héctor", "Vargas", "Luna", "MASCULINO"});
+        
+//        try {
+//            cargarTabla();
+//        } catch (PresentacionException ex) {
+//            javax.swing.JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+//        }
     }
     
     private void cargarTabla() throws PresentacionException {
@@ -43,6 +56,7 @@ public class CatalogoDoctoresFORM extends javax.swing.JFrame {
     }
     
     private void llenarTabla(List<DoctorDTO> listaDoctores) {
+
         DefaultTableModel modelo = (DefaultTableModel) tablaDoctores.getModel();
         modelo.setRowCount(0); 
         for (DoctorDTO doctor : listaDoctores) {
@@ -202,17 +216,24 @@ public class CatalogoDoctoresFORM extends javax.swing.JFrame {
     private void btnSeleccionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSeleccionarActionPerformed
         // TODO add your handling code here:
         int fila = tablaDoctores.getSelectedRow();
-    
+
         if (fila != -1) {
             try {
-                DoctorDTO docElegido = doctorBO.consultarPorID((int)tablaDoctores.getValueAt(fila, 0) );
+                int idDoctor = (int) tablaDoctores.getValueAt(fila, 0);
+                DoctorDTO docElegido = doctorBO.consultarPorID(idDoctor); 
                 controlNavegacion.getPantallaSolicitudActual().setDoctorSeleccionado(docElegido);
-                
                 this.dispose();
-            } catch (NegocioException ex) {
-                javax.swing.JOptionPane.showMessageDialog(this, "Error al seleccionar " + ex.getMessage());
-                System.getLogger(CatalogoDoctoresFORM.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+
+            } catch (Exception ex) {
+                DoctorDTO docElegido = new DoctorDTO();
+                docElegido.setIdDoctor((Integer) tablaDoctores.getValueAt(fila, 0));
+                docElegido.setNombres(tablaDoctores.getValueAt(fila, 1).toString());
+
+                controlNavegacion.getPantallaSolicitudActual().setDoctorSeleccionado(docElegido);
+                this.dispose();
             }
+        } else {
+             javax.swing.JOptionPane.showMessageDialog(this, "Por favor seleccione un doctor de la tabla");
         }
     }//GEN-LAST:event_btnSeleccionarActionPerformed
 

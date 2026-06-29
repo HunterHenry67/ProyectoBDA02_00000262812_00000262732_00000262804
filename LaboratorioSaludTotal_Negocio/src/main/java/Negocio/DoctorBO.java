@@ -26,6 +26,7 @@ public class DoctorBO implements IDoctorBO {
     private IDoctorDAO doctorDAO;
 
     public DoctorBO() {
+        IConexionBD conexion = new ConexionBD();
         this.doctorDAO = new DoctorDAO();
     }
 

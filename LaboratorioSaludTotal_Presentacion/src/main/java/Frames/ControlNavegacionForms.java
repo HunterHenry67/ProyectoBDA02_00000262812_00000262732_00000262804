@@ -41,7 +41,7 @@ public class ControlNavegacionForms {
     
     public void mostrarRegistroSolicitudPrueba() {
         RegistroSolicitudPruebaFORM pantalla = new RegistroSolicitudPruebaFORM(this);
-        this.pantallaSolicitudActual = pantalla; // <--- La única línea extra: tomamos foto de la pantalla
+        this.pantallaSolicitudActual = pantalla; 
         pantalla.setVisible(true);
     }
     
