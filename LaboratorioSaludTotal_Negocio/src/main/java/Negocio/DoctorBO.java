@@ -20,7 +20,6 @@ import java.util.List;
  *
  * @author Andre
  */
-
 public class DoctorBO implements IDoctorBO {
 
     private IDoctorDAO doctorDAO;
@@ -31,10 +30,12 @@ public class DoctorBO implements IDoctorBO {
     }
 
     /**
-     * 
-     * @param idDoctor
-     * @return
-     * @throws NegocioException 
+     * Consulta un doctor mediante su identificador.
+     *
+     * @param idDoctor identificador del doctor que deseas consultar.
+     * @return doctor encontrado en formato DTO.
+     * @throws NegocioException si el ID no es valido o ocurre algun error al
+     * consultar.
      */
     @Override
     public DoctorDTO consultarPorID(Integer idDoctor) throws NegocioException {
@@ -57,9 +58,10 @@ public class DoctorBO implements IDoctorBO {
     }
 
     /**
-     * 
-     * @return
-     * @throws NegocioException 
+     * Consulta todos los doctores registrados.
+     *
+     * @return lista de doctores encontrados en formato DTO.
+     * @throws NegocioException si ocurre algun error al consultar los doctores.
      */
     @Override
     public List<DoctorDTO> consultarTodos() throws NegocioException {
@@ -78,10 +80,11 @@ public class DoctorBO implements IDoctorBO {
     }
 
     /**
-     * 
-     * @param nombres
-     * @return
-     * @throws NegocioException 
+     * Busca doctores por medio de sus nombres.
+     *
+     * @param nombres nombre del doctor que deseas buscar.
+     * @return lista de doctores encontrados en formato DTO.
+     * @throws NegocioException si ocurre algun error al buscar por nombres.
      */
     @Override
     public List<DoctorDTO> buscarPorNombres(String nombres) throws NegocioException {
@@ -97,10 +100,11 @@ public class DoctorBO implements IDoctorBO {
     }
 
     /**
-     * 
-     * @param sexo
-     * @return
-     * @throws NegocioException 
+     * Busca doctores por medio del sexo.
+     *
+     * @param sexo sexo del doctor que deseas buscar.
+     * @return lista de doctores encontrados en formato DTO.
+     * @throws NegocioException si ocurre algun error al buscar por sexo.
      */
     @Override
     public List<DoctorDTO> buscarPorSexo(Sexo sexo) throws NegocioException {
@@ -116,9 +120,10 @@ public class DoctorBO implements IDoctorBO {
     }
 
     /**
-     * 
-     * @param doctor
-     * @return 
+     * Convierte una entidad Doctor a DoctorDTO.
+     *
+     * @param doctor doctor que deseas convertir.
+     * @return doctor convertido a DTO.
      */
     private DoctorDTO convertirADTO(Doctor doctor) {
         DoctorDTO dto = new DoctorDTO();
@@ -142,9 +147,10 @@ public class DoctorBO implements IDoctorBO {
     }
 
     /**
-     * 
-     * @param doctores
-     * @return 
+     * Convierte una lista de doctores a una lista de DTO.
+     *
+     * @param doctores lista de doctores que deseas convertir.
+     * @return lista de doctores convertidos a DTO.
      */
     private List<DoctorDTO> convertirListaADTO(List<Doctor> doctores) {
         List<DoctorDTO> dtos = new ArrayList<>();
