@@ -22,16 +22,20 @@ import Negocio.ResultadoBO;
 import java.awt.Color;
 import java.awt.Font;
 import java.io.InputStream;
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.persistence.EntityManager;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRMapCollectionDataSource;
+import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.view.JasperViewer;
+
 /**
  *
  * @author Andre
@@ -39,7 +43,7 @@ import net.sf.jasperreports.view.JasperViewer;
 public class EmisionReporteFORM extends JFrame {
 
     private ControlNavegacionForms controlNavegacion;
-
+    private JasperReport reporteCompilado;
     private PruebaBO pruebaBO;
     private ResultadoBO resultadoBO;
     private ParametroBO parametroBO;
@@ -58,6 +62,7 @@ public class EmisionReporteFORM extends JFrame {
         inicializarBOs();
         initComponents();
         cargarPruebas();
+        cargarReporte();
     }
 
     private void inicializarBOs() {
@@ -68,11 +73,11 @@ public class EmisionReporteFORM extends JFrame {
         resultadoBO = new ResultadoBO(
                 new ResultadoDAO(conexion),
                 new PruebaDAO(),
-                new ParametroDAO(conexion)
+                new ParametroDAO()
         );
 
         parametroBO = new ParametroBO(
-                new ParametroDAO(conexion),
+                new ParametroDAO(),
                 new AnalisisDAO()
         );
 
@@ -221,36 +226,88 @@ public class EmisionReporteFORM extends JFrame {
             });
         }
     }
+    private void cargarReporte() {
+    try {
+        InputStream reporte = getClass().getResourceAsStream("/reportes.jasper");
+
+        if (reporte == null) {
+            JOptionPane.showMessageDialog(this, "No se encontró el reporte en:\n/reportes.jasper");
+            return;
+        }
+
+        reporteCompilado = (JasperReport) JRLoader.loadObject(reporte);
+
+    } catch (Exception e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(this, "Error al cargar el reporte:\n" + e.getMessage());
+    }
+}
 
     private void imprimirReporte() {
-        try {
-            int fila = tabla.getSelectedRow();
-
-            if (fila == -1) {
-                JOptionPane.showMessageDialog(this, "Selecciona una prueba.");
-                return;
-            }
-
-            PruebaDTO prueba = pruebasMostradas.get(fila);
-
-            InputStream archivo = getClass().getResourceAsStream("/reportes.jrxml");
-
-            JasperReport reporte = JasperCompileManager.compileReport(archivo);
-
-            Collection datos = crearDatosReporte(prueba.getIdPrueba());
-
-            JasperPrint print = JasperFillManager.fillReport(
-                    reporte,
-                    crearParametrosReporte(prueba),
-                    new JRMapCollectionDataSource(datos)
-            );
-
-            JasperViewer.viewReport(print, false);
-
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, ex.getMessage());
+    try {
+        if (reporteCompilado == null) {
+            JOptionPane.showMessageDialog(this, "El reporte no está cargado correctamente.");
+            return;
         }
+
+        int filaVista = tabla.getSelectedRow();
+
+        if (filaVista == -1) {
+            JOptionPane.showMessageDialog(this, "Selecciona una prueba primero");
+            return;
+        }
+
+        int filaModelo = tabla.convertRowIndexToModel(filaVista);
+
+        Integer idPrueba = Integer.parseInt(
+                tabla.getModel().getValueAt(filaModelo, 0).toString()
+        );
+
+        PruebaDTO pruebaSeleccionada = null;
+
+        for (PruebaDTO prueba : pruebasMostradas) {
+            if (prueba.getIdPrueba().equals(idPrueba)) {
+                pruebaSeleccionada = prueba;
+                break;
+            }
+        }
+
+        if (pruebaSeleccionada == null) {
+            JOptionPane.showMessageDialog(this, "No se encontró la prueba seleccionada");
+            return;
+        }
+
+        Map<String, Object> parametros = crearParametrosReporte(pruebaSeleccionada);
+
+        Collection<Map<String, ?>> datos = crearDatosReporte(idPrueba);
+
+        if (datos == null || datos.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "La prueba seleccionada no tiene resultados registrados");
+            return;
+        }
+
+        JRMapCollectionDataSource dataSource = new JRMapCollectionDataSource(datos);
+
+        JasperPrint print = JasperFillManager.fillReport(
+                reporteCompilado,
+                parametros,
+                dataSource
+        );
+
+        JasperViewer.viewReport(print, false);
+
+    } catch (Exception e) {
+        e.printStackTrace();
+
+        Throwable causa = e;
+
+        while (causa.getCause() != null) {
+            causa = causa.getCause();
+        }
+
+        JOptionPane.showMessageDialog(this, causa.toString());
     }
+}
 
     private Map<String, Object> crearParametrosReporte(PruebaDTO prueba) {
         Map<String, Object> parametros = new HashMap<>();
@@ -283,12 +340,14 @@ public class EmisionReporteFORM extends JFrame {
         return parametros;
     }
 
-    private Collection<Map<String, Object>> crearDatosReporte(Integer idPrueba) throws NegocioException {
-        List<Map<String, Object>> datos = new ArrayList<>();
+    private Collection<Map<String, ?>> crearDatosReporte(Integer idPrueba) throws NegocioException {
+
+        List<Map<String, ?>> datos = new ArrayList<>();
 
         List resultados = resultadoBO.consultarTablaPorPrueba(idPrueba);
 
         for (Object obj : resultados) {
+
             ResultadoDTO resultado = (ResultadoDTO) obj;
 
             Parametro parametro = parametroBO.consultarParametroPorID(resultado.getIdParametro());

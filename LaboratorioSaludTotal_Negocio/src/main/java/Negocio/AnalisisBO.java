@@ -6,16 +6,26 @@ package Negocio;
 
 import DAO.AnalisisDAO;
 import DAO.IAnalisisDAO;
+import DAO.IParametroDAO;
+import DAO.IRangoDAO;
+import DAO.ParametroDAO;
 import DAO.PersistenciaException;
+import DAO.RangoDAO;
 import DTO.ActualizarAnalisisDTO;
 import DTO.AnalisisDTO;
 import DTO.EliminarAnalisisDTO;
 import DTO.GuardarAnalisisDTO;
+import DTO.RangoDTO;
+import DTO.RegistrarParametroDTO;
 import Entidades.Analisis;
 import Entidades.Muestra;
+import Entidades.Parametro;
+import Entidades.Rango;
+import Entidades.Sexo;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
-
+import java.util.Set;
 
 /**
  *
@@ -24,27 +34,46 @@ import java.util.List;
 public class AnalisisBO implements IAnalisisBO {
 
     private final IAnalisisDAO analisisDAO;
+    private final IParametroDAO parametroDAO;
+    private final IRangoDAO rangoDAO;
 
     public AnalisisBO() {
         this.analisisDAO = new AnalisisDAO();
+        this.parametroDAO = new ParametroDAO();
+        this.rangoDAO = new RangoDAO();
     }
 
     @Override
     public Analisis guardarAnalisis(GuardarAnalisisDTO guardarAnalisis) throws NegocioException {
         try {
             validarGuardar(guardarAnalisis);
-
             Analisis analisis = new Analisis();
             analisis.setNombre(guardarAnalisis.getNombre().trim());
             analisis.setNota(guardarAnalisis.getNota().trim());
-
             Muestra muestra = new Muestra();
             muestra.setIdMuestra(guardarAnalisis.getIdMuestra());
-
             analisis.setMuestra(muestra);
-
-            return analisisDAO.guardar(analisis);
-
+            Analisis analisisGuardado = analisisDAO.guardar(analisis);
+            for (RegistrarParametroDTO parametroDTO : guardarAnalisis.getParametros()) {
+                Parametro parametro = new Parametro();
+                parametro.setNombre(parametroDTO.getNombre());
+                parametro.setOrdenReporte(parametroDTO.getOrdenReporte());
+                parametro.setNotaDescriptiva(parametroDTO.getNotaDescriptiva());
+                parametro.setUnidadMedida(parametroDTO.getUnidadMedida());
+                parametro.setAnalisis(analisisGuardado);
+                Parametro parametroGuardado = parametroDAO.registarParametro(parametro);
+                for (RangoDTO rangoDTO : parametroDTO.getRangos()) {
+                    Rango rango = new Rango();
+                    rango.setSexo(convertirSexo(rangoDTO.getSexo()));
+                    rango.setEdadInicial(rangoDTO.getEdadInicial());
+                    rango.setEdadFinal(rangoDTO.getEdadFinal());
+                    rango.setRangoIncial(rangoDTO.getRangoInicial());
+                    rango.setRangoFinal(rangoDTO.getRangoFinal());
+                    rango.setParametro(parametroGuardado);
+                    rangoDAO.agregarRango(rango);
+                }
+            }
+            return analisisGuardado;
         } catch (PersistenciaException ex) {
             throw new NegocioException("Error al guardar el análisis: " + ex.getMessage());
         }
@@ -155,6 +184,13 @@ public class AnalisisBO implements IAnalisisBO {
         if (guardarAnalisis.getIdMuestra() == null || guardarAnalisis.getIdMuestra() <= 0) {
             throw new NegocioException("Debe seleccionar un tipo de muestra válido.");
         }
+        List<Integer> ordenesUsados = new ArrayList<>();
+        for (RegistrarParametroDTO parametro : guardarAnalisis.getParametros()) {
+            if (ordenesUsados.contains(parametro.getOrdenReporte())) {
+                throw new NegocioException( "No puedes repetir el orden de reporte.");
+            }
+            ordenesUsados.add(parametro.getOrdenReporte());
+        }
     }
 
     private void validarActualizar(ActualizarAnalisisDTO actualizarAnalisis) throws NegocioException {
@@ -227,27 +263,43 @@ public class AnalisisBO implements IAnalisisBO {
 
     @Override
     public List<AnalisisDTO> buscarPorTipoMuestra(String tipoMuestra) throws NegocioException {
-        try{
-            if(tipoMuestra == null || tipoMuestra.isEmpty()){
+        try {
+            if (tipoMuestra == null || tipoMuestra.isEmpty()) {
                 return consultarTodos();
             }
             List<Analisis> analisis = analisisDAO.buscarPorTipoMuestra(tipoMuestra.trim());
             return convertirATablaDTO(analisis);
-        }catch(PersistenciaException ex){
-            throw new NegocioException("Error al buscar el análisis por tipo de muestra: "+ex.getMessage());
+        } catch (PersistenciaException ex) {
+            throw new NegocioException("Error al buscar el análisis por tipo de muestra: " + ex.getMessage());
         }
     }
 
     @Override
     public List<AnalisisDTO> buscarPorCantidadParametro(Integer cantidad) throws NegocioException {
-        try{
-            if(cantidad == null || cantidad < 0){
+        try {
+            if (cantidad == null || cantidad < 0) {
                 throw new NegocioException("Error al buscar el analisis por parámetro.");
             }
             List<Analisis> analisis = analisisDAO.buscarPorCantidadParametro(cantidad);
             return convertirATablaDTO(analisis);
-        }catch(PersistenciaException ex){
-            throw new NegocioException("Error al buscar el análisis por cantidad de parámetro: "+ex.getMessage());
+        } catch (PersistenciaException ex) {
+            throw new NegocioException("Error al buscar el análisis por cantidad de parámetro: " + ex.getMessage());
+        }
+    }
+
+    private Sexo convertirSexo(String sexo) throws NegocioException {
+        if (sexo == null || sexo.trim().isEmpty()) {
+            throw new NegocioException("El sexo del rango no es válido.");
+        }
+        String sexoNormalizado = sexo.trim().toUpperCase();
+        switch (sexoNormalizado) {
+            case "MASCULINO":
+                return Sexo.MASCULINO;
+
+            case "FEMENINO":
+                return Sexo.FEMENINO;
+            default:
+                throw new NegocioException("Sexo no válido: " + sexo);
         }
     }
 }

@@ -71,14 +71,14 @@ public class RegistrarResultadosFORM extends JFrame {
         IConexionBD conexion = new ConexionBD();
 
         parametroBO = new ParametroBO(
-                new ParametroDAO(conexion),
+                new ParametroDAO(),
                 new AnalisisDAO()
         );
 
         resultadoBO = new ResultadoBO(
                 new ResultadoDAO(conexion),
                 new PruebaDAO(),
-                new ParametroDAO(conexion)
+                new ParametroDAO()
         );
     }
 
