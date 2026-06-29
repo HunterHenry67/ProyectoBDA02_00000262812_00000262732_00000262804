@@ -35,6 +35,13 @@ public class CatalogoAnalisisPruebaFORM extends javax.swing.JFrame {
         }
     }
     
+    private String convertirTexto(Object valor) {
+        if (valor == null) {
+            return "N/A";
+        }
+        return valor.toString();
+    }
+    
     private void cargarTabla() throws PresentacionException {
         try {
             List<AnalisisDTO> listaAnalisis = analisisBO.consultarTodos(); 
@@ -46,13 +53,13 @@ public class CatalogoAnalisisPruebaFORM extends javax.swing.JFrame {
     
     private void llenarTabla(List<AnalisisDTO> listaAnalisis) {
         DefaultTableModel modelo = (DefaultTableModel) tablaAnalisis.getModel();
-        modelo.setRowCount(0); 
-        
+        modelo.setRowCount(0);
+
         for (AnalisisDTO analisis : listaAnalisis) {
             modelo.addRow(new Object[]{
-                analisis.getIdAnalisis(),       
-                analisis.getNombre(),           
-                analisis.getTipoMuestra(),      
+                analisis.getIdAnalisis(),
+                analisis.getNombre(),
+                analisis.getTipoMuestra() != null ? analisis.getTipoMuestra() : "N/A",
                 analisis.getCantidadParametros()
             });
         }
@@ -212,27 +219,41 @@ public class CatalogoAnalisisPruebaFORM extends javax.swing.JFrame {
                 RegistroSolicitudPruebaFORM pantallaSolicitud = controlNavegacion.getPantallaSolicitudActual();
 
                 if (pantallaSolicitud == null) {
-                    javax.swing.JOptionPane.showMessageDialog(this, "Primero debes abrir una solicitud de prueba.");
+                    javax.swing.JOptionPane.showMessageDialog(
+                        this,
+                        "Primero debes abrir una solicitud de prueba."
+                    );
                     return;
                 }
 
                 int filaModelo = tablaAnalisis.convertRowIndexToModel(fila);
 
                 AnalisisDTO analisisElegido = new AnalisisDTO();
+
                 int idAnalisis = ((Number) tablaAnalisis.getModel().getValueAt(filaModelo, 0)).intValue();
+                String nombre = convertirTexto(tablaAnalisis.getModel().getValueAt(filaModelo, 1));
+                String tipoMuestra = convertirTexto(tablaAnalisis.getModel().getValueAt(filaModelo, 2));
 
                 analisisElegido.setIdAnalisis(idAnalisis);
-                analisisElegido.setNombre(tablaAnalisis.getModel().getValueAt(filaModelo, 1).toString());
-                analisisElegido.setTipoMuestra(tablaAnalisis.getModel().getValueAt(filaModelo, 2).toString());
+                analisisElegido.setNombre(nombre);
+                analisisElegido.setTipoMuestra(tipoMuestra);
 
                 pantallaSolicitud.agregarAnalisisTemporal(analisisElegido);
                 this.dispose();
 
             } catch (Exception ex) {
-                javax.swing.JOptionPane.showMessageDialog(this, "Error al seleccionar " + ex.getMessage());
+                javax.swing.JOptionPane.showMessageDialog(
+                    this,
+                    "Error al seleccionar " + ex.getMessage()
+                );
             }
         } else {
-            javax.swing.JOptionPane.showMessageDialog(this, "Seleccione un análisis de la tabla.", "Advertencia", javax.swing.JOptionPane.WARNING_MESSAGE);
+            javax.swing.JOptionPane.showMessageDialog(
+                this,
+                "Seleccione un análisis de la tabla.",
+                "Advertencia",
+                javax.swing.JOptionPane.WARNING_MESSAGE
+            );
         }
         
     }//GEN-LAST:event_btnSeleccionarActionPerformed
