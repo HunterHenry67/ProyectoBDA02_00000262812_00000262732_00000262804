@@ -218,51 +218,53 @@ public class RegistrarResultadosFORM extends JFrame {
      * Recorre la tabla de resultados, valida los datos y los envía a guardar
      */
     private void registrarResultados() {
-        if (!validarTablaResultados()) {
-            return;
-        }
-        try {
-            DefaultTableModel modelo = (DefaultTableModel) tabla.getModel();
+    if (tabla.isEditing()) {
+        tabla.getCellEditor().stopCellEditing();
+    }
 
-            for (int i = 0; i < modelo.getRowCount(); i++) {
-                Object valorResultado = modelo.getValueAt(i, 3);
+    if (!validarTablaResultados()) {
+        return;
+    }
 
-                if (valorResultado != null) {
-                    String textoResultado = valorResultado.toString().trim();
+    try {
+        DefaultTableModel modelo = (DefaultTableModel) tabla.getModel();
 
-                    if (!textoResultado.isEmpty()) {
-                        double resultadoNumero = Double.parseDouble(textoResultado);
+        for (int i = 0; i < modelo.getRowCount(); i++) {
+            Object valorResultado = modelo.getValueAt(i, 3);
 
-                        ParametroDTO parametro = parametros.get(i);
+            String textoResultado = valorResultado.toString().trim();
+            double resultadoNumero = Double.parseDouble(textoResultado);
 
-                        String observacion = "";
-                        Object valorObservacion = modelo.getValueAt(i, 4);
+            ParametroDTO parametro = parametros.get(i);
 
-                        if (valorObservacion != null) {
-                            observacion = valorObservacion.toString();
-                        }
+            String observacion;
+            Object valorObservacion = modelo.getValueAt(i, 4);
 
-                        RegistrarResultadoDTO dto = new RegistrarResultadoDTO();
-                        dto.setIdPrueba(prueba.getIdPrueba());
-                        dto.setIdParametro(parametro.getIdParametro());
-                        dto.setResultadoObtenido(resultadoNumero);
-                        dto.setObservacion(observacion);
-
-                        resultadoBO.registrarResultado(dto);
-                    }
-                }
+            if (valorObservacion != null && !valorObservacion.toString().trim().isEmpty()) {
+                observacion = valorObservacion.toString().trim();
+            } else {
+                observacion = "Sin observación";
             }
 
-            JOptionPane.showMessageDialog(this, "Resultados registrados correctamente.");
-            controlNavegacion.mostrarMenuPrincipal();
-            dispose();
+            RegistrarResultadoDTO dto = new RegistrarResultadoDTO();
+            dto.setIdPrueba(prueba.getIdPrueba());
+            dto.setIdParametro(parametro.getIdParametro());
+            dto.setResultadoObtenido(resultadoNumero);
+            dto.setObservacion(observacion);
 
-        } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(this, "Los resultados deben ser numéricos.");
-        } catch (NegocioException ex) {
-            JOptionPane.showMessageDialog(this, ex.getMessage());
+            resultadoBO.registrarResultado(dto);
         }
+
+        JOptionPane.showMessageDialog(this, "Resultados registrados correctamente.");
+        controlNavegacion.mostrarMenuPrincipal();
+        dispose();
+
+    } catch (NumberFormatException ex) {
+        JOptionPane.showMessageDialog(this, "Los resultados deben ser numéricos.");
+    } catch (NegocioException ex) {
+        JOptionPane.showMessageDialog(this, ex.getMessage());
     }
+}
 
     /**
      * Junta los nombres del cliente para mostrarlos en el campo de texto
