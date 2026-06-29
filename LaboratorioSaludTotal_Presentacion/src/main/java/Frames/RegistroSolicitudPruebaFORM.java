@@ -29,8 +29,10 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 /**
- *
- * @author Andre
+ * Pantalla principal para registrar solicitudes de pruebas clínicas.
+ * Aquí es donde el usuario selecciona al cliente, al doctor y va agregando 
+ * los análisis clínicos necesarios antes de guardar el registro definitivo.
+ * * @author Andre
  */
 public class RegistroSolicitudPruebaFORM extends JFrame {
 
@@ -56,6 +58,10 @@ public class RegistroSolicitudPruebaFORM extends JFrame {
     private JButton btnRegistrar;
     private JButton btnCancelar;
 
+    /**
+     * Crea la ventana de registro y prepara las dependencias para la navegación y la lógica.
+     * @param controlNavegacion El controlador que maneja el cambio entre pantallas.
+     */
     public RegistroSolicitudPruebaFORM(ControlNavegacionForms controlNavegacion) {
         this.controlNavegacion = controlNavegacion;
         this.controlNavegacion.setPantallaSolicitudActual(this);
@@ -68,6 +74,9 @@ public class RegistroSolicitudPruebaFORM extends JFrame {
         cargarTablaAnalisis();
     }
 
+    /**
+     * Configura el aspecto visual de la ventana y los campos de texto iniciales.
+     */
     private void configurarPantalla() {
         setTitle("Registro de Solicitud de Prueba");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -84,10 +93,14 @@ public class RegistroSolicitudPruebaFORM extends JFrame {
             this.controlNavegacion.mostrarCatalogoDoctores();
         });
         
-        configurarFiltrosAnalisis();
+        
         cargarTablaAnalisis();
     }
 
+    /**
+     * Guarda el cliente seleccionado en esta solicitud.
+     * @param cliente El cliente elegido desde el catálogo.
+     */
     public void setClienteSeleccionado(ClienteDTO cliente) {
         if (cliente != null) {
             this.clienteSeleccionado = cliente;
@@ -95,6 +108,10 @@ public class RegistroSolicitudPruebaFORM extends JFrame {
         }
     }
 
+    /**
+     * Guarda el doctor seleccionado en esta solicitud.
+     * @param doctor El doctor elegido desde el catálogo.
+     */
     public void setDoctorSeleccionado(DoctorDTO doctor) {
         if (doctor != null) {
             this.doctorSeleccionado = doctor;
@@ -102,6 +119,11 @@ public class RegistroSolicitudPruebaFORM extends JFrame {
         }
     }
 
+    /**
+     * Agrega un análisis a la lista temporal de la solicitud actual.
+     * @param analisis El análisis a incluir.
+     * @throws PresentacionException Si el análisis ya estaba agregado.
+     */
     public void agregarAnalisisTemporal(AnalisisDTO analisis) throws PresentacionException {
         if (analisis == null) {
             throw new PresentacionException("Debe existir un analisis seleccionado.");
@@ -117,6 +139,9 @@ public class RegistroSolicitudPruebaFORM extends JFrame {
         cargarTablaAnalisis();
     }
 
+    /**
+     * Refresca la tabla visualmente con los análisis que se han ido agregando.
+     */
     private void cargarTablaAnalisis() {
         DefaultTableModel modelo = (DefaultTableModel) tablaAnalisis.getModel();
         modelo.setRowCount(0);
@@ -131,6 +156,11 @@ public class RegistroSolicitudPruebaFORM extends JFrame {
         }
     }
 
+    /**
+     * Envía toda la información capturada (cliente, doctor, análisis) al negocio para 
+     * realizar el registro final en la base de datos.
+     * @throws PresentacionException Si falta algún dato obligatorio o falla la persistencia.
+     */
     private void registrarSolicitud() throws PresentacionException {
         try {
             if (clienteSeleccionado == null) {
@@ -170,6 +200,9 @@ public class RegistroSolicitudPruebaFORM extends JFrame {
         }
     }
 
+    /**
+     * Elimina el análisis que el usuario seleccionó en la tabla.
+     */
     private void eliminarAnalisisSeleccionado() {
         int fila = tablaAnalisis.getSelectedRow();
 
