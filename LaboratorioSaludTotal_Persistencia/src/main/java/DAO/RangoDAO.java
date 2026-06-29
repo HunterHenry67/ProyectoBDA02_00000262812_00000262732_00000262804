@@ -12,7 +12,8 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
 /**
- *
+ * Clase de acceso a datos para la entidad {@link Rango}.
+ * métodos para gestionar el ciclo de vida y consultas específicas de los rangos
  * @author BALAMRUSH
  */
 public class RangoDAO implements IRangoDAO {
@@ -24,10 +25,10 @@ public class RangoDAO implements IRangoDAO {
     }
 
     /**
-     *
-     * @param rango
-     * @return
-     * @throws PersistenciaException
+     * usa persist para registrar un nuevo objeto Rango en la base de datos
+     * @param rango el objeto a guardar
+     * @return el mimso objeto rango guardado
+     * @throws PersistenciaException Si ocurre un error durante la transacción
      */
     @Override
     public Rango agregarRango(Rango rango) throws PersistenciaException {
@@ -52,10 +53,10 @@ public class RangoDAO implements IRangoDAO {
     }
 
     /**
-     * 
-     * @param idRango
-     * @return
-     * @throws PersistenciaException 
+     * Elimina un rango de la base de datos que coincida con el id
+     * * @param idRango El identificador único del rango a eliminar
+     * @return El objeto {@link Rango} eliminado, o null si no se encontró el ID
+     * @throws PersistenciaException Si ocurre un error durante la eliminación o la transacción
      */
     @Override
     public Rango eliminarRango(int idRango) throws PersistenciaException {
@@ -87,10 +88,10 @@ public class RangoDAO implements IRangoDAO {
     }
 
     /**
-     * 
-     * @param idParametro
-     * @return
-     * @throws PersistenciaException 
+     * Busca todos los rangos asociados a un parámetro específico mediante su ID
+     * * @param idParametro El identificador del parámetro para filtrar los rangos
+     * @return Una lista de objetos {@link Rango} relacionados con el parámetro
+     * @throws PersistenciaException Si ocurre un error durante la ejecución de la consulta
      */
     @Override
     public List<Rango> buscarRangosPorParametro(int idParametro) throws PersistenciaException {
@@ -119,12 +120,12 @@ public class RangoDAO implements IRangoDAO {
     }
 
     /**
-     * 
-     * @param idParametro
-     * @param sexo
-     * @param edad
-     * @return
-     * @throws PersistenciaException 
+     * Cuenta la cantidad de rangos asociados a un parámetro
+     * * @param idParametro El identificador del parámetro
+     * @param sexo Criterio de sexo 
+     * @param edad Criterio de edad 
+     * @return Un valor de tipo long con el conteo de rangos encontrados
+     * @throws PersistenciaException Si ocurre un error al realizar el conteo
      */
     @Override
     public long obtenerRangosPorParametro(int idParametro, String sexo, int edad) throws PersistenciaException {
