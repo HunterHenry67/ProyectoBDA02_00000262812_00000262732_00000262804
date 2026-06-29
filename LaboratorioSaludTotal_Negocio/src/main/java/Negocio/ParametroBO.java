@@ -261,5 +261,24 @@ public class ParametroBO implements IParametroBO {
             throw new NegocioException("Error al convertir el paraemtro a DTO: " + ex.getMessage());
         }
     }
+    
+    /**
+    * 
+    * @param idPrueba 
+    * @return Lista de parámetros asociados a la prueba.
+    * @throws NegocioException Si ocurre un error durante la operación.
+    */
+   @Override
+   public List<ParametroDTO> listarPorPrueba(Integer idPrueba) throws NegocioException {
+       try {
+           if (idPrueba == null) {
+               throw new NegocioException("El identificador de la prueba no puede ser nulo.");
+           }
+           List<Parametro> parametros = parametroDAO.listarPorPrueba(idPrueba);
+           return conversionADTO(parametros);
 
+       } catch (PersistenciaException e) {
+           throw new NegocioException(e.getMessage());
+       }
+   }
 }

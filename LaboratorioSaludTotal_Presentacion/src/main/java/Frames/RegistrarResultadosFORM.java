@@ -160,7 +160,7 @@ public class RegistrarResultadosFORM extends JFrame {
 
     private void cargarParametros() {
         try {
-            parametros = parametroBO.listarTodos();
+            parametros = parametroBO.listarPorPrueba(prueba.getIdPrueba());
 
             DefaultTableModel modelo = (DefaultTableModel) tabla.getModel();
             modelo.setRowCount(0);

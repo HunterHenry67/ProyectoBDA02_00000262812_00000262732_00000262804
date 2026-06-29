@@ -30,4 +30,6 @@ public interface IParametroDAO {
     List<Parametro> consultarParametroPorCantidadRango(Integer rangos) throws PersistenciaException;
     
     Integer contarRangos(Integer idParametro) throws PersistenciaException;
+    
+    List<Parametro> listarPorPrueba(Integer idPrueba) throws PersistenciaException;
 }

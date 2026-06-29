@@ -32,4 +32,6 @@ public interface IParametroBO {
     List<ParametroDTO> consultarParametroPorCantidadRango(Integer rangos) throws NegocioException;
     
     Integer contarRangos(Integer idParametro) throws NegocioException;
+    
+    List<ParametroDTO> listarPorPrueba(Integer idPrueba) throws NegocioException;
 }

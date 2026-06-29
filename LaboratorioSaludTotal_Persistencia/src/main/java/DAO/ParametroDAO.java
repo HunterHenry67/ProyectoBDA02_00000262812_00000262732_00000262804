@@ -6,11 +6,13 @@ package DAO;
 
 import Entidades.Parametro;
 import Entidades.Rango;
+import Entidades.Resultado;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Root;
 
 /**
@@ -28,10 +30,10 @@ public class ParametroDAO implements IParametroDAO {
     }
 
     /**
-     * 
+     *
      * @param nuevoParametro
      * @return
-     * @throws PersistenciaException 
+     * @throws PersistenciaException
      */
     @Override
     public Parametro registarParametro(Parametro nuevoParametro) throws PersistenciaException {
@@ -51,9 +53,8 @@ public class ParametroDAO implements IParametroDAO {
     }
 
     /**
-     * 
-     * @return
-     * @throws PersistenciaException 
+     *
+     * @return @throws PersistenciaException
      */
     @Override
     public List<Parametro> listarTodos() throws PersistenciaException {
@@ -73,9 +74,9 @@ public class ParametroDAO implements IParametroDAO {
     }
 
     /**
-     * 
+     *
      * @param idParametro
-     * @throws PersistenciaException 
+     * @throws PersistenciaException
      */
     @Override
     public void eliminarParametro(Integer idParametro) throws PersistenciaException {
@@ -83,7 +84,7 @@ public class ParametroDAO implements IParametroDAO {
         try {
             entityManager.getTransaction().begin();
             Parametro parametroEliminado = entityManager.find(Parametro.class, idParametro);
-            if(parametroEliminado == null){
+            if (parametroEliminado == null) {
                 throw new PersistenciaException("El parámetro que se desea eliminar no existe.");
             }
             entityManager.remove(parametroEliminado);
@@ -98,10 +99,10 @@ public class ParametroDAO implements IParametroDAO {
     }
 
     /**
-     * 
+     *
      * @param idParametro
      * @return
-     * @throws PersistenciaException 
+     * @throws PersistenciaException
      */
     @Override
     public Parametro consultarParametroPorID(Integer idParametro) throws PersistenciaException {
@@ -121,10 +122,10 @@ public class ParametroDAO implements IParametroDAO {
     }
 
     /**
-     * 
+     *
      * @param nombre
      * @return
-     * @throws PersistenciaException 
+     * @throws PersistenciaException
      */
     @Override
     public List<Parametro> consultarParametroPorNombre(String nombre) throws PersistenciaException {
@@ -146,10 +147,10 @@ public class ParametroDAO implements IParametroDAO {
     }
 
     /**
-     * 
+     *
      * @param orden
      * @return
-     * @throws PersistenciaException 
+     * @throws PersistenciaException
      */
     @Override
     public List<Parametro> consultarParametroPorOrden(Integer orden) throws PersistenciaException {
@@ -170,10 +171,10 @@ public class ParametroDAO implements IParametroDAO {
     }
 
     /**
-     * 
+     *
      * @param unidadMedida
      * @return
-     * @throws PersistenciaException 
+     * @throws PersistenciaException
      */
     @Override
     public List<Parametro> consultarParametroPorUnidadMedidad(String unidadMedida) throws PersistenciaException {
@@ -194,10 +195,10 @@ public class ParametroDAO implements IParametroDAO {
     }
 
     /**
-     * 
+     *
      * @param rangos
      * @return
-     * @throws PersistenciaException 
+     * @throws PersistenciaException
      */
     @Override
     public List<Parametro> consultarParametroPorCantidadRango(Integer rangos) throws PersistenciaException {
@@ -219,15 +220,15 @@ public class ParametroDAO implements IParametroDAO {
     }
 
     /**
-     * 
+     *
      * @param idParametro
      * @return
-     * @throws PersistenciaException 
+     * @throws PersistenciaException
      */
     @Override
     public Integer contarRangos(Integer idParametro) throws PersistenciaException {
         EntityManager entityManager = conexionBD.conexionBD();
-        try{
+        try {
             CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
             CriteriaQuery<Long> criteriaQuery = criteriaBuilder.createQuery(Long.class);
             Root<Rango> rango = criteriaQuery.from(Rango.class);
@@ -235,11 +236,55 @@ public class ParametroDAO implements IParametroDAO {
                     .where(criteriaBuilder.equal(rango.get("parametro").get("idParametro"), idParametro));
             Long totalRangos = entityManager.createQuery(criteriaQuery).getSingleResult();
             return totalRangos.intValue();
-        }catch(Exception ex){
+        } catch (Exception ex) {
             LOGGER.severe(ex.getMessage());
-            throw new PersistenciaException("Error al contarlos rangos del parámetro: "+ex.getMessage());                          
-        }finally{
+            throw new PersistenciaException("Error al contarlos rangos del parámetro: " + ex.getMessage());
+        } finally {
             entityManager.close();
+        }
+    }
+
+    /**
+     * Obtiene los parámetros asociados a una prueba específica.
+     *
+     * @param idPrueba Identificador de la prueba.
+     * @return Lista de parámetros asociados a la prueba.
+     * @throws PersistenciaException Si ocurre un error durante la consulta.
+     */
+    @Override
+    public List<Parametro> listarPorPrueba(Integer idPrueba) throws PersistenciaException {
+        EntityManager em = null;
+
+        try {
+            em = conexionBD.conexionBD();
+
+            CriteriaBuilder cb = em.getCriteriaBuilder();
+            CriteriaQuery<Parametro> cq = cb.createQuery(Parametro.class);
+
+            Root<Resultado> resultado = cq.from(Resultado.class);
+            Join<Resultado, Parametro> parametro = resultado.join("parametro");
+
+            cq.select(parametro).distinct(true);
+
+            cq.where(
+                    cb.equal(
+                            resultado.get("prueba").get("idPrueba"),
+                            idPrueba
+                    )
+            );
+
+            cq.orderBy(cb.asc(parametro.get("ordenReporte")));
+
+            return em.createQuery(cq).getResultList();
+
+        } catch (Exception e) {
+            throw new PersistenciaException(
+                    "Error al obtener los parámetros de la prueba: " + e.getMessage()
+            );
+        } finally {
+            if (em != null) {
+                em.close();
+            }
         }
     }
 
