@@ -7,7 +7,11 @@ package Frames;
 import DTO.DoctorDTO;
 import Negocio.IDoctorBO;
 import Negocio.NegocioException;
+import java.util.ArrayList;
 import java.util.List;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -17,6 +21,7 @@ import javax.swing.table.DefaultTableModel;
 public class CatalogoDoctoresFORM extends javax.swing.JFrame {
     private ControlNavegacionForms controlNavegacion;
     private IDoctorBO doctorBO;
+    private List<DoctorDTO> doctores;
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(CatalogoDoctoresFORM.class.getName());
 
     /**
@@ -24,6 +29,8 @@ public class CatalogoDoctoresFORM extends javax.swing.JFrame {
      */
     public CatalogoDoctoresFORM(ControlNavegacionForms controlNavegacion) {
         initComponents();
+        this.doctores = new ArrayList<>(); // Inicializar lista
+        configurarFiltrosDoctores();
         this.controlNavegacion = controlNavegacion;
         this.doctorBO = new Negocio.DoctorBO();
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -34,6 +41,55 @@ public class CatalogoDoctoresFORM extends javax.swing.JFrame {
             javax.swing.JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
         }
 }
+    
+    private void configurarFiltrosDoctores() {
+        comboBoxFiltro.setModel(new DefaultComboBoxModel<>(
+                new String[]{"Todos", "ID", "Nombre", "Sexo"}
+        ));
+
+        txtBuscador.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) { filtrarDoctores(); }
+            @Override
+            public void removeUpdate(DocumentEvent e) { filtrarDoctores(); }
+            @Override
+            public void changedUpdate(DocumentEvent e) { filtrarDoctores(); }
+        });
+
+        comboBoxFiltro.addActionListener(e -> filtrarDoctores());
+    }
+    
+    private void filtrarDoctores() {
+        DefaultTableModel modelo = (DefaultTableModel) tablaDoctores.getModel();
+        modelo.setRowCount(0);
+
+        String entrada = txtBuscador.getText().trim().toLowerCase();
+        String filtro = comboBoxFiltro.getSelectedItem().toString();
+
+        for (DoctorDTO doctor : doctores) {
+            String id = doctor.getIdDoctor() != null ? doctor.getIdDoctor().toString().toLowerCase() : "";
+            String nombre = doctor.getNombres() != null ? doctor.getNombres().toLowerCase() : "";
+            String apellidoPaterno = doctor.getApellidoPaterno() != null ? doctor.getApellidoPaterno().toLowerCase() : "";
+            String apellidoMaterno = doctor.getApellidoMaterno() != null ? doctor.getApellidoMaterno().toLowerCase() : "";
+            String nombreCompleto = (nombre + " " + apellidoPaterno + " " + apellidoMaterno).trim();
+            String sexo = doctor.getSexo() != null ? doctor.getSexo().toLowerCase() : "";
+
+            boolean coincide = entrada.isEmpty();
+
+            if (!entrada.isEmpty()) {
+                switch (filtro) {
+                    case "ID": coincide = id.contains(entrada); break;
+                    case "Nombre": coincide = nombreCompleto.contains(entrada); break;
+                    case "Sexo": coincide = sexo.contains(entrada); break;
+                    case "Todos": coincide = id.contains(entrada) || nombreCompleto.contains(entrada) || sexo.contains(entrada); break;
+                }
+            }
+
+            if (coincide) {
+                modelo.addRow(new Object[]{ doctor.getIdDoctor(), nombreCompleto, doctor.getSexo() });
+            }
+        }
+    }
     
     private void cargarTabla() throws PresentacionException {
         try {
@@ -46,14 +102,13 @@ public class CatalogoDoctoresFORM extends javax.swing.JFrame {
     
     private void llenarTabla(List<DoctorDTO> listaDoctores) {
 
+        this.doctores = listaDoctores; 
         DefaultTableModel modelo = (DefaultTableModel) tablaDoctores.getModel();
-        modelo.setRowCount(0); 
+        modelo.setRowCount(0);
+
         for (DoctorDTO doctor : listaDoctores) {
-            modelo.addRow(new Object[]{
-                doctor.getIdDoctor(),
-                doctor.getNombres(), 
-                doctor.getSexo()
-            });
+            String nombreCompleto = (doctor.getNombres() + " " + doctor.getApellidoPaterno() + " " + doctor.getApellidoMaterno()).trim();
+            modelo.addRow(new Object[]{ doctor.getIdDoctor(), nombreCompleto, doctor.getSexo() });
         }
     }
 

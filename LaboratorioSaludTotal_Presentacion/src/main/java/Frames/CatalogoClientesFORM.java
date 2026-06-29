@@ -7,7 +7,11 @@ package Frames;
 import DTO.ClienteDTO;
 import Negocio.IClienteBO;
 import Negocio.NegocioException;
+import java.util.ArrayList;
 import java.util.List;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -17,6 +21,7 @@ import javax.swing.table.DefaultTableModel;
 public class CatalogoClientesFORM extends javax.swing.JFrame {
     private ControlNavegacionForms controlNavegacion;
     private IClienteBO clienteBO;
+    private List<ClienteDTO> clientes;
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(CatalogoClientesFORM.class.getName());
 
     /**
@@ -27,6 +32,9 @@ public class CatalogoClientesFORM extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         this.controlNavegacion = controlNavegacion;
         this.clienteBO = new Negocio.ClienteBO();
+        this.clientes = new ArrayList<>(); 
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        configurarFiltrosClientes();
         
         try {
             cargarTabla();
@@ -37,8 +45,8 @@ public class CatalogoClientesFORM extends javax.swing.JFrame {
     
     private void cargarTabla() throws PresentacionException {
         try {
-            List<ClienteDTO> listaClientes = clienteBO.ObtenerClientes();
-            llenarTabla(listaClientes);
+            clientes = clienteBO.ObtenerClientes(); // Guardamos en la lista global
+            llenarTabla(clientes);
         } catch (Exception ex) {
             throw new PresentacionException("Error al cargar la tabla con los clientes: " + ex.getMessage());
         }
@@ -46,16 +54,65 @@ public class CatalogoClientesFORM extends javax.swing.JFrame {
     
     private void llenarTabla(List<ClienteDTO> listaClientes) {
         DefaultTableModel modelo = (DefaultTableModel) tablaClientes.getModel();
-        modelo.setRowCount(0); 
-        
+        modelo.setRowCount(0);
+
         for (ClienteDTO cliente : listaClientes) {
-            modelo.addRow(new Object[]{
-                cliente.getIdCliente(),
-                cliente.getNombres(),        
-                cliente.getFechaNacimiento(), 
-                cliente.getTipoSangre(),      
-                cliente.getSexo()             
-            });
+            String nombre = cliente.getNombres() != null ? cliente.getNombres() : "";
+            String apellidoPaterno = cliente.getApellidoPaterno() != null ? cliente.getApellidoPaterno() : "";
+            String apellidoMaterno = cliente.getApellidoMaterno() != null ? cliente.getApellidoMaterno() : "";
+            String nombreCompleto = (nombre + " " + apellidoPaterno + " " + apellidoMaterno).trim();
+
+            modelo.addRow(new Object[]{ cliente.getIdCliente(), nombreCompleto, cliente.getFechaNacimiento(), cliente.getTipoSangre(), cliente.getSexo() });
+        }
+    }
+    
+    private void configurarFiltrosClientes() {
+        comboBoxFiltro.setModel(new DefaultComboBoxModel<>(
+                new String[]{"Todos", "ID", "Nombre", "Fecha Nacimiento", "Tipo Sangre", "Sexo"}
+        ));
+
+        txtBuscador.getDocument().addDocumentListener(new DocumentListener() {
+            @Override public void insertUpdate(DocumentEvent e) { filtrarClientes(); }
+            @Override public void removeUpdate(DocumentEvent e) { filtrarClientes(); }
+            @Override public void changedUpdate(DocumentEvent e) { filtrarClientes(); }
+        });
+
+        comboBoxFiltro.addActionListener(e -> filtrarClientes());
+    }
+
+    private void filtrarClientes() {
+        DefaultTableModel modelo = (DefaultTableModel) tablaClientes.getModel();
+        modelo.setRowCount(0);
+
+        String entrada = txtBuscador.getText().trim().toLowerCase();
+        String filtro = comboBoxFiltro.getSelectedItem().toString();
+
+        for (ClienteDTO cliente : clientes) {
+            String id = String.valueOf(cliente.getIdCliente()).toLowerCase();
+            String nombre = cliente.getNombres() != null ? cliente.getNombres().toLowerCase() : "";
+            String apellidoPaterno = cliente.getApellidoPaterno() != null ? cliente.getApellidoPaterno().toLowerCase() : "";
+            String apellidoMaterno = cliente.getApellidoMaterno() != null ? cliente.getApellidoMaterno().toLowerCase() : "";
+            String nombreCompleto = (nombre + " " + apellidoPaterno + " " + apellidoMaterno).trim();
+            String fechaNacimiento = cliente.getFechaNacimiento() != null ? cliente.getFechaNacimiento().toString().toLowerCase() : "";
+            String tipoSangre = cliente.getTipoSangre() != null ? cliente.getTipoSangre().toLowerCase() : "";
+            String sexo = cliente.getSexo() != null ? cliente.getSexo().toLowerCase() : "";
+
+            boolean coincide = entrada.isEmpty();
+
+            if (!entrada.isEmpty()) {
+                switch (filtro) {
+                    case "ID": coincide = id.contains(entrada); break;
+                    case "Nombre": coincide = nombreCompleto.contains(entrada); break;
+                    case "Fecha Nacimiento": coincide = fechaNacimiento.contains(entrada); break;
+                    case "Tipo Sangre": coincide = tipoSangre.contains(entrada); break;
+                    case "Sexo": coincide = sexo.contains(entrada); break;
+                    case "Todos": coincide = id.contains(entrada) || nombreCompleto.contains(entrada) || fechaNacimiento.contains(entrada) || tipoSangre.contains(entrada) || sexo.contains(entrada); break;
+                }
+            }
+
+            if (coincide) {
+                modelo.addRow(new Object[]{ cliente.getIdCliente(), nombreCompleto, cliente.getFechaNacimiento(), cliente.getTipoSangre(), cliente.getSexo() });
+            }
         }
     }
 

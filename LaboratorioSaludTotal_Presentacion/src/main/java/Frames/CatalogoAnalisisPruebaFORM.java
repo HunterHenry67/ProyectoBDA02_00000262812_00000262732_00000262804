@@ -7,7 +7,11 @@ package Frames;
 import Negocio.AnalisisBO;
 import DTO.AnalisisDTO;
 import Negocio.IAnalisisBO;
+import java.util.ArrayList;
 import java.util.List;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -17,6 +21,7 @@ import javax.swing.table.DefaultTableModel;
 public class CatalogoAnalisisPruebaFORM extends javax.swing.JFrame {
     private ControlNavegacionForms controlNavegacion;
     private IAnalisisBO analisisBO;
+    private List<AnalisisDTO> analisis;
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(CatalogoAnalisisPruebaFORM.class.getName());
 
     /**
@@ -24,6 +29,8 @@ public class CatalogoAnalisisPruebaFORM extends javax.swing.JFrame {
      */
     public CatalogoAnalisisPruebaFORM(ControlNavegacionForms controlNavegacion) {
         initComponents();
+        this.analisis = new ArrayList<>();
+        configurarFiltrosAnalisis();
         this.controlNavegacion = controlNavegacion;
         this.analisisBO = new AnalisisBO();
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -32,6 +39,56 @@ public class CatalogoAnalisisPruebaFORM extends javax.swing.JFrame {
             cargarTabla();
         } catch (PresentacionException ex) {
             javax.swing.JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    private void configurarFiltrosAnalisis() {
+        comboBoxFiltro.setModel(new DefaultComboBoxModel<>(
+                new String[]{"Todos", "ID", "Análisis", "Tipo de Muestra", "Parámetros"}
+        ));
+
+        txtBuscador.getDocument().addDocumentListener(new DocumentListener() {
+            @Override public void insertUpdate(DocumentEvent e) { filtrarAnalisis(); }
+            @Override public void removeUpdate(DocumentEvent e) { filtrarAnalisis(); }
+            @Override public void changedUpdate(DocumentEvent e) { filtrarAnalisis(); }
+        });
+
+        comboBoxFiltro.addActionListener(e -> filtrarAnalisis());
+    }
+    
+    private void filtrarAnalisis() {
+        DefaultTableModel modelo = (DefaultTableModel) tablaAnalisis.getModel();
+        modelo.setRowCount(0);
+
+        String entrada = txtBuscador.getText().trim().toLowerCase();
+        String filtro = comboBoxFiltro.getSelectedItem().toString();
+
+        for (AnalisisDTO analisisDTO : analisis) {
+            String id = analisisDTO.getIdAnalisis() != null ? analisisDTO.getIdAnalisis().toString().toLowerCase() : "";
+            String nombre = analisisDTO.getNombre() != null ? analisisDTO.getNombre().toLowerCase() : "";
+            String tipoMuestra = analisisDTO.getTipoMuestra() != null ? analisisDTO.getTipoMuestra().toLowerCase() : "";
+            String parametros = analisisDTO.getCantidadParametros() != null ? analisisDTO.getCantidadParametros().toString().toLowerCase() : "";
+
+            boolean coincide = entrada.isEmpty();
+
+            if (!entrada.isEmpty()) {
+                switch (filtro) {
+                    case "ID": coincide = id.contains(entrada); break;
+                    case "Análisis": coincide = nombre.contains(entrada); break;
+                    case "Tipo de Muestra": coincide = tipoMuestra.contains(entrada); break;
+                    case "Parámetros": coincide = parametros.contains(entrada); break;
+                    case "Todos": coincide = id.contains(entrada) || nombre.contains(entrada) || tipoMuestra.contains(entrada) || parametros.contains(entrada); break;
+                }
+            }
+
+            if (coincide) {
+                modelo.addRow(new Object[]{
+                    analisisDTO.getIdAnalisis(),
+                    analisisDTO.getNombre(),
+                    analisisDTO.getTipoMuestra() != null ? analisisDTO.getTipoMuestra() : "N/A",
+                    analisisDTO.getCantidadParametros()
+                });
+            }
         }
     }
     
@@ -44,10 +101,10 @@ public class CatalogoAnalisisPruebaFORM extends javax.swing.JFrame {
     
     private void cargarTabla() throws PresentacionException {
         try {
-            List<AnalisisDTO> listaAnalisis = analisisBO.consultarTodos(); 
-            llenarTabla(listaAnalisis);
+            analisis = analisisBO.consultarTodos(); 
+            llenarTabla(analisis);
         } catch (Exception ex) {
-            throw new PresentacionException("Error al cargar la tabla con los análisis: " + ex.getMessage());
+            throw new PresentacionException("Error al cargar la tabla: " + ex.getMessage());
         }
     }
     

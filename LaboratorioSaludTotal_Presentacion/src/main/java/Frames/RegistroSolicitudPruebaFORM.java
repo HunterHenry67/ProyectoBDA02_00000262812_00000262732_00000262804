@@ -12,6 +12,9 @@ import Negocio.IPruebaBO;
 import Negocio.PruebaBO;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -39,6 +42,7 @@ public class RegistroSolicitudPruebaFORM extends javax.swing.JFrame {
         this.pruebaBO = new PruebaBO();
         this.analisisAgregados = new ArrayList<>();
 
+        configurarFiltrosAnalisis();
         txtFolio.setEditable(false);
         txtFechaHora.setEditable(false);
         txtCliente.setEditable(false);
@@ -49,7 +53,25 @@ public class RegistroSolicitudPruebaFORM extends javax.swing.JFrame {
         btnBuscarDoctor.addActionListener(evt -> {
             this.controlNavegacion.mostrarCatalogoDoctores();
         });
+        
         cargarTablaAnalisis();
+    }
+    
+    private void configurarFiltrosAnalisis() {
+        comboBoxFiltro.setModel(new DefaultComboBoxModel<>(
+                new String[]{"Todos", "Análisis", "Tipo Muestra"}
+        ));
+
+        txtBuscador.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) { cargarTablaAnalisis(); }
+            @Override
+            public void removeUpdate(DocumentEvent e) { cargarTablaAnalisis(); }
+            @Override
+            public void changedUpdate(DocumentEvent e) { cargarTablaAnalisis(); }
+        });
+
+        comboBoxFiltro.addActionListener(e -> cargarTablaAnalisis());
     }
     
     public void setClienteSeleccionado(ClienteDTO cliente) {
@@ -84,9 +106,46 @@ public class RegistroSolicitudPruebaFORM extends javax.swing.JFrame {
     private void cargarTablaAnalisis() {
         DefaultTableModel modelo = (DefaultTableModel) tablaAnalisis.getModel();
         modelo.setRowCount(0);
-        
+
+        String entrada = txtBuscador.getText().trim().toLowerCase();
+        String filtro = comboBoxFiltro.getSelectedItem().toString();
+
         for (AnalisisDTO analisis : analisisAgregados) {
-            modelo.addRow(new Object[]{analisis.getIdAnalisis(), analisis.getNombre(), analisis.getTipoMuestra(), "Eliminar"});
+            String nombre = analisis.getNombre() != null
+                    ? analisis.getNombre().toLowerCase()
+                    : "";
+
+            String tipoMuestra = analisis.getTipoMuestra() != null
+                    ? analisis.getTipoMuestra().toLowerCase()
+                    : "";
+
+            boolean coincide = entrada.isEmpty();
+
+            if (!entrada.isEmpty()) {
+                switch (filtro) {
+                    case "Análisis":
+                        coincide = nombre.contains(entrada);
+                        break;
+
+                    case "Tipo Muestra":
+                        coincide = tipoMuestra.contains(entrada);
+                        break;
+
+                    case "Todos":
+                        coincide = nombre.contains(entrada)
+                                || tipoMuestra.contains(entrada);
+                        break;
+                }
+            }
+
+            if (coincide) {
+                modelo.addRow(new Object[]{
+                    analisis.getIdAnalisis(),
+                    analisis.getNombre(),
+                    analisis.getTipoMuestra(),
+                    "Eliminar"
+                });
+            }
         }
     }
 
