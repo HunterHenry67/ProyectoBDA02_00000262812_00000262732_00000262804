@@ -14,6 +14,9 @@ import javax.persistence.Persistence;
  */
 public class ConexionBD implements IConexionBD{
 
+    public ConexionBD() {
+    }
+
     /**
      * 
      * @return 
