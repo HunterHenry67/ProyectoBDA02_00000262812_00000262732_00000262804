@@ -13,10 +13,8 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
 /**
- * Clase de acceso a datos para la entidad {@link Muestra}
- * Proporciona métodos para la gestión de persistencia, búsqueda y filtrado de 
- * muestras clínicas mediante el uso de JPA y Criteria API
- * * @author BALAMRUSH
+ *
+ * @author user
  */
 public class MuestraDAO implements IMuestraDAO{
     private IConexionBD conexion;
@@ -26,10 +24,10 @@ public class MuestraDAO implements IMuestraDAO{
     }
 
     /**
-     * Persiste una nueva muestra en la base de datos
-     * * @param muestra El objeto {@link Muestra} que se desea agregar
-     * @return El objeto {@link Muestra} recién persistido
-     * @throws PersistenciaException Si ocurre un error al intentar guardar en la base de datos
+     * 
+     * @param muestra
+     * @return
+     * @throws PersistenciaException 
      */
     @Override
     public Muestra agregarMuestra(Muestra muestra) throws PersistenciaException {
@@ -49,10 +47,10 @@ public class MuestraDAO implements IMuestraDAO{
     }
 
     /**
-     * Busca una muestra específica por su id
-     * * @param idMuestra El ID de la muestra a buscar
-     * @return El objeto {@link Muestra} encontrado
-     * @throws PersistenciaException Si la muestra no existe o si ocurre un error de conexión
+     * 
+     * @param idMuestra
+     * @return
+     * @throws PersistenciaException 
      */
     @Override
     public Muestra buscarMuestraPorId(int idMuestra) throws PersistenciaException {
@@ -73,9 +71,9 @@ public class MuestraDAO implements IMuestraDAO{
     }
 
     /**
-     * Recupera una lista completa de todas las muestras almacenadas
-     * * @return Una lista de objetos {@link Muestra}
-     * @throws PersistenciaException Si ocurre un error durante la consulta general
+     * 
+     * @return
+     * @throws PersistenciaException 
      */
     @Override
     public List<Muestra> consultarTodasLasMuestras() throws PersistenciaException {
@@ -98,10 +96,10 @@ public class MuestraDAO implements IMuestraDAO{
     }
 
     /**
-     * Filtra y guarda las muestras que pertenecen a una prueba clínica
-     * * @param idPrueba El identificador de la prueba con la cual están relacionadas las muestras
-     * @return Una lista de objetos {@link Muestra} asociadas a la prueba dada
-     * @throws PersistenciaException Si ocurre un error al realizar la consulta relacional
+     * 
+     * @param idPrueba
+     * @return
+     * @throws PersistenciaException 
      */
     @Override
     public List<Muestra> buscarMuestrasPorPrueba(int idPrueba) throws PersistenciaException {

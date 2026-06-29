@@ -22,13 +22,14 @@ public class CatalogoDoctoresFORM extends javax.swing.JFrame {
     private ControlNavegacionForms controlNavegacion;
     private IDoctorBO doctorBO;
     private List<DoctorDTO> doctores;
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(CatalogoDoctoresFORM.class.getName());
 
     /**
      * Creates new form CatalogoDoctoresFORM
      */
     public CatalogoDoctoresFORM(ControlNavegacionForms controlNavegacion) {
         initComponents();
-        this.doctores = new ArrayList<>();
+        this.doctores = new ArrayList<>(); // Inicializar lista
         configurarFiltrosDoctores();
         this.controlNavegacion = controlNavegacion;
         this.doctorBO = new Negocio.DoctorBO();

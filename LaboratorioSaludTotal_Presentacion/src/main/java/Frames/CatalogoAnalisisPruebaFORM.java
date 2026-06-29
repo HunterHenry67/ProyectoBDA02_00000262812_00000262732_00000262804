@@ -43,7 +43,9 @@ public class CatalogoAnalisisPruebaFORM extends javax.swing.JFrame {
     }
     
     private void configurarFiltrosAnalisis() {
-        comboBoxFiltro.setModel(new DefaultComboBoxModel<>(new String[]{"Todos", "ID", "Análisis", "Tipo de Muestra", "Parámetros"}));
+        comboBoxFiltro.setModel(new DefaultComboBoxModel<>(
+                new String[]{"Todos", "ID", "Análisis", "Tipo de Muestra", "Parámetros"}
+        ));
 
         txtBuscador.getDocument().addDocumentListener(new DocumentListener() {
             @Override public void insertUpdate(DocumentEvent e) { filtrarAnalisis(); }
@@ -102,7 +104,7 @@ public class CatalogoAnalisisPruebaFORM extends javax.swing.JFrame {
             analisis = analisisBO.consultarTodos(); 
             llenarTabla(analisis);
         } catch (Exception ex) {
-            throw new PresentacionException("Error al cargar la tabla " + ex.getMessage());
+            throw new PresentacionException("Error al cargar la tabla: " + ex.getMessage());
         }
     }
     
@@ -274,7 +276,10 @@ public class CatalogoAnalisisPruebaFORM extends javax.swing.JFrame {
                 RegistroSolicitudPruebaFORM pantallaSolicitud = controlNavegacion.getPantallaSolicitudActual();
 
                 if (pantallaSolicitud == null) {
-                    javax.swing.JOptionPane.showMessageDialog(this, "Primero debes abrir una solicitud de prueba.");
+                    javax.swing.JOptionPane.showMessageDialog(
+                        this,
+                        "Primero debes abrir una solicitud de prueba."
+                    );
                     return;
                 }
 
@@ -294,10 +299,18 @@ public class CatalogoAnalisisPruebaFORM extends javax.swing.JFrame {
                 this.dispose();
 
             } catch (Exception ex) {
-                javax.swing.JOptionPane.showMessageDialog(this, "Error al seleccionar " + ex.getMessage());
+                javax.swing.JOptionPane.showMessageDialog(
+                    this,
+                    "Error al seleccionar " + ex.getMessage()
+                );
             }
         } else {
-            javax.swing.JOptionPane.showMessageDialog(this, "Seleccione un análisis de la tabla", "Advertencia", javax.swing.JOptionPane.WARNING_MESSAGE );
+            javax.swing.JOptionPane.showMessageDialog(
+                this,
+                "Seleccione un análisis de la tabla.",
+                "Advertencia",
+                javax.swing.JOptionPane.WARNING_MESSAGE
+            );
         }
         
     }//GEN-LAST:event_btnSeleccionarActionPerformed

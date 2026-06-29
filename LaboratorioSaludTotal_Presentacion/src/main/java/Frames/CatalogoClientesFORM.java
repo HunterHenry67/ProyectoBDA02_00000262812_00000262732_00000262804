@@ -29,7 +29,7 @@ public class CatalogoClientesFORM extends javax.swing.JFrame {
      */
     public CatalogoClientesFORM(ControlNavegacionForms controlNavegacion) {
         initComponents();
-        
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         this.controlNavegacion = controlNavegacion;
         this.clienteBO = new Negocio.ClienteBO();
         this.clientes = new ArrayList<>(); 
@@ -45,7 +45,7 @@ public class CatalogoClientesFORM extends javax.swing.JFrame {
     
     private void cargarTabla() throws PresentacionException {
         try {
-            clientes = clienteBO.ObtenerClientes();
+            clientes = clienteBO.ObtenerClientes(); // Guardamos en la lista global
             llenarTabla(clientes);
         } catch (Exception ex) {
             throw new PresentacionException("Error al cargar la tabla con los clientes: " + ex.getMessage());

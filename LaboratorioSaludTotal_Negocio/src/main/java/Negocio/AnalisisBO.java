@@ -28,9 +28,8 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Clase que controla toda la lógica de negocio de los Análisis
- * Aquí se validan los datos y se preparan las entidades antes de guardarlas o consultarlas
- * * @author Andre
+ *
+ * @author Andre
  */
 public class AnalisisBO implements IAnalisisBO {
 
@@ -45,10 +44,10 @@ public class AnalisisBO implements IAnalisisBO {
     }
 
     /**
-     * Guarda un análisis nuevo junto con todos sus parámetros y rangos
-     * @param guardarAnalisis Objeto con la información del análisis
-     * @return El análisis ya guardado con su ID generado
-     * @throws NegocioException Si los datos están mal o hay error al guardar
+     * 
+     * @param guardarAnalisis
+     * @return
+     * @throws NegocioException 
      */
     @Override
     public Analisis guardarAnalisis(GuardarAnalisisDTO guardarAnalisis) throws NegocioException {
@@ -87,10 +86,10 @@ public class AnalisisBO implements IAnalisisBO {
     }
 
     /**
-     * Actualiza la información básica de un análisis existente
-     * @param actualizarAnalisis Datos nuevos del análisis
-     * @return El análisis actualizado
-     * @throws NegocioException Si no se encuentra el análisis o hay error de base de datos
+     * 
+     * @param actualizarAnalisis
+     * @return
+     * @throws NegocioException 
      */
     @Override
     public Analisis actualizarAnalisis(ActualizarAnalisisDTO actualizarAnalisis) throws NegocioException {
@@ -119,9 +118,9 @@ public class AnalisisBO implements IAnalisisBO {
     }
 
     /**
-     * Borra un análisis del sistema
-     * @param eliminarAnalisis Contiene el ID del análisis a borrar
-     * @throws NegocioException Si el análisis no existe o no se puede borrar
+     * 
+     * @param eliminarAnalisis
+     * @throws NegocioException 
      */
     @Override
     public void eliminarAnalisis(EliminarAnalisisDTO eliminarAnalisis) throws NegocioException {
@@ -142,10 +141,10 @@ public class AnalisisBO implements IAnalisisBO {
     }
 
     /**
-     * Busca un análisis específico por su ID
-     * @param idAnalisis ID del análisis
-     * @return El objeto análisis encontrado
-     * @throws NegocioException Si el ID es inválido o no existe
+     * 
+     * @param idAnalisis
+     * @return
+     * @throws NegocioException 
      */
     @Override
     public Analisis consultarPorId(Integer idAnalisis) throws NegocioException {
@@ -168,9 +167,9 @@ public class AnalisisBO implements IAnalisisBO {
     }
 
     /**
-     * Lista todos los análisis registrados
-     * @return Lista de análisis convertidos a DTO para la tabla
-     * @throws NegocioException Si ocurre un error al consultar
+     * 
+     * @return
+     * @throws NegocioException 
      */
     @Override
     public List<AnalisisDTO> consultarTodos() throws NegocioException {
@@ -184,10 +183,10 @@ public class AnalisisBO implements IAnalisisBO {
     }
 
     /**
-     * Busca análisis que coincidan con el nombre proporcionado
-     * @param nombre Nombre del análisis
-     * @return Lista de análisis encontrados
-     * @throws NegocioException Si hay error al buscar
+     * 
+     * @param nombre
+     * @return
+     * @throws NegocioException 
      */
     @Override
     public List<AnalisisDTO> buscarPorNombre(String nombre) throws NegocioException {

@@ -5,7 +5,6 @@
 package DTO;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 /**
  *
@@ -70,14 +69,5 @@ public class PruebaDTO {
         this.nombreDoctor = nombreDoctor;
     }
     
-    private List<AnalisisDTO> analisisAgregados;
-
-    public List<AnalisisDTO> getAnalisisAgregados() {
-        return analisisAgregados;
-    }
-
-    public void setAnalisisAgregados(List<AnalisisDTO> analisisAgregados) {
-        this.analisisAgregados = analisisAgregados;
-    }
     
 }

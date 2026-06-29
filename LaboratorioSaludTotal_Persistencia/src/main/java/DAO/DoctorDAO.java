@@ -33,10 +33,9 @@ public class DoctorDAO implements IDoctorDAO {
     }
 
     /**
-     * Consulta el doctor buscado a través de su id
-     * * @param idDoctor identificador de doctor
-     * @return un objeto de la clase Doctor que coincida con el id
-     * @throws PersistenciaException Si ocurre un error al acceder a la base de datos
+     * * @param idDoctor
+     * @return
+     * @throws PersistenciaException 
      */
     @Override
     public Doctor consultarPorID(Integer idDoctor) throws PersistenciaException {
@@ -55,9 +54,8 @@ public class DoctorDAO implements IDoctorDAO {
     }
 
     /**
-     * devuelve una lista con todos los doctores registrados
-     * * @return una lista con objetos Doctor
-     * @throws PersistenciaException Si ocurre un error durante la consulta de la bd
+     * * @return
+     * @throws PersistenciaException 
      */
     @Override
     public List<Doctor> consultarTodos() throws PersistenciaException {
@@ -76,10 +74,9 @@ public class DoctorDAO implements IDoctorDAO {
     }
 
     /**
-     * busca doctores cuyos nombres coincidan con el parametro mandado
-     * * @param nombres nombre a buscar
-     * @return Una lista de objetos Doctor que coinciden con el parametro
-     * @throws PersistenciaException Si ocurre un error durante la búsqueda
+     * * @param nombres
+     * @return
+     * @throws PersistenciaException 
      */
     @Override
     public List<Doctor> buscarPorNombres(String nombres) throws PersistenciaException {
@@ -98,10 +95,9 @@ public class DoctorDAO implements IDoctorDAO {
     }
 
     /**
-     * manda los doctores basándose en el sexo especificado
-     * * @param sexo El valor del enum para filtrar.
-     * @return Una lista de objetos Doctor filtrada por el sexo requerido
-     * @throws PersistenciaException Si ocurre un error durante la consulta
+     * * @param sexo
+     * @return
+     * @throws PersistenciaException 
      */
     @Override
     public List<Doctor> buscarPorSexo(Sexo sexo) throws PersistenciaException {

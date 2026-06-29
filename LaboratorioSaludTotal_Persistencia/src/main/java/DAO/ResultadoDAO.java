@@ -14,10 +14,8 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
 /**
- * Clase de acceso a datos para la entidad {@link Resultado}
- * Gestiona las operaciones de persistencia y consultas mediante JPA para 
- * los resultados de los análisis clínicos.
- * * @author BALAMRUSH
+ *
+ * @author BALAMRUSH
  */
 public class ResultadoDAO implements IResultadoDAO{
 
@@ -31,10 +29,10 @@ public class ResultadoDAO implements IResultadoDAO{
     }
     
     /**
-     * Registra un nuevo resultado en la base de datos
-     * * @param resultado El objeto {@link Resultado} a registrar
-     * @return El objeto {@link Resultado} registrado
-     * @throws PersistenciaException Si ocurre un error durante la transacción
+     * 
+     * @param resultado
+     * @return
+     * @throws PersistenciaException 
      */
     @Override
     public Resultado registrarResultado(Resultado resultado) throws PersistenciaException {
@@ -54,10 +52,10 @@ public class ResultadoDAO implements IResultadoDAO{
     }
 
     /**
-     * Consulta un resultado específico por su id
-     * * @param idResultado El ID del resultado a buscar
-     * @return El objeto {@link Resultado} encontrado
-     * @throws PersistenciaException Si el resultado no existe o hay un error de conexión
+     * 
+     * @param idResultado
+     * @return
+     * @throws PersistenciaException 
      */
     @Override
     public Resultado consultarResultadoPorID(Integer idResultado) throws PersistenciaException {
@@ -77,10 +75,10 @@ public class ResultadoDAO implements IResultadoDAO{
     }
 
     /**
-     * Recupera una lista de resultados asociados a una prueba 
-     * * @param idPrueba El ID de la prueba que se desean consultar
-     * @return Lista de objetos {@link Resultado} encontrados
-     * @throws PersistenciaException Si ocurre un error en la consulta
+     * 
+     * @param idPrueba
+     * @return
+     * @throws PersistenciaException 
      */
     @Override
     public List<Resultado> consultarResultadoPorPrueba(Integer idPrueba) throws PersistenciaException {
@@ -102,11 +100,11 @@ public class ResultadoDAO implements IResultadoDAO{
     }
 
     /**
-     * Busca un resultado único filtrado por prueba y parámetro
-     * * @param idPrueba El ID de la prueba
-     * @param idParametro El ID del parámetro clínico
-     * @return El objeto {@link Resultado} encontrado, o null si ocurre una excepción
-     * @throws PersistenciaException Si ocurre un error durante la búsqueda
+     * 
+     * @param idPrueba
+     * @param idParametro
+     * @return
+     * @throws PersistenciaException 
      */
     @Override
     public Resultado consultarResultadoPorPruebaParametro(Integer idPrueba, Integer idParametro) throws PersistenciaException {
@@ -132,11 +130,11 @@ public class ResultadoDAO implements IResultadoDAO{
     }
 
     /**
-     * Verifica la existencia de un resultado para una prueba y parámetro dados
-     * * @param idPrueba El ID de la prueba
-     * @param idParametro El ID del parámetro clínico
-     * @return true si el resultado existe, false en el otro caso
-     * @throws PersistenceException Si ocurre un error al ejecutar la consulta de conteo
+     * 
+     * @param idPrueba
+     * @param idParametro
+     * @return
+     * @throws PersistenceException 
      */
     @Override
     public boolean resultadoExiste(Integer idPrueba, Integer idParametro) throws PersistenceException {

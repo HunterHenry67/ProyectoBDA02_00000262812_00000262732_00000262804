@@ -32,17 +32,19 @@ public class ParametroBO implements IParametroBO {
     }
 
     /**
-     * 
-     * @param registrarParametro
-     * @return
-     * @throws NegocioException 
+     * Valida y registra un nuevo parametro.
+     *
+     * @param registrarParametro datos del parametro que deseas registrar.
+     * @return parametro registrado.
+     * @throws NegocioException si los datos no son validos o ocurre algun error
+     * al registrar.
      */
     @Override
     public Parametro registarParametro(RegistrarParametroDTO registrarParametro) throws NegocioException {
-        try{
+        try {
             this.validarGuardado(registrarParametro);
             Analisis analisis = analisisDAO.consultarPorId(registrarParametro.getIdAnalisis());
-            if(analisis == null){
+            if (analisis == null) {
                 throw new NegocioException("No existe el analisis que se seleccionó.");
             }
             Parametro parametro = new Parametro();
@@ -50,169 +52,186 @@ public class ParametroBO implements IParametroBO {
             parametro.setOrdenReporte(registrarParametro.getOrdenReporte());
             parametro.setNotaDescriptiva(registrarParametro.getNotaDescriptiva());
             parametro.setUnidadMedida(registrarParametro.getUnidadMedida());
-            parametro.setAnalisis(analisis);           
+            parametro.setAnalisis(analisis);
             return parametroDAO.registarParametro(parametro);
-        }catch(PersistenciaException ex){
+        } catch (PersistenciaException ex) {
             LOGGER.severe(ex.getMessage());
-            throw new NegocioException("Error al registrar el parámetro: "+ex.getMessage());
+            throw new NegocioException("Error al registrar el parámetro: " + ex.getMessage());
         }
     }
 
     /**
-     * 
-     * @return
-     * @throws NegocioException 
+     * Consulta todos los parametros registrados.
+     *
+     * @return lista de parametros encontrados.
+     * @throws NegocioException si ocurre algun error al consultar los
+     * parametros.
      */
     @Override
     public List<ParametroDTO> listarTodos() throws NegocioException {
-        try{
+        try {
             List<Parametro> parametros = parametroDAO.listarTodos();
             return conversionADTO(parametros);
-        }catch(PersistenciaException ex){
+        } catch (PersistenciaException ex) {
             LOGGER.severe(ex.getMessage());
-            throw new NegocioException("Error al lista todos los parámetros: "+ex.getMessage());
+            throw new NegocioException("Error al lista todos los parámetros: " + ex.getMessage());
         }
     }
+
     /**
-     * 
-     * @param idParametro
-     * @throws NegocioException 
+     * Valida y elimina el parametro seleccionado.
+     *
+     * @param idParametro identificador del parametro que deseas eliminar.
+     * @throws NegocioException si el identificador no es valido o ocurre algun
+     * error al eliminar.
      */
     @Override
     public void eliminarParametro(Integer idParametro) throws NegocioException {
-        try{
-            if(idParametro == null || idParametro <= 0){
+        try {
+            if (idParametro == null || idParametro <= 0) {
                 throw new NegocioException("El ID del parametro no es válido.");
             }
             parametroDAO.eliminarParametro(idParametro);
-        }catch(PersistenciaException ex){
+        } catch (PersistenciaException ex) {
             LOGGER.severe(ex.getMessage());
-            throw new NegocioException("Error al eliminar el parámetro: "+ex.getMessage());
+            throw new NegocioException("Error al eliminar el parámetro: " + ex.getMessage());
         }
     }
 
     /**
-     * 
-     * @param idParametro
-     * @return
-     * @throws NegocioException 
+     * Consulta un parametro mediante su identificador.
+     *
+     * @param idParametro identificador del parametro que deseas consultar.
+     * @return parametro encontrado.
+     * @throws NegocioException si el identificador no es valido o ocurre algun
+     * error al consultar.
      */
     @Override
     public Parametro consultarParametroPorID(Integer idParametro) throws NegocioException {
-        try{
-            if(idParametro == null || idParametro <= 0){
+        try {
+            if (idParametro == null || idParametro <= 0) {
                 throw new NegocioException("El ID del parámetro no es válido.");
             }
             return parametroDAO.consultarParametroPorID(idParametro);
-        }catch(PersistenciaException ex){
+        } catch (PersistenciaException ex) {
             LOGGER.severe(ex.getMessage());
-            throw new NegocioException("Error al consultar el parámetro por ID: "+ex.getMessage());
+            throw new NegocioException("Error al consultar el parámetro por ID: " + ex.getMessage());
         }
     }
 
     /**
-     * 
-     * @param nombre
-     * @return
-     * @throws NegocioException 
+     * Consulta los parametros por medio del nombre.
+     *
+     * @param nombre nombre del parametro que deseas buscar.
+     * @return lista de parametros encontrados.
+     * @throws NegocioException si ocurre algun error al consultar por nombre.
      */
     @Override
     public List<ParametroDTO> consultarParametroPorNombre(String nombre) throws NegocioException {
-        try{
-            if(nombre == null || nombre.trim().isEmpty()){
+        try {
+            if (nombre == null || nombre.trim().isEmpty()) {
                 return listarTodos();
             }
             List<Parametro> parametros = parametroDAO.consultarParametroPorNombre(nombre.trim());
             return conversionADTO(parametros);
-        }catch(PersistenciaException ex){
+        } catch (PersistenciaException ex) {
             LOGGER.severe(ex.getMessage());
-            throw new NegocioException("Error al consultar el parámetro por nombre: "+ex.getMessage());
+            throw new NegocioException("Error al consultar el parámetro por nombre: " + ex.getMessage());
         }
     }
 
     /**
-     * 
-     * @param orden
-     * @return
-     * @throws NegocioException 
+     * Consulta los parametros por medio del orden de reporte.
+     *
+     * @param orden orden del parametro que deseas buscar.
+     * @return lista de parametros encontrados.
+     * @throws NegocioException si el orden no es valido o ocurre algun error al
+     * consultar.
      */
     @Override
     public List<ParametroDTO> consultarParametroPorOrden(Integer orden) throws NegocioException {
-        try{
-            if(orden == null || orden  <= 0){
+        try {
+            if (orden == null || orden <= 0) {
                 throw new NegocioException("El orden debe ser mayor a 0.");
             }
             List<Parametro> parametros = parametroDAO.consultarParametroPorOrden(orden);
             return conversionADTO(parametros);
-        }catch(PersistenciaException ex){
+        } catch (PersistenciaException ex) {
             LOGGER.severe(ex.getMessage());
-            throw new NegocioException("Error al buscar el parametro por orden: "+ex.getMessage());
+            throw new NegocioException("Error al buscar el parametro por orden: " + ex.getMessage());
         }
     }
 
     /**
-     * 
-     * @param unidadMedida
-     * @return
-     * @throws NegocioException 
+     * Consulta los parametros por medio de la unidad de medida.
+     *
+     * @param unidadMedida unidad de medida que deseas buscar.
+     * @return lista de parametros encontrados.
+     * @throws NegocioException si la unidad de medida no es valida o ocurre
+     * algun error al consultar.
      */
     @Override
     public List<ParametroDTO> consultarParametroPorUnidadMedidad(String unidadMedida) throws NegocioException {
-        try{
-            if(unidadMedida == null || unidadMedida.trim().isEmpty()){
+        try {
+            if (unidadMedida == null || unidadMedida.trim().isEmpty()) {
                 throw new NegocioException("La unidad de medidad es obligatoria.");
             }
             List<Parametro> parametros = parametroDAO.consultarParametroPorUnidadMedidad(unidadMedida);
             return conversionADTO(parametros);
-        }catch(PersistenciaException ex){
+        } catch (PersistenciaException ex) {
             LOGGER.severe(ex.getMessage());
-            throw new NegocioException("Error al consultar el parámetro por unidad de medidad: "+ex.getMessage());
+            throw new NegocioException("Error al consultar el parámetro por unidad de medidad: " + ex.getMessage());
         }
     }
 
     /**
-     * 
-     * @param rangos
-     * @return
-     * @throws NegocioException 
+     * Consulta los parametros por medio de la cantidad de rangos.
+     *
+     * @param rangos cantidad de rangos que deseas buscar.
+     * @return lista de parametros encontrados.
+     * @throws NegocioException si la cantidad no es valida o ocurre algun error
+     * al consultar.
      */
     @Override
     public List<ParametroDTO> consultarParametroPorCantidadRango(Integer rangos) throws NegocioException {
-        try{
-            if(rangos == 0 || rangos < 0){
+        try {
+            if (rangos == 0 || rangos < 0) {
                 throw new NegocioException("La cantidad del rango no es válida.");
             }
             List<Parametro> parametros = parametroDAO.consultarParametroPorCantidadRango(rangos);
             return conversionADTO(parametros);
-        }catch(PersistenciaException ex){
+        } catch (PersistenciaException ex) {
             LOGGER.severe(ex.getMessage());
-            throw new NegocioException("Error al consultar el parámetro por rango: "+ex.getMessage());
+            throw new NegocioException("Error al consultar el parámetro por rango: " + ex.getMessage());
         }
     }
 
     /**
-     * 
-     * @param idParametro
-     * @return
-     * @throws NegocioException 
+     * Cuenta los rangos que pertenecen a un parametro.
+     *
+     * @param idParametro identificador del parametro.
+     * @return cantidad de rangos encontrados.
+     * @throws NegocioException si el identificador no es valido o ocurre algun
+     * error al contar.
      */
     @Override
     public Integer contarRangos(Integer idParametro) throws NegocioException {
-        try{
-            if(idParametro == null || idParametro <= 0){
+        try {
+            if (idParametro == null || idParametro <= 0) {
                 throw new NegocioException("El ID del parámetro no es válido.");
             }
             return parametroDAO.contarRangos(idParametro);
-        }catch(PersistenciaException ex){
+        } catch (PersistenciaException ex) {
             LOGGER.severe(ex.getMessage());
-            throw new NegocioException("Error al contar los rangos: "+ex.getMessage());
+            throw new NegocioException("Error al contar los rangos: " + ex.getMessage());
         }
     }
 
     /**
-     * 
-     * @param registro
-     * @throws NegocioException 
+     * Valida los datos necesarios para registrar un parametro.
+     *
+     * @param registro datos del parametro que deseas validar.
+     * @throws NegocioException si algun dato obligatorio no es valido.
      */
     private void validarGuardado(RegistrarParametroDTO registro) throws NegocioException {
         if (registro == null) {
@@ -236,10 +255,11 @@ public class ParametroBO implements IParametroBO {
     }
 
     /**
-     * 
-     * @param parametros
-     * @return
-     * @throws NegocioException 
+     * Convierte una lista de parametros a una lista de DTO.
+     *
+     * @param parametros lista de parametros que deseas convertir.
+     * @return lista de parametros en formato DTO.
+     * @throws NegocioException si ocurre algun error al convertir los datos.
      */
     private List<ParametroDTO> conversionADTO(List<Parametro> parametros) throws NegocioException {
         try {
@@ -261,24 +281,24 @@ public class ParametroBO implements IParametroBO {
             throw new NegocioException("Error al convertir el paraemtro a DTO: " + ex.getMessage());
         }
     }
-    
-    /**
-    * 
-    * @param idPrueba 
-    * @return Lista de parámetros asociados a la prueba.
-    * @throws NegocioException Si ocurre un error durante la operación.
-    */
-   @Override
-   public List<ParametroDTO> listarPorPrueba(Integer idPrueba) throws NegocioException {
-       try {
-           if (idPrueba == null) {
-               throw new NegocioException("El identificador de la prueba no puede ser nulo.");
-           }
-           List<Parametro> parametros = parametroDAO.listarPorPrueba(idPrueba);
-           return conversionADTO(parametros);
 
-       } catch (PersistenciaException e) {
-           throw new NegocioException(e.getMessage());
-       }
-   }
+    /**
+     * Valida y lista los parametros por prueba.
+     * @param idPrueba identificador del parametro
+     * @return Lista de parámetros asociados a la prueba.
+     * @throws NegocioException Si ocurre un error durante la operación.
+     */
+    @Override
+    public List<ParametroDTO> listarPorPrueba(Integer idPrueba) throws NegocioException {
+        try {
+            if (idPrueba == null) {
+                throw new NegocioException("El identificador de la prueba no puede ser nulo.");
+            }
+            List<Parametro> parametros = parametroDAO.listarPorPrueba(idPrueba);
+            return conversionADTO(parametros);
+
+        } catch (PersistenciaException e) {
+            throw new NegocioException(e.getMessage());
+        }
+    }
 }
