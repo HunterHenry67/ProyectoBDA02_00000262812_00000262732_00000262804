@@ -27,12 +27,10 @@ public class AnalisisDAO implements IAnalisisDAO {
     }
 
     /**
-     * Guarda un nuevo análisis en la base de datos.
-     *
-     * @param analisis entidad que se guarda en la base de datos.
-     * @return el análisis guardado.
-     * @throws PersistenciaException si ocurre algún error al guardar el
-     * análisis.
+     * 
+     * @param analisis
+     * @return
+     * @throws PersistenciaException 
      */
     @Override
     public Analisis guardar(Analisis analisis) throws PersistenciaException {
@@ -56,12 +54,10 @@ public class AnalisisDAO implements IAnalisisDAO {
     }
 
     /**
-     * Actualiza la información del análisis seleccionado.
-     *
-     * @param analisis entidad que se desea actualizar.
-     * @return el análisis actualizado.
-     * @throws PersistenciaException si ocurre algún error al guardar el
-     * análisis.
+     * 
+     * @param analisis
+     * @return
+     * @throws PersistenciaException 
      */
     @Override
     public Analisis actualizar(Analisis analisis) throws PersistenciaException {
@@ -84,11 +80,9 @@ public class AnalisisDAO implements IAnalisisDAO {
     }
 
     /**
-     * Elimina el análisis seleccionado mediante el identificador.
-     *
-     * @param idAnalisis identificador del análisis que deseas eliminar.
-     * @throws PersistenciaException si ocurre algún error al eliminar el
-     * análisis.
+     * 
+     * @param idAnalisis
+     * @throws PersistenciaException 
      */
     @Override
     public void eliminar(Integer idAnalisis) throws PersistenciaException {
@@ -109,12 +103,10 @@ public class AnalisisDAO implements IAnalisisDAO {
     }
 
     /**
-     * Consulta un análisis por su identificador.
-     *
-     * @param idAnalisis identificador de analisis buscado.
-     * @return analisis encontrado.
-     * @throws PersistenciaException si existe algún error al consultar el
-     * análisis por su identificador.
+     * 
+     * @param idAnalisis
+     * @return
+     * @throws PersistenciaException 
      */
     @Override
     public Analisis consultarPorId(Integer idAnalisis) throws PersistenciaException {
@@ -134,11 +126,9 @@ public class AnalisisDAO implements IAnalisisDAO {
     }
 
     /**
-     * Consulta todos los analisis encontrados en la base de datos.
-     *
-     * @return una lista con todos los analisis encontrados.
-     * @throws PersistenciaException si existe algún error al consultar todos
-     * los analisis.
+     * 
+     * @return
+     * @throws PersistenciaException 
      */
     @Override
     public List<Analisis> consultarTodos() throws PersistenciaException {
@@ -157,12 +147,10 @@ public class AnalisisDAO implements IAnalisisDAO {
     }
 
     /**
-     * Busca los analisis que coincidan con el nombre recibido.
-     *
-     * @param nombre utilizado para filtrar los analisis.
-     * @return una lista con los analisis filtrados.
-     * @throws PersistenciaException si existe algún error al consultar los
-     * analisis por nombre.
+     * 
+     * @param nombre
+     * @return
+     * @throws PersistenciaException 
      */
     @Override
     public List<Analisis> buscarPorNombre(String nombre) throws PersistenciaException {
@@ -181,12 +169,10 @@ public class AnalisisDAO implements IAnalisisDAO {
     }
 
     /**
-     * Cuenta la cantidad de parámetros asociados al analisis.
-     *
-     * @param idAnalisis identificador del analisis.
-     * @return cantidad de parametros asociados.
-     * @throws PersistenciaException si existe algún error al contra los
-     * parametros.
+     * 
+     * @param idAnalisis
+     * @return
+     * @throws PersistenciaException 
      */
     @Override
     public Integer contarParametros(Integer idAnalisis) throws PersistenciaException {
@@ -207,10 +193,10 @@ public class AnalisisDAO implements IAnalisisDAO {
     }
 
     /**
-     * Busca el analisis por el tipo de prueba asociado.
-     * @param tipoMuestra nombre de tipo de muestra asociado al analisis.
-     * @return lista con todos los analisis filtrados.
-     * @throws PersistenciaException si ocurre un error al buscar el analisis por tipo de muestra.
+     * 
+     * @param tipoMuestra
+     * @return
+     * @throws PersistenciaException 
      */
     @Override
     public List<Analisis> buscarPorTipoMuestra(String tipoMuestra) throws PersistenciaException {
@@ -231,11 +217,10 @@ public class AnalisisDAO implements IAnalisisDAO {
     }
 
     /**
-     * Busca analisis de acuerdo con la cantidad de parametros registrados.
-     * @param cantidad de parámetros del analisis.
-     * @return lista con todos los analisis filtrados.
-     * @throws PersistenciaException si ocurre un error al buscar el analisis
-     * por cantidad y parametro.
+     * 
+     * @param cantidad
+     * @return
+     * @throws PersistenciaException 
      */
     @Override
     public List<Analisis> buscarPorCantidadParametro(Integer cantidad) throws PersistenciaException {
@@ -258,57 +243,51 @@ public class AnalisisDAO implements IAnalisisDAO {
                     ));
             return entityManager.createQuery(criteriaQuery).getResultList();
         } catch (Exception ex) {
-            throw new PersistenciaException("Error al buscar el analisis por cantidad de parámetro: " + ex.getMessage());
+            throw new PersistenciaException("Error al buscar el analisis por cantidad de parámetro: "+ex.getMessage());
         } finally {
             entityManager.close();
         }
     }
 
-    /**
-     * 
-     * @param idPrueba 
-     * @return
-     * @throws PersistenciaException 
-     */
     @Override
-    public String obtenerNombreAnalisisPorPrueba(Integer idPrueba) throws PersistenciaException {
-        EntityManager em = null;
+public String obtenerNombreAnalisisPorPrueba(Integer idPrueba) throws PersistenciaException {
+    EntityManager em = null;
 
-        try {
-            em = conexion.conexionBD();
+    try {
+        em = conexion.conexionBD();
 
-            CriteriaBuilder cb = em.getCriteriaBuilder();
-            CriteriaQuery<String> cq = cb.createQuery(String.class);
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<String> cq = cb.createQuery(String.class);
 
-            Root<Resultado> resultado = cq.from(Resultado.class);
+        Root<Resultado> resultado = cq.from(Resultado.class);
 
-            Join<Resultado, Parametro> parametro = resultado.join("parametro");
-            Join<Parametro, Analisis> analisis = parametro.join("analisis");
+        Join<Resultado, Parametro> parametro = resultado.join("parametro");
+        Join<Parametro, Analisis> analisis = parametro.join("analisis");
 
-            cq.select(analisis.get("nombre")).distinct(true);
+        cq.select(analisis.get("nombre")).distinct(true);
 
-            cq.where(
-                    cb.equal(
-                            resultado.get("prueba").get("idPrueba"),
-                            idPrueba
-                    )
-            );
+        cq.where(
+                cb.equal(
+                        resultado.get("prueba").get("idPrueba"),
+                        idPrueba
+                )
+        );
 
-            List<String> nombres = em.createQuery(cq).getResultList();
+        List<String> nombres = em.createQuery(cq).getResultList();
 
-            if (nombres == null || nombres.isEmpty()) {
-                return "Sin resultados";
-            }
+        if (nombres == null || nombres.isEmpty()) {
+            return "Sin resultados";
+        }
 
-            return String.join(", ", nombres);
+        return String.join(", ", nombres);
 
-        } catch (Exception e) {
-            throw new PersistenciaException("Error al obtener análisis de la prueba" + e);
-        } finally {
-            if (em != null) {
-                em.close();
-            }
+    } catch (Exception e) {
+        throw new PersistenciaException("Error al obtener análisis de la prueba"+ e);
+    } finally {
+        if (em != null) {
+            em.close();
         }
     }
+}
 
 }

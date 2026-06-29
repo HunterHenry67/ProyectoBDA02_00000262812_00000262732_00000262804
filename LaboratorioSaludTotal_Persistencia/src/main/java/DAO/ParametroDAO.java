@@ -30,10 +30,10 @@ public class ParametroDAO implements IParametroDAO {
     }
 
     /**
-     * Registra un nuevo parametro en la base de datos.
-     * @param nuevoParametro entidad Parametro que se desea registrar.
-     * @return parametro guardado con su identificador generado
-     * @throws PersistenciaException si ocurre un error 
+     *
+     * @param nuevoParametro
+     * @return
+     * @throws PersistenciaException
      */
     @Override
     public Parametro registarParametro(Parametro nuevoParametro) throws PersistenciaException {
@@ -53,8 +53,8 @@ public class ParametroDAO implements IParametroDAO {
     }
 
     /**
-     * Consulta todos los parametros registrados.
-     * @return @throws PersistenciaException si ocurre algun error al consultar los parametros.
+     *
+     * @return @throws PersistenciaException
      */
     @Override
     public List<Parametro> listarTodos() throws PersistenciaException {
@@ -74,9 +74,9 @@ public class ParametroDAO implements IParametroDAO {
     }
 
     /**
-     * Elimina el parametro seleccionado mediante el identificador.
-     * @param idParametro identificador del parametro a eliminar.
-     * @throws PersistenciaException si existe algun error al eliminar el parametro.
+     *
+     * @param idParametro
+     * @throws PersistenciaException
      */
     @Override
     public void eliminarParametro(Integer idParametro) throws PersistenciaException {
@@ -99,10 +99,10 @@ public class ParametroDAO implements IParametroDAO {
     }
 
     /**
-     * Consulta los parametros por medio del identificador.
-     * @param idParametro identificador del parametro a filtrar.
-     * @return lista con los parametros filtrados por el identificador.
-     * @throws PersistenciaException si existe algun error al consultar el parametro por id.
+     *
+     * @param idParametro
+     * @return
+     * @throws PersistenciaException
      */
     @Override
     public Parametro consultarParametroPorID(Integer idParametro) throws PersistenciaException {
@@ -122,10 +122,10 @@ public class ParametroDAO implements IParametroDAO {
     }
 
     /**
-     * Consulta el parametro por su nombre.
-     * @param nombre del parametro que deseas buscar.
-     * @return lista de parametros encontrados.
-     * @throws PersistenciaException si ocurre algun error al consultar por nombre.
+     *
+     * @param nombre
+     * @return
+     * @throws PersistenciaException
      */
     @Override
     public List<Parametro> consultarParametroPorNombre(String nombre) throws PersistenciaException {
@@ -147,11 +147,10 @@ public class ParametroDAO implements IParametroDAO {
     }
 
     /**
-     * Consulta los parametros por medio del orden de reporte.
-     * @param orden orden del parametro que deseas buscar.
-     * @return lista de parametros encontrados.
-     * @throws PersistenciaException 
- * @throws PersistenciaException 
+     *
+     * @param orden
+     * @return
+     * @throws PersistenciaException
      */
     @Override
     public List<Parametro> consultarParametroPorOrden(Integer orden) throws PersistenciaException {
@@ -172,10 +171,10 @@ public class ParametroDAO implements IParametroDAO {
     }
 
     /**
-     * Consulta los parametros por medio de la unidad de medida.
-     * @param unidadMedida  unidad de medida que deseas buscar.
-     * @return lista de parametros encontrados.
-     * @throws PersistenciaException si ocurre algun error al consultar por unidad de medida.
+     *
+     * @param unidadMedida
+     * @return
+     * @throws PersistenciaException
      */
     @Override
     public List<Parametro> consultarParametroPorUnidadMedidad(String unidadMedida) throws PersistenciaException {
@@ -196,10 +195,10 @@ public class ParametroDAO implements IParametroDAO {
     }
 
     /**
-     * Consulta los parametros por medio de la cantidad de rangos.
-     * @param rangos cantidad de rangos que deseas buscar.
-     * @return lista de parametros encontrados.
-     * @throws PersistenciaException si ocurre algun error al consultar por cantidad de rangos.
+     *
+     * @param rangos
+     * @return
+     * @throws PersistenciaException
      */
     @Override
     public List<Parametro> consultarParametroPorCantidadRango(Integer rangos) throws PersistenciaException {
@@ -221,10 +220,10 @@ public class ParametroDAO implements IParametroDAO {
     }
 
     /**
-     * Cuenta los rangos que pertenecen a un parametro.
-     * @param idParametro identificador del parametro.
-     * @return cantidad de rangos encontrados.
-     * @throws PersistenciaException si ocurre algun error al contar los rangos.
+     *
+     * @param idParametro
+     * @return
+     * @throws PersistenciaException
      */
     @Override
     public Integer contarRangos(Integer idParametro) throws PersistenciaException {
