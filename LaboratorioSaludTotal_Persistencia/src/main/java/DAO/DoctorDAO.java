@@ -21,7 +21,7 @@ public class DoctorDAO implements IDoctorDAO{
     private IConexionBD conexionBD;
     
     public DoctorDAO(){
-        this.conexionBD = conexionBD;
+        this.conexionBD = new ConexionBD();
     }
     
     @Override

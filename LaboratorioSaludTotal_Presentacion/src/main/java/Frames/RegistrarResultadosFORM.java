@@ -14,9 +14,11 @@ import DTO.ClienteDTO;
 import DTO.DoctorDTO;
 import DTO.ParametroDTO;
 import DTO.PruebaDTO;
+import DTO.RangoDTO;
 import DTO.RegistrarResultadoDTO;
 import Negocio.NegocioException;
 import Negocio.ParametroBO;
+import Negocio.RangoBO;
 import Negocio.ResultadoBO;
 import java.awt.Font;
 import java.util.ArrayList;
@@ -43,6 +45,7 @@ public class RegistrarResultadosFORM extends JFrame {
 
     private ParametroBO parametroBO;
     private ResultadoBO resultadoBO;
+    private RangoBO rangoBO;
 
     private List<ParametroDTO> parametros;
 
@@ -80,6 +83,8 @@ public class RegistrarResultadosFORM extends JFrame {
                 new PruebaDAO(),
                 new ParametroDAO()
         );
+
+        rangoBO = new RangoBO();
     }
 
     private void initComponents() {
@@ -163,7 +168,7 @@ public class RegistrarResultadosFORM extends JFrame {
                 modelo.addRow(new Object[]{
                     parametro.getNombre(),
                     parametro.getUnidadMedida(),
-                    "",
+                    obtenerRangoNormal(parametro.getIdParametro()),
                     "",
                     ""
                 });
@@ -174,6 +179,23 @@ public class RegistrarResultadosFORM extends JFrame {
         }
     }
 
+    private String obtenerRangoNormal(Integer idParametro) {
+        try {
+            List<RangoDTO> rangos = rangoBO.buscarRangosPorParametro(idParametro);
+
+            if (rangos == null || rangos.isEmpty()) {
+                return "N/A";
+            }
+
+            RangoDTO rango = rangos.get(0);
+
+            return rango.getRangoInicial() + " - " + rango.getRangoFinal();
+
+        } catch (NegocioException ex) {
+            return "N/A";
+        }
+    }
+    
     private void registrarResultados() {
         try {
             DefaultTableModel modelo = (DefaultTableModel) tabla.getModel();

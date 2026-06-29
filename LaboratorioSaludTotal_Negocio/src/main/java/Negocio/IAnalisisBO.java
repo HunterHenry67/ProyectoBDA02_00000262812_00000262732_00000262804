@@ -24,4 +24,5 @@ public interface IAnalisisBO {
     public Integer contarParametro(Integer idAnalisis) throws NegocioException;
     List<AnalisisDTO> buscarPorTipoMuestra(String tipoMuestra) throws NegocioException;
     List<AnalisisDTO> buscarPorCantidadParametro(Integer cantidad) throws NegocioException; 
+    String obtenerNombreAnalisisPorPrueba(Integer idPrueba) throws NegocioException;
 }

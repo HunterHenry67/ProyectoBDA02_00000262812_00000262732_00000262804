@@ -78,6 +78,11 @@ public class MenuPrincipalFORM extends javax.swing.JFrame {
         btnIngresoResultado.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         btnIngresoResultado.setForeground(new java.awt.Color(255, 255, 255));
         btnIngresoResultado.setText("Ingreso de Resultado");
+        btnIngresoResultado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnIngresoResultadoActionPerformed(evt);
+            }
+        });
 
         btnSalir.setBackground(new java.awt.Color(0, 0, 0));
         btnSalir.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
@@ -159,6 +164,11 @@ public class MenuPrincipalFORM extends javax.swing.JFrame {
     private void btnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalirActionPerformed
         this.dispose();
     }//GEN-LAST:event_btnSalirActionPerformed
+
+    private void btnIngresoResultadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresoResultadoActionPerformed
+        controlNavegacion.mostrarBusquedaPaciente();
+        this.dispose();
+    }//GEN-LAST:event_btnIngresoResultadoActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCatalogoAnalisis;

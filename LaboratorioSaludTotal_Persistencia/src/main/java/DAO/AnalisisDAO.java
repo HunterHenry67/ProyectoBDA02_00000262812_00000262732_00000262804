@@ -6,10 +6,12 @@ package DAO;
 
 import Entidades.Analisis;
 import Entidades.Parametro;
+import Entidades.Resultado;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Subquery;
 
@@ -194,5 +196,46 @@ public class AnalisisDAO implements IAnalisisDAO {
             entityManager.close();
         }
     }
+
+    @Override
+public String obtenerNombreAnalisisPorPrueba(Integer idPrueba) throws PersistenciaException {
+    EntityManager em = null;
+
+    try {
+        em = conexion.conexionBD();
+
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<String> cq = cb.createQuery(String.class);
+
+        Root<Resultado> resultado = cq.from(Resultado.class);
+
+        Join<Resultado, Parametro> parametro = resultado.join("parametro");
+        Join<Parametro, Analisis> analisis = parametro.join("analisis");
+
+        cq.select(analisis.get("nombre")).distinct(true);
+
+        cq.where(
+                cb.equal(
+                        resultado.get("prueba").get("idPrueba"),
+                        idPrueba
+                )
+        );
+
+        List<String> nombres = em.createQuery(cq).getResultList();
+
+        if (nombres == null || nombres.isEmpty()) {
+            return "Sin resultados";
+        }
+
+        return String.join(", ", nombres);
+
+    } catch (Exception e) {
+        throw new PersistenciaException("Error al obtener análisis de la prueba"+ e);
+    } finally {
+        if (em != null) {
+            em.close();
+        }
+    }
+}
 
 }
