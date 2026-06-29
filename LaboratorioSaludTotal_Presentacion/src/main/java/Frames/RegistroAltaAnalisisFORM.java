@@ -19,7 +19,7 @@ import javax.swing.JPanel;
 import javax.swing.table.DefaultTableModel;
 
 /**
- *
+ * Pantalla para dar de alta nuevos tipos de análisis en el sistema
  * @author BALAMRUSH
  */
 public class RegistroAltaAnalisisFORM extends javax.swing.JFrame {
@@ -48,8 +48,8 @@ public class RegistroAltaAnalisisFORM extends javax.swing.JFrame {
     }
 
     /**
-     *
-     * @throws PresentacionException
+     * Consulta en la base de datos todos los tipos de muestra y los pone en el menú desplegable
+     * @throws PresentacionException Si no se pueden cargar las muestras
      */
     private void cargarMuestra() throws PresentacionException {
         try {
@@ -64,9 +64,9 @@ public class RegistroAltaAnalisisFORM extends javax.swing.JFrame {
     }
 
     /**
-     *
-     * @param parametroDTO
-     * @throws PresentacionException
+     * Valida que el parámetro sea correcto y lo añade a la lista de esta solicitud
+     * @param parametroDTO El parámetro que quieres agregar
+     * @throws PresentacionException Si el parámetro está vacío o tiene errores
      */
     public void agregarParametroAlAnalisis(RegistrarParametroDTO parametroDTO) throws PresentacionException {
         if (parametroDTO == null) {
@@ -86,8 +86,8 @@ public class RegistroAltaAnalisisFORM extends javax.swing.JFrame {
     }
 
     /**
-     *
-     * @throws PresentacionException
+     * Revisa que todos los campos estén llenos y envía la información al negocio para guardar el análisis
+     * @throws PresentacionException Si falta algún campo obligatorio o hay error al guardar
      */
     private void registrarAnalisis() throws PresentacionException {
         try {
@@ -119,16 +119,16 @@ public class RegistroAltaAnalisisFORM extends javax.swing.JFrame {
     }
 
     /**
-     *
+     * Refresca la tabla mostrando la lista de parámetros actuales
      */
     private void cargarTablaParametros() {
         llenadoTablaParametros(parametros);
     }
 
     /**
-     *
-     * @param parametroDTO
-     * @throws PresentacionException
+     * Recibe un parámetro nuevo y lo guarda en la lista temporal de la pantalla
+     * @param parametroDTO El parámetro que quieres añadir
+     * @throws PresentacionException Si el parámetro no es válido
      */
     public void parametrosTemporales(RegistrarParametroDTO parametroDTO) throws PresentacionException {
         if (parametroDTO == null) {
@@ -143,8 +143,8 @@ public class RegistroAltaAnalisisFORM extends javax.swing.JFrame {
     }
 
     /**
-     *
-     * @param listaParametros
+     * Dibuja los datos en la tabla usando paginación para no saturar la vista
+     * @param listaParametros La lista completa de parámetros a mostrar
      */
     private void llenadoTablaParametros(List<RegistrarParametroDTO> listaParametros) {
         parametrosMostradosTabla = new ArrayList<>(listaParametros);
@@ -176,8 +176,8 @@ public class RegistroAltaAnalisisFORM extends javax.swing.JFrame {
     }
 
     /**
-     *
-     * @throws PresentacionException
+     * Filtra la lista de parámetros según el criterio que el usuario elija
+     * @throws PresentacionException Si ocurre un error al buscar
      */
     private void buscarParametro() throws PresentacionException {
         String entrada = txtFieldBuscar.getText();
@@ -237,24 +237,24 @@ public class RegistroAltaAnalisisFORM extends javax.swing.JFrame {
     }
 
     /**
-     *
-     * @param mensaje
+     * Muestra un mensaje de error al usuario
+     * @param mensaje Texto del error
      */
     private void saltoErrores(String mensaje) {
         JOptionPane.showMessageDialog(this, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
     }
 
     /**
-     *
-     * @param mensaje
+     * Muestra un mensaje de aviso al usuario
+     * @param mensaje Texto del aviso
      */
     private void saltoAdvertencia(String mensaje) {
         JOptionPane.showMessageDialog(this, mensaje, "Advertencia", JOptionPane.WARNING_MESSAGE);
     }
 
     /**
-     *
-     * @param totalRegistros
+     * Cambia el texto que indica en qué página de la tabla estás
+     * @param totalRegistros Cantidad total de registros encontrados
      */
     private void actualizarTextoPaginaParametros(int totalRegistros) {
         int totalPaginas = (int) Math.ceil((double) totalRegistros / tamanoPagina);

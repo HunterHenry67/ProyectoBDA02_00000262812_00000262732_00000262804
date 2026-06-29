@@ -33,7 +33,7 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 /**
- *
+ * Pantalla que permite al usuario capturar y registrar los resultados clínicos de una prueba específica
  * @author Andre
  */
 public class RegistrarResultadosFORM extends JFrame {
@@ -71,6 +71,9 @@ public class RegistrarResultadosFORM extends JFrame {
         cargarParametros();
     }
 
+    /**
+     * Crea los objetos de lógica de negocio necesarios para procesar los datos
+     */
     private void inicializarBOs() {
         IConexionBD conexion = new ConexionBD();
 
@@ -88,6 +91,9 @@ public class RegistrarResultadosFORM extends JFrame {
         rangoBO = new RangoBO();
     }
 
+    /**
+     * Configura los elementos visuales de la ventana
+     */
     private void initComponents() {
         setTitle("Registrar Resultados");
         setSize(1000, 650);
@@ -153,11 +159,17 @@ public class RegistrarResultadosFORM extends JFrame {
         add(btnRegistrar);
     }
 
+    /**
+     * Muestra los datos básicos del paciente y la prueba en la pantalla
+     */
     private void cargarDatos() {
         txtPaciente.setText(nombreCompletoCliente(cliente));
         txtAnalisis.setText("Folio: " + prueba.getIdPrueba());
     }
 
+    /**
+     * Obtiene los parámetros asociados a la prueba y llena la tabla de resultados
+     */
     private void cargarParametros() {
         try {
             parametros = parametroBO.listarPorPrueba(prueba.getIdPrueba());
@@ -180,6 +192,11 @@ public class RegistrarResultadosFORM extends JFrame {
         }
     }
 
+    /**
+     * Busca y formatea el rango normal para un parámetro específico
+     * @param idParametro ID del parámetro
+     * @return El rango como texto o "N/A" si no hay
+     */
     private String obtenerRangoNormal(Integer idParametro) {
         try {
             List<RangoDTO> rangos = rangoBO.buscarRangosPorParametro(idParametro);
@@ -197,6 +214,9 @@ public class RegistrarResultadosFORM extends JFrame {
         }
     }
 
+    /**
+     * Recorre la tabla de resultados, valida los datos y los envía a guardar
+     */
     private void registrarResultados() {
         if (!validarTablaResultados()) {
             return;
@@ -244,6 +264,11 @@ public class RegistrarResultadosFORM extends JFrame {
         }
     }
 
+    /**
+     * Junta los nombres del cliente para mostrarlos en el campo de texto
+     * @param cliente El cliente
+     * @return El nombre completo como String
+     */
     private String nombreCompletoCliente(ClienteDTO cliente) {
         String nombre = "";
 
@@ -262,12 +287,19 @@ public class RegistrarResultadosFORM extends JFrame {
         return nombre.trim();
     }
 
+    /**
+     * Regresa a la ventana de búsqueda de pacientes
+     */
     private void regresarBusqueda() {
         BusquedaPacienteFORM pantalla = new BusquedaPacienteFORM(controlNavegacion);
         pantalla.setVisible(true);
         dispose();
     }
 
+    /**
+     * Revisa que todos los resultados sean números válidos antes de guardar
+     * @return true si todo está bien, false si hay errores
+     */
     private boolean validarTablaResultados() {
         DefaultTableModel modelo = (DefaultTableModel) tabla.getModel();
 

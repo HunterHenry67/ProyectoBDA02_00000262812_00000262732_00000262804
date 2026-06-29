@@ -15,6 +15,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -44,7 +46,7 @@ public class Prueba implements Serializable {
     private Doctor doctor;
     
     @OneToMany(mappedBy = "prueba", cascade = CascadeType.PERSIST)
-    private List<Resultado> listaResultado = new ArrayList<>();    
+    private List<Resultado> listaResultado = new ArrayList<>(); 
 
     public Prueba() {
     }
