@@ -24,6 +24,14 @@ public class PruebaBO implements IPruebaBO {
         this.pruebaDAO = new PruebaDAO();
     }
 
+    /**
+     * Valida y agrega una nueva prueba medica.
+     *
+     * @param dtoNuevo datos de la prueba que deseas agregar.
+     * @return prueba agregada en formato DTO.
+     * @throws NegocioException si la prueba no tiene cliente, doctor o ocurre
+     * algun error al registrar.
+     */
     @Override
     public PruebaDTO agregarPrueba(PruebaDTO dtoNuevo) throws NegocioException {
         try {
@@ -45,6 +53,14 @@ public class PruebaBO implements IPruebaBO {
         }
     }
 
+    /**
+     * Valida y elimina la prueba seleccionada mediante su identificador.
+     *
+     * @param idPrueba identificador de la prueba que deseas eliminar.
+     * @return prueba eliminada en formato DTO.
+     * @throws NegocioException si el identificador no es valido, no se
+     * encuentra la prueba o ocurre algun error al eliminar.
+     */
     @Override
     public PruebaDTO eliminarPrueba(int idPrueba) throws NegocioException {
         try {
@@ -65,6 +81,14 @@ public class PruebaBO implements IPruebaBO {
         }
     }
 
+    /**
+     * Busca una prueba mediante su identificador.
+     *
+     * @param idPrueba identificador de la prueba que deseas buscar.
+     * @return prueba encontrada en formato DTO.
+     * @throws NegocioException si el identificador no es valido, no se
+     * encuentra la prueba o ocurre algun error al buscar.
+     */
     @Override
     public PruebaDTO buscarPruebaPorId(int idPrueba) throws NegocioException {
         try {
@@ -85,6 +109,12 @@ public class PruebaBO implements IPruebaBO {
         }
     }
 
+    /**
+     * Consulta todas las pruebas registradas.
+     *
+     * @return lista de pruebas encontradas en formato DTO.
+     * @throws NegocioException si ocurre algun error al consultar las pruebas.
+     */
     @Override
     public List<PruebaDTO> consultarTodasLasPruebas() throws NegocioException {
         try {
@@ -102,6 +132,12 @@ public class PruebaBO implements IPruebaBO {
         }
     }
 
+    /**
+     * Convierte una entidad Prueba a PruebaDTO.
+     *
+     * @param entidad prueba que deseas convertir.
+     * @return prueba convertida a DTO.
+     */
     private PruebaDTO convertirADTO(Prueba entidad) {
         PruebaDTO dto = new PruebaDTO();
 
@@ -139,6 +175,12 @@ public class PruebaBO implements IPruebaBO {
         return dto;
     }
 
+    /**
+     * Convierte un PruebaDTO a entidad Prueba.
+     *
+     * @param dto prueba que deseas convertir.
+     * @return entidad prueba creada desde el DTO.
+     */
     private Prueba convertirAEntidad(PruebaDTO dto) {
         Prueba entidad = new Prueba();
 
