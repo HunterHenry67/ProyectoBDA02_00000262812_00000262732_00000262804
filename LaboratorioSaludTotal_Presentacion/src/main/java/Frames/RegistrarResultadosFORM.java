@@ -86,6 +86,7 @@ public class RegistrarResultadosFORM extends JFrame {
         );
 
         rangoBO = new RangoBO();
+        
     }
 
     private void initComponents() {
