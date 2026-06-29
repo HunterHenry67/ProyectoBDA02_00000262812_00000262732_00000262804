@@ -19,10 +19,19 @@ import javax.persistence.criteria.Root;
 public class DoctorDAO implements IDoctorDAO{
 
     private IConexionBD conexionBD;
-    
-    public DoctorDAO(){
-        this.conexionBD = conexionBD;
+
+    public DoctorDAO() {
+        this.conexionBD = new ConexionBD();
     }
+
+    public DoctorDAO(IConexionBD conexionBD) {
+        if (conexionBD == null) {
+            this.conexionBD = new ConexionBD();
+        } else {
+            this.conexionBD = conexionBD;
+        }
+    }
+
     
     /**
      * 

@@ -26,7 +26,8 @@ public class DoctorBO implements IDoctorBO {
     private IDoctorDAO doctorDAO;
 
     public DoctorBO() {
-        this.doctorDAO = new DoctorDAO();
+        IConexionBD conexion = new ConexionBD();
+        this.doctorDAO = new DoctorDAO(conexion);
     }
 
     /**
@@ -38,19 +39,20 @@ public class DoctorBO implements IDoctorBO {
     @Override
     public DoctorDTO consultarPorID(Integer idDoctor) throws NegocioException {
         try {
-            if (idDoctor <= 0) {
-                throw new NegocioException("Error en DoctorBO, ID invalido");
+            if (idDoctor == null || idDoctor <= 0) {
+                throw new NegocioException("Error en DoctorBO, ID inválido");
             }
 
             Doctor doctor = doctorDAO.consultarPorID(idDoctor);
+
             if (doctor == null) {
-                throw new NegocioException("Error en DoctorBO, el id no puede ser nulo");
+                throw new NegocioException("No se encontró el doctor con ese ID");
             }
 
             return convertirADTO(doctor);
 
         } catch (PersistenciaException ex) {
-            throw new NegocioException("Error al conectar negocio con dao");
+            throw new NegocioException("Error al consultar el doctor.", ex);
         }
     }
 

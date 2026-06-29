@@ -24,6 +24,7 @@ public class CatalogoClientesFORM extends javax.swing.JFrame {
      */
     public CatalogoClientesFORM(ControlNavegacionForms controlNavegacion) {
         initComponents();
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         this.controlNavegacion = controlNavegacion;
         this.clienteBO = new Negocio.ClienteBO();
         
@@ -199,26 +200,34 @@ public class CatalogoClientesFORM extends javax.swing.JFrame {
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         // TODO add your handling code here:
-        controlNavegacion.mostrarCatalogoAnalisisPrueba();
         this.dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnSeleccionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSeleccionarActionPerformed
         // TODO add your handling code here:
         int fila = tablaClientes.getSelectedRow();
-    
+
         if (fila != -1) {
             try {
-                int idCliente = (int) tablaClientes.getValueAt(fila, 0);
+                RegistroSolicitudPruebaFORM pantallaSolicitud = controlNavegacion.getPantallaSolicitudActual();
+
+                if (pantallaSolicitud == null) {
+                    javax.swing.JOptionPane.showMessageDialog(this, "Primero debes abrir una solicitud de prueba.");
+                    return;
+                }
+
+                int filaModelo = tablaClientes.convertRowIndexToModel(fila);
+                int idCliente = ((Number) tablaClientes.getModel().getValueAt(filaModelo, 0)).intValue();
+
                 ClienteDTO cliElegido = clienteBO.buscarClienteId(idCliente);
-                controlNavegacion.getPantallaSolicitudActual().setClienteSeleccionado(cliElegido);
-                
+                pantallaSolicitud.setClienteSeleccionado(cliElegido);
+
                 this.dispose();
             } catch (Exception ex) {
                 javax.swing.JOptionPane.showMessageDialog(this, "Error al seleccionar " + ex.getMessage());
             }
         } else {
-             javax.swing.JOptionPane.showMessageDialog(this, "Por favor seleccione un cliente de la tabla");
+            javax.swing.JOptionPane.showMessageDialog(this, "Por favor seleccione un cliente de la tabla");
         }
     }//GEN-LAST:event_btnSeleccionarActionPerformed
 

@@ -4,6 +4,7 @@
  */
 package Frames;
 
+import Negocio.AnalisisBO;
 import DTO.AnalisisDTO;
 import Negocio.IAnalisisBO;
 import java.util.List;
@@ -24,13 +25,14 @@ public class CatalogoAnalisisPruebaFORM extends javax.swing.JFrame {
     public CatalogoAnalisisPruebaFORM(ControlNavegacionForms controlNavegacion) {
         initComponents();
         this.controlNavegacion = controlNavegacion;
-        
+        this.analisisBO = new AnalisisBO();
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+
         try {
             cargarTabla();
         } catch (PresentacionException ex) {
             javax.swing.JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
         }
-        
     }
     
     private void cargarTabla() throws PresentacionException {
@@ -204,24 +206,33 @@ public class CatalogoAnalisisPruebaFORM extends javax.swing.JFrame {
     private void btnSeleccionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSeleccionarActionPerformed
         // TODO add your handling code here:
         int fila = tablaAnalisis.getSelectedRow();
-        
+
         if (fila != -1) {
             try {
-                int idAnalisis = (int) tablaAnalisis.getValueAt(fila, 0);
-                
-                
+                RegistroSolicitudPruebaFORM pantallaSolicitud = controlNavegacion.getPantallaSolicitudActual();
+
+                if (pantallaSolicitud == null) {
+                    javax.swing.JOptionPane.showMessageDialog(this, "Primero debes abrir una solicitud de prueba.");
+                    return;
+                }
+
+                int filaModelo = tablaAnalisis.convertRowIndexToModel(fila);
+
                 AnalisisDTO analisisElegido = new AnalisisDTO();
+                int idAnalisis = ((Number) tablaAnalisis.getModel().getValueAt(filaModelo, 0)).intValue();
+
                 analisisElegido.setIdAnalisis(idAnalisis);
-                analisisElegido.setNombre((String)tablaAnalisis.getValueAt(fila, 1));
-                analisisElegido.setTipoMuestra((String)tablaAnalisis.getValueAt(fila, 2));                
-                controlNavegacion.getPantallaSolicitudActual().agregarAnalisisTemporal(analisisElegido);
+                analisisElegido.setNombre(tablaAnalisis.getModel().getValueAt(filaModelo, 1).toString());
+                analisisElegido.setTipoMuestra(tablaAnalisis.getModel().getValueAt(filaModelo, 2).toString());
+
+                pantallaSolicitud.agregarAnalisisTemporal(analisisElegido);
                 this.dispose();
-                
+
             } catch (Exception ex) {
                 javax.swing.JOptionPane.showMessageDialog(this, "Error al seleccionar " + ex.getMessage());
             }
         } else {
-            javax.swing.JOptionPane.showMessageDialog(this, "seleccione un análisis de la tabla.", "Advertencia", javax.swing.JOptionPane.WARNING_MESSAGE);
+            javax.swing.JOptionPane.showMessageDialog(this, "Seleccione un análisis de la tabla.", "Advertencia", javax.swing.JOptionPane.WARNING_MESSAGE);
         }
         
     }//GEN-LAST:event_btnSeleccionarActionPerformed
