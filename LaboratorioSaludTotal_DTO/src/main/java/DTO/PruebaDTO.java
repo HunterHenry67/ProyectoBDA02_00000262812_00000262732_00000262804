@@ -5,18 +5,21 @@
 package DTO;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
-/**
- *
- * @author user
- */
 public class PruebaDTO {
-    private Integer idPrueba; 
+
+    private Integer idPrueba;
     private LocalDateTime fechaHora;
+
     private Integer idCliente;
     private String nombreCliente;
+
     private Integer idDoctor;
     private String nombreDoctor;
+
+    private List<AnalisisDTO> analisisAgregados = new ArrayList<>();
 
     public PruebaDTO() {
     }
@@ -68,6 +71,12 @@ public class PruebaDTO {
     public void setNombreDoctor(String nombreDoctor) {
         this.nombreDoctor = nombreDoctor;
     }
-    
-    
+
+    public List<AnalisisDTO> getAnalisisAgregados() {
+        return analisisAgregados;
+    }
+
+    public void setAnalisisAgregados(List<AnalisisDTO> analisisAgregados) {
+        this.analisisAgregados = analisisAgregados;
+    }
 }
