@@ -12,7 +12,7 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
- *
+ * Ventana para registrar un nuevo parámetro de análisis con su lista de rangos asociada
  * @author BALAMRUSH
  */
 public class RegistroParametroFORM extends javax.swing.JFrame {
@@ -23,6 +23,10 @@ public class RegistroParametroFORM extends javax.swing.JFrame {
     private int paginaActualRango = 1;
     private int tamanoPaginaRango = 5;
 
+    /**
+     * Inicializa la ventana de registro y la vincula con la pantalla padre
+     * @param registroAltaAnalisisFORM Pantalla que recibirá este parámetro al terminar
+     */
     public RegistroParametroFORM(RegistroAltaAnalisisFORM registroAltaAnalisisFORM) {
         initComponents();
         this.registroAltaAnalisisFORM = registroAltaAnalisisFORM;
@@ -32,8 +36,8 @@ public class RegistroParametroFORM extends javax.swing.JFrame {
     }
 
     /**
-     * 
-     * @throws PresentacionException 
+     * Valida la información del parámetro y lo envía a la pantalla principal de alta
+     * @throws PresentacionException Si falta algún dato o el formato es incorrecto
      */
     private void guardarParametro() throws PresentacionException {
         if (txtFieldNombre.getText().trim().isEmpty()) {
@@ -70,9 +74,9 @@ public class RegistroParametroFORM extends javax.swing.JFrame {
     }
 
     /**
-     * 
-     * @param rangoDTO
-     * @throws PresentacionException 
+     * Recibe un rango nuevo y lo agrega a la lista de rangos de este parámetro
+     * @param rangoDTO El rango que quieres añadir
+     * @throws PresentacionException Si el rango viene nulo
      */
     public void agregarRangoAlParametro(RangoDTO rangoDTO) throws PresentacionException {
         if (rangoDTO == null) {
@@ -84,15 +88,15 @@ public class RegistroParametroFORM extends javax.swing.JFrame {
     }
 
     /**
-     * 
+     * Refresca la vista de la tabla de rangos usando la lista actual
      */
     private void cargarTablaRangos() {
         llenadoTablaRangos(rangos);
     }
 
     /**
-     * 
-     * @param listaRangos 
+     * Dibuja los datos en la tabla manejando la paginación de los registros
+     * @param listaRangos La lista completa de rangos para mostrar
      */
     private void llenadoTablaRangos(List<RangoDTO> listaRangos) {
 
@@ -121,9 +125,9 @@ public class RegistroParametroFORM extends javax.swing.JFrame {
     }
 
     /**
-     * 
-     * @return
-     * @throws PresentacionException 
+     * Convierte el texto del campo orden a un número entero
+     * @return El número de orden
+     * @throws PresentacionException Si el texto no es un número
      */
     private Integer convertirOrdenReporte() throws PresentacionException {
         try {
@@ -134,24 +138,24 @@ public class RegistroParametroFORM extends javax.swing.JFrame {
     }
 
     /**
-     * 
-     * @param mensaje 
+     * Muestra un mensaje de error en pantalla
+     * @param mensaje El texto de error
      */
     private void saltoErrores(String mensaje) {
         JOptionPane.showMessageDialog(this, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
     }
 
     /**
-     * 
-     * @param mensaje 
+     * Muestra un mensaje de advertencia en pantalla
+     * @param mensaje El texto de advertencia
      */
     private void saltoAdvertencia(String mensaje) {
         JOptionPane.showMessageDialog(this, mensaje, "Advertencia", JOptionPane.WARNING_MESSAGE);
     }
 
     /**
-     * 
-     * @throws PresentacionException 
+     * Busca rangos en la lista según el filtro seleccionado
+     * @throws PresentacionException Si algo falla al filtrar
      */
     private void buscarRango() throws PresentacionException {
         if (comboFiltro.getSelectedItem() == null) {
@@ -220,8 +224,8 @@ public class RegistroParametroFORM extends javax.swing.JFrame {
     }
 
     /**
-     * 
-     * @param totalRegistros 
+     * Calcula y muestra el texto de paginación
+     * @param totalRegistros Cantidad de registros encontrados
      */
     private void actualizarTextoPaginaRangos(int totalRegistros) {
         int totalPaginas = (int) Math.ceil((double) totalRegistros / tamanoPaginaRango);
