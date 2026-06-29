@@ -15,7 +15,7 @@ public class ControlNavegacionForms {
     }
     
     /**
-     * 
+     * Muestra la pantalla de MenuPrincipalFORM
      */
     public void mostrarMenuPrincipal(){
         MenuPrincipalFORM pantallaMenuPrincipalFORM = new MenuPrincipalFORM(this);
@@ -23,7 +23,7 @@ public class ControlNavegacionForms {
     }
     
     /**
-     * 
+     * Muestra la pantalla de CatalogoAnalisisFORM
      */
     public void mostrarCatalogoAnalisis(){
         CatalogoAnalisisFORM pantallaCatalogoAnalisis = new CatalogoAnalisisFORM(this);
@@ -31,26 +31,32 @@ public class ControlNavegacionForms {
     }
     
     /**
-     * 
+     * Muestra la pantalla de RegistroAltaAnalisisFORM
      */
     public void mostrarRegistroAltaAnalisis(){
         RegistroAltaAnalisisFORM pantallaRegistroAltaAnalisis = new RegistroAltaAnalisisFORM(this);
         pantallaRegistroAltaAnalisis.setVisible(true);
     }
     
+    /**
+     * Muestra la pantalla de CatalogoClientesFORM
+     */
     public void mostrarCatalogoClientes() {
         CatalogoClientesFORM pantallaCatalogoClientes = new CatalogoClientesFORM(this);
         pantallaCatalogoClientes.setVisible(true);
     }
 
     /**
-     * 
+     * Muestra la pantalla de CatalogoDoctoresFORM
      */
     public void mostrarCatalogoDoctores() {
         CatalogoDoctoresFORM pantallaCatalogoDoctores = new CatalogoDoctoresFORM(this);
         pantallaCatalogoDoctores.setVisible(true);
     }
     
+    /**
+     * Muestra la pantalla de RegistroSolicitudPruebaFORM
+     */
     public void mostrarRegistroSolicitudPrueba() {
         RegistroSolicitudPruebaFORM pantalla = new RegistroSolicitudPruebaFORM(this);
         this.pantallaSolicitudActual = pantalla; 
@@ -58,7 +64,7 @@ public class ControlNavegacionForms {
     }
     
     /**
-     * 
+     * Muestra la pantalla de CatalogoAnalisisPruebaFORM
      */
     public void mostrarCatalogoAnalisisPrueba() {
         CatalogoAnalisisPruebaFORM pantalla = new CatalogoAnalisisPruebaFORM(this);
@@ -66,7 +72,7 @@ public class ControlNavegacionForms {
     }
     
     /**
-     * 
+     * Muestra la pantalla de BusquedaPacienteFORM
      */
     public void mostrarBusquedaPaciente() {
         BusquedaPacienteFORM pantalla = new BusquedaPacienteFORM(this);
@@ -74,17 +80,14 @@ public class ControlNavegacionForms {
     }
 
     /**
-     * 
+     * Muestra la pantalla de EmisionReporteFORM
      */
     public void mostrarEmisionReporte() {
         EmisionReporteFORM pantalla = new EmisionReporteFORM(this);
         pantalla.setVisible(true);
     }
     
-    /**
-     * 
-     * @return 
-     */
+    
     public RegistroSolicitudPruebaFORM getPantallaSolicitudActual() {
         return pantallaSolicitudActual;
     }

@@ -21,36 +21,32 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+/**
+ *
+ * @author user
+ */
 @Entity
 @Table(name = "prueba")
 public class Prueba implements Serializable {
-
+ 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idPrueba", nullable = false)
     private Integer idPrueba;
-
+    
     @Column(name = "fechaHora", nullable = false)
     private LocalDateTime fechaHora;
-
+    
     @ManyToOne
     @JoinColumn(name = "idCliente", nullable = false)
     private Cliente cliente;
-
+    
     @ManyToOne
-    @JoinColumn(name = "idDoctor", nullable = false)
+    @JoinColumn(name = "idDoctor",  nullable = false)
     private Doctor doctor;
-
-    @ManyToMany
-    @JoinTable(
-            name = "prueba_analisis",
-            joinColumns = @JoinColumn(name = "idPrueba"),
-            inverseJoinColumns = @JoinColumn(name = "idAnalisis")
-    )
-    private List<Analisis> analisis = new ArrayList<>();
-
+    
     @OneToMany(mappedBy = "prueba", cascade = CascadeType.PERSIST)
-    private List<Resultado> listaResultado = new ArrayList<>();
+    private List<Resultado> listaResultado = new ArrayList<>(); 
 
     public Prueba() {
     }
@@ -62,6 +58,14 @@ public class Prueba implements Serializable {
     public void setIdPrueba(Integer idPrueba) {
         this.idPrueba = idPrueba;
     }
+
+//    public Integer getFolio() {
+//        return folio;
+//    }
+//
+//    public void setFolio(Integer folio) {
+//        this.folio = folio;
+//    }
 
     public LocalDateTime getFechaHora() {
         return fechaHora;
@@ -83,16 +87,8 @@ public class Prueba implements Serializable {
         return doctor;
     }
 
-    public void setDoctor(Doctor doctor) {
-        this.doctor = doctor;
-    }
-
-    public List<Analisis> getAnalisis() {
-        return analisis;
-    }
-
-    public void setAnalisis(List<Analisis> analisis) {
-        this.analisis = analisis;
+    public void setDoctor(Doctor Doctor) {
+        this.doctor = Doctor;
     }
 
     public List<Resultado> getListaResultado() {
@@ -102,4 +98,6 @@ public class Prueba implements Serializable {
     public void setListaResultado(List<Resultado> listaResultado) {
         this.listaResultado = listaResultado;
     }
+    
+    
 }

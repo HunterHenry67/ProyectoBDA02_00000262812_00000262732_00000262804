@@ -20,6 +20,10 @@ public class RegistroRangoFORM extends javax.swing.JFrame {
         this.registroParametroFORM = registroParametroFORM;
     }
 
+    /**
+     * Valida que todos los campos tengan información correcta y guarda el rango
+     * @throws PresentacionException Si falta algún dato o el formato es incorrecto
+     */
     private void guardarRango() throws PresentacionException {
         if (comboBoxSexo.getSelectedItem() == null) {
             throw new PresentacionException("Favor de seleccionar el sexo.");
@@ -67,6 +71,11 @@ public class RegistroRangoFORM extends javax.swing.JFrame {
         this.dispose();
     }
     
+    /**
+     * Convierte el texto de edad inicial a entero
+     * @return El valor de edad inicial
+     * @throws PresentacionException Si el texto no es un número válido
+     */
      private Integer convertirEdadInicial() throws PresentacionException {
         try {
             return Integer.valueOf(txtFieldEdadInicial.getText().trim());
@@ -75,6 +84,11 @@ public class RegistroRangoFORM extends javax.swing.JFrame {
         }
     }
      
+     /**
+     * Convierte el texto de edad final a entero
+     * @return El valor de edad final
+     * @throws PresentacionException Si el texto no es un número válido
+     */
     private Integer convertirEdadFinal() throws PresentacionException {
         try {
             return Integer.valueOf(txtFieldEdadFinal.getText().trim());
@@ -83,6 +97,11 @@ public class RegistroRangoFORM extends javax.swing.JFrame {
         }
     }
 
+    /**
+     * Convierte el texto de rango inicial a flotante
+     * @return El valor de rango inicial
+     * @throws PresentacionException Si el texto no es un número válido
+     */
     private Float convertirRangoInicial() throws PresentacionException {
         try {
             return Float.valueOf(txtFieldRangoInicial.getText().trim());
@@ -91,6 +110,11 @@ public class RegistroRangoFORM extends javax.swing.JFrame {
         }
     }
 
+    /**
+     * Convierte el texto de rango final a flotante
+     * @return El valor de rango final
+     * @throws PresentacionException Si el texto no es un número válido
+     */
     private Float convertirRangoFinal() throws PresentacionException {
         try {
             return Float.valueOf(txtFieldRangoFinal.getText().trim());
@@ -99,6 +123,10 @@ public class RegistroRangoFORM extends javax.swing.JFrame {
         }
     }
     
+    /**
+     * Muestra una ventana emergente con un mensaje de advertencia
+     * @param mensaje El texto que se mostrará al usuario
+     */
     private void saltoAdvertencia(String mensaje){
         JOptionPane.showMessageDialog(this, mensaje, "Advertencia", JOptionPane.WARNING_MESSAGE);
     } 
