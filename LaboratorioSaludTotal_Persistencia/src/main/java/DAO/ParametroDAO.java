@@ -244,7 +244,7 @@ public class ParametroDAO implements IParametroDAO {
         }
     }
 
-    @Override
+   @Override
 public List<Parametro> listarPorPrueba(Integer idPrueba) throws PersistenciaException {
     EntityManager em = null;
 
@@ -271,4 +271,5 @@ public List<Parametro> listarPorPrueba(Integer idPrueba) throws PersistenciaExce
         }
     }
 }
+
 }
