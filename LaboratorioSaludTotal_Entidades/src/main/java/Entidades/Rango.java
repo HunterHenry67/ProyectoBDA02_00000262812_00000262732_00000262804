@@ -23,7 +23,7 @@ import javax.persistence.ManyToOne;
 public class Rango implements Serializable {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idRango", nullable = false)
     private Integer idRango;
 

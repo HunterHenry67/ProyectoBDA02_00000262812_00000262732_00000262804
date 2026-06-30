@@ -21,6 +21,4 @@ public interface IResultadoDAO {
     List<Resultado> consultarResultadoPorPrueba(Integer idPrueba) throws PersistenciaException;
 
     Resultado consultarResultadoPorPruebaParametro(Integer idPrueba, Integer idParametro) throws PersistenciaException;
-
-    boolean resultadoExiste(Integer idPrueba, Integer idParametro) throws PersistenceException;
 }

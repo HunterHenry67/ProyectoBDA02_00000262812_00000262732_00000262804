@@ -21,6 +21,4 @@ public interface IResultadoBO {
     List<ResultadoDTO> consultarTablaPorPrueba(Integer idPrueba) throws NegocioException;
 
     Resultado consultarResultadoPorPruebaParametro(Integer idPrueba, Integer idParametro) throws NegocioException;
-
-    boolean resultadoExiste(Integer idPrueba, Integer idParametro) throws NegocioException;
 }

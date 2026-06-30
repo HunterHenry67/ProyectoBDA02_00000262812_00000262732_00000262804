@@ -10,6 +10,7 @@ import Negocio.ClienteBO;
 import Negocio.DoctorBO;
 import Negocio.NegocioException;
 import Negocio.PruebaBO;
+import java.awt.Color;
 import java.awt.Font;
 import java.time.LocalDate;
 import java.time.Period;
@@ -72,6 +73,8 @@ public class BusquedaPacienteFORM extends JFrame {
 
         JButton btnBuscar = new JButton("Buscar");
         btnBuscar.setBounds(610, 160, 120, 35);
+        btnBuscar.setBackground(Color.MAGENTA);
+        btnBuscar.setForeground(Color.WHITE);
         btnBuscar.addActionListener(e -> buscarPaciente());
         add(btnBuscar);
 
@@ -107,6 +110,8 @@ public class BusquedaPacienteFORM extends JFrame {
 
         JButton btnCancelar = new JButton("Cancelar");
         btnCancelar.setBounds(300, 450, 140, 45);
+        btnCancelar.setBackground(Color.MAGENTA);
+        btnCancelar.setForeground(Color.WHITE);
         btnCancelar.addActionListener(e -> regresarMenu());
         add(btnCancelar);
 

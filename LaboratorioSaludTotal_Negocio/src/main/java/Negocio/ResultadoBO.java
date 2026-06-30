@@ -58,10 +58,6 @@ public class ResultadoBO implements IResultadoBO {
                 throw new NegocioException("No existe el parámetro seleccionado.");
             }
 
-            if (resultadoDAO.resultadoExiste(dto.getIdPrueba(), dto.getIdParametro())) {
-                throw new NegocioException("Ya existe un resultado registrado para esta prueba y este parámetro.");
-            }
-
             Resultado resultado = convertirAEntidad(dto, prueba, parametro);
 
             return resultadoDAO.registrarResultado(resultado);
@@ -153,33 +149,6 @@ public class ResultadoBO implements IResultadoBO {
 
         } catch (PersistenciaException ex) {
             throw new NegocioException("Error al buscar el resultado específico: " + ex.getMessage());
-        }
-    }
-
-    /**
-     * Verifica si ya existe un resultado para una prueba y un parametro.
-     *
-     * @param idPrueba identificador de la prueba.
-     * @param idParametro identificador del parametro.
-     * @return true si el resultado ya existe, false en caso contrario.
-     * @throws NegocioException si algun identificador no es valido o ocurre
-     * algun error al verificar.
-     */
-    @Override
-    public boolean resultadoExiste(Integer idPrueba, Integer idParametro) throws NegocioException {
-        if (idPrueba == null || idPrueba <= 0) {
-            throw new NegocioException("El ID de la prueba no es válido.");
-        }
-
-        if (idParametro == null || idParametro <= 0) {
-            throw new NegocioException("El ID del parámetro no es válido.");
-        }
-
-        try {
-            return resultadoDAO.resultadoExiste(idPrueba, idParametro);
-
-        } catch (PersistenceException ex) {
-            throw new NegocioException("Error al verificar si el resultado existe: " + ex.getMessage());
         }
     }
 

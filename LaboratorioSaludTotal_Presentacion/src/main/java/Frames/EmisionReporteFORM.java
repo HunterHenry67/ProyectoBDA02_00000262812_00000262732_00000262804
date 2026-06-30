@@ -121,6 +121,8 @@ public class EmisionReporteFORM extends JFrame {
 
         JButton btnBuscar = new JButton("Buscar");
         btnBuscar.setBounds(170, 300, 120, 45);
+        btnBuscar.setBackground(Color.BLACK);
+        btnBuscar.setForeground(Color.WHITE);
         btnBuscar.addActionListener(e -> filtrarPruebas());
         add(btnBuscar);
 
@@ -140,6 +142,8 @@ public class EmisionReporteFORM extends JFrame {
 
         JButton btnImprimir = new JButton("Imprimir Reporte");
         btnImprimir.setBounds(820, 300, 180, 45);
+        btnImprimir.setBackground(Color.BLACK);
+        btnImprimir.setForeground(Color.WHITE);
         btnImprimir.addActionListener(e -> imprimirReporte());
         add(btnImprimir);
 

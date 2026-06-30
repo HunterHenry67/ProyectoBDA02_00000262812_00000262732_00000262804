@@ -130,34 +130,5 @@ public class ResultadoDAO implements IResultadoDAO{
             entityManager.close();
         }
     }
-
-    /**
-     * Verifica la existencia de un resultado para una prueba y parámetro dados
-     * * @param idPrueba El ID de la prueba
-     * @param idParametro El ID del parámetro clínico
-     * @return true si el resultado existe, false en el otro caso
-     * @throws PersistenceException Si ocurre un error al ejecutar la consulta de conteo
-     */
-    @Override
-    public boolean resultadoExiste(Integer idPrueba, Integer idParametro) throws PersistenceException {
-        EntityManager entityManager = conexionBD.conexionBD();
-        try{
-            CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-            CriteriaQuery<Long> criteriaQuery = criteriaBuilder.createQuery(Long.class);
-            Root<Resultado> ruta = criteriaQuery.from(Resultado.class);
-            
-            criteriaQuery.select(criteriaBuilder.count(ruta))
-                    .where(criteriaBuilder.and(
-                            criteriaBuilder.equal(ruta.get("prueba").get("idPrueba"), idPrueba),
-                            criteriaBuilder.equal(ruta.get("parametro").get("idParametro"), idParametro)));
-            Long total = entityManager.createQuery(criteriaQuery).getSingleResult();
-            return total > 0;
-        }catch(Exception ex){
-            LOGGER.severe(ex.getMessage());
-            throw new PersistenceException("Error al saber si el resultado ya fue registrado: "+ex.getMessage());
-        }finally{
-            entityManager.close();
-        }
-    }
     
 }
